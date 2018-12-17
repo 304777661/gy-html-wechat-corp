@@ -1,0 +1,209 @@
+import enums from './enums'
+import defaultAvatar from 'IMAGE/default-avatar.jpg'
+import folder from 'IMAGE/folder.png'
+import docx from 'IMAGE/docx.png'
+import xlsx from 'IMAGE/xlsx.png'
+import pptx from 'IMAGE/pptx.png'
+import pdf from 'IMAGE/pdf.png'
+import image from 'IMAGE/image.png'
+import video from 'IMAGE/video.png'
+import zip from 'IMAGE/zip.png'
+import unknown from 'IMAGE/unknown.png'
+import boy from 'IMAGE/boy@3x.png'
+import girl from 'IMAGE/girl@3x.png'
+
+export default {
+  timeSlot (val) {
+    return enums.LeavePeriod.getName(val)
+  },
+  ymdhm (val) {
+    let param = 'yyyy-MM-dd hh:mm'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  hm (val) {
+    let param = 'hh:mm'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  ymd (val) {
+    let param = 'yyyy-MM-dd'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+    // return new Date().Format('yyyy-MM-dd')
+  },
+  yyyymmdd (val) {
+    let param = 'yyyyMMdd'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+    // return new Date().Format('yyyy-MM-dd')
+  },
+  md (val) {
+    let param = 'MM-dd'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  ym (val) {
+    let param = 'yyyy-MM'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  yyyy (val) {
+    let param = 'yyyy'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  mm (val) {
+    let param = 'MM'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  publishTime (val) {
+    let param = 'MM-dd hh:mm'
+    if (val instanceof Date) {
+      return val.Format(param) || '--'
+    }
+    return new Date(val).Format(param) || '--'
+  },
+  parentHomeWorkCardTime (val) {
+    if (!(val instanceof Date)) {
+      val = new Date(val)
+    }
+    let day = val.getDay()
+    let chineseDay = null
+    switch (day) {
+      case 0:
+        chineseDay = '周日'
+        break
+      case 1:
+        chineseDay = '周一'
+        break
+      case 2:
+        chineseDay = '周二'
+        break
+      case 3:
+        chineseDay = '周三'
+        break
+      case 4:
+        chineseDay = '周四'
+        break
+      case 5:
+        chineseDay = '周五'
+        break
+      case 6:
+        chineseDay = '周六'
+        break
+    }
+    return `${val.Format('yyyy-MM-dd')} ${chineseDay} ${val.Format('hh:mm')}`
+  },
+  defaultAvatar (val) {
+    if (!val) return defaultAvatar
+    return val
+  },
+  num2Abc (idx) {
+    return String.fromCharCode(idx + 65)
+  },
+  placeholderNum2Abc (idx) {
+    return `选项${String.fromCharCode(idx + 65)}`
+  },
+  fileIcon (fileName) {
+    if (fileName === 'directory') return folder
+    let suffix = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()
+    switch (suffix) {
+      case 'doc':
+      case 'docx':
+        return docx
+      case 'xls':
+      case 'xlsx':
+        return xlsx
+      case 'ppt':
+      case 'pptx':
+        return pptx
+      case 'pdf':
+        return pdf
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'svg':
+      case 'webp':
+        return image
+      case 'mp4':
+      case 'mp3':
+      case 'avi':
+      case 'mov':
+      case 'flv':
+        return video
+      case 'zip':
+        return zip
+      default:
+        return unknown
+    }
+  },
+  formatFileSize (fileSize) {
+    if (!fileSize) return null
+
+    const kb = 1024
+    const mb = 1024 * 1024
+    const gb = mb * 1024
+    const tb = gb * 1024
+    if (fileSize < kb) {
+      return fileSize + 'b'
+    }
+    if (fileSize >= kb && fileSize < mb) {
+      return (fileSize / kb).toFixed(0) + 'K'
+    }
+    if (fileSize >= mb && fileSize < gb) {
+      return (fileSize / mb).toFixed(0) + 'M'
+    }
+    if (fileSize >= gb && fileSize < tb) {
+      return (fileSize / gb).toFixed(0) + 'G'
+    }
+    if (fileSize >= tb) {
+      return (fileSize / tb).toFixed(0) + 'T'
+    }
+  },
+
+  sex (val) {
+    if (val === 'Female') return girl
+    return boy
+  },
+
+  rmb (val) {
+    if (!val) {
+      return '0.00元'
+    }
+    val = val.toString().replace(/\$|\,/g, '')
+    if (isNaN(val)) {
+      val = '0'
+    }
+    let sign = (val == (val = Math.abs(val)))
+    val = Math.floor(val * 100 + 0.50000000001)
+    let cents = val % 100
+    val = Math.floor(val / 100).toString()
+    if (cents < 10) {
+      cents = '0' + cents
+    }
+    for (let i = 0; i < Math.floor((val.length - (1 + i)) / 3); i++) {
+      val = val.substring(0, val.length - (4 * i + 3)) + ',' + val.substring(val.length - (4 * i + 3))
+    }
+
+    return (((sign) ? '' : '-') + val + '.' + cents + '元')
+  }
+}

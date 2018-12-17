@@ -1,0 +1,159 @@
+@charset "UTF-8"
+@import "variables", "mixins", "transition", "vant", "iconfont", "schemes"
+
+*
+  box-sizing: border-box
+
+html, body
+  width: 100%
+  font-family: $font-family
+  color: $black
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  background: $body-background
+  overflow-x: hidden
+
+#app
+  font-size: $font-normal
+
+img, object, video
+  width: 100%
+  max-width: 100%
+  vertical-align: middle
+
+p
+  margin: 0
+  padding: 0
+
+input, textarea
+  width: 100%
+  line-height: inherit
+  border: none
+  outline: none
+  -webkit-tap-highlight-color: transparent
+  // 消除输入框和按钮的原生外观
+  -webkit-appearance: none
+  resize: none
+
+input::-webkit-input-placeholder
+  font-size: $font-normal
+  color: $gray
+
+// 取消搜索框的的清空按钮
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button
+  display: none
+
+ul, li
+  margin: 0
+  padding: 0
+  list-style: none
+
+table
+  border-collapse: collapse
+
+/* 滚动条样式开始 */
+::-webkit-scrollbar
+  width: $scrollbar-width
+  height: $scrollbar-width
+
+::-webkit-scrollbar-track-piece
+  background-color: rgba(0, 0, 0, 0.2)
+  -webkit-border-radius: $scrollbar-width
+
+::-webkit-scrollbar-thumb:vertical
+  height: $scrollbar-width
+  background-color: rgba(125, 125, 125, 0.7)
+  -webkit-border-radius: $scrollbar-width
+
+::-webkit-scrollbar-thumb:horizontal
+  width: $scrollbar-width
+  background-color: rgba(125, 125, 125, 0.7)
+  -webkit-border-radius: $scrollbar-width
+/* 滚动条样式结束 */
+
+//.btn-primary
+//  $h: 35px
+//  display: block
+//  width: 200px
+//  height: $h
+//  margin: $h auto
+//  line-height: $h
+//  border: none
+//  outline: none
+//  border-radius: $h / 2
+
+.btn-primary
+  $h: 35px
+  display: block
+  width: 85vw
+  height: $h
+  margin: $h auto
+  line-height: $h
+  border: none
+  outline: none
+  border-radius: 3px
+
+.checkbox-group
+  @include clearfix
+  & > .checkbox
+    $w: 32%
+    $count: 3
+    float: left
+    width: $w
+    margin-left: (100% - ($w * $count)) / $count
+    &:nth-of-type(#{$count}n + 1)
+      margin-left: 0
+    &:nth-of-type(n + #{$count + 1})
+      margin-top: 10px
+
+.card.card-grad
+  &-header
+    padding: 12px $default-gap
+    color: #fff
+    background: linear-gradient(36deg, #8081FF 0%, #23BAFF 100%)
+    @include hor-start-center
+    &--gray
+      background: #ccc
+    &__title
+      font-size: $font-normal + 1px
+      font-weight: bold
+      flex: 4
+      @include text-overflow
+    &__status
+      text-align: right
+      font-size: $font-smaller
+      white-space: nowrap
+    &-body
+      padding: $default-gap
+      line-height: 1.2
+      font-size: $font-normal - 1px
+      border-bottom: 1.5px dashed $gray-light
+    &-footer
+      padding: 10px $default-gap
+      font-size: $font-small
+      color: $gray
+      border-bottom: 1.5px dashed $gray-light
+      @include hor-start-center
+      &:last-of-type
+        border-bottom: none
+      &__time
+        flex: 1
+      &__name
+        flex: 1
+        white-space: nowrap
+      &__count
+        flex: 2
+        text-align: right
+
+.radio
+  $w: 16px
+  display: inline-block
+  line-height: $w
+  &-bg
+    float: left
+    margin-right: 8px
+    @include circle($w)
+    border: 1px solid $blue
+    &--on
+      background: url("~IMAGE/radio-on.png") no-repeat center / 80%
