@@ -50,57 +50,7 @@
       selectDate.setDate(1)
       return {
         selectDate,
-        // salary: {},
-        salary: {
-          'id': 1,
-          'salaryMonthId': 1,
-          'teacherId': 1,
-          'name': 'name',
-          'gradeId': 1,
-          'gradeName': 'gradeName',
-          'courseId': 1,
-          'courseName': 'courseName',
-          'position': 'position',
-          'title': 'title',
-          'acquireTime': '2018-12-12 13:00:07',
-          'education': 'DOCTORAL_CANDIDATE',
-          'joinSchoolTime': '2018-12-12 13:00:07',
-          'joinWorkTime': '2018-12-12 13:00:07',
-          'idCard': 'idCard',
-          'salaryBase': 1.0,
-          'salaryBase1': 1.0,
-          'salaryFloat4': 1.0,
-          'salaryFloat5': 1.0,
-          'salaryFloat10': 1.0,
-          'schoolAge': 1.0,
-          'salaryWorkAge': 1.0,
-          'otherSalaryList': [
-            {
-              'id': 1,
-              'salaryId': 1,
-              'salaryTemplateId': 1,
-              'salaryTemplateName': '扣税1',
-              'salaryMonthId': 1,
-              'salaryValue': 1.0,
-              'remark': 'remark',
-              'createdTime': '2018-12-12 13:00:07',
-              'updatedTime': '2018-12-12 13:00:07'
-            },
-            {
-              'id': 1,
-              'salaryId': 1,
-              'salaryTemplateId': 1,
-              'salaryTemplateName': '扣税2',
-              'salaryMonthId': 1,
-              'salaryValue': 1.0,
-              'remark': 'remark',
-              'createdTime': '2018-12-12 13:00:07',
-              'updatedTime': '2018-12-12 13:00:07'
-            }
-          ],
-          'createdTime': '2018-12-12 13:00:07',
-          'updatedTime': '2018-12-12 13:00:07'
-        },
+        salary: {},
       }
     },
     methods: {
@@ -141,7 +91,7 @@
       font-size: 13px
     &-detail
       background: $white
-      padding: 0 14px
+      padding: 5px 14px
       .van-cell
         background: #F7F8FA
         &:first-child

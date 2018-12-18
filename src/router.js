@@ -75,12 +75,17 @@ const router = new Router({
       component: teacherView('visit/List'),
       meta: {title: '学生家访'}
     }, {
+      path: 'visit/students',
+      name: 'VisitStudents',
+      component: teacherView('visit/Students'),
+      meta: {title: '选择学生'}
+    }, {
       path: 'visit/:id',
       name: 'visitDetail',
       component: teacherView('visit/Detail'),
       meta: {title: '家访详情'}
     }, {
-      path: 'visit/add',
+      path: 'visitadd',
       name: 'AddVisit',
       component: teacherView('visit/Add'),
       meta: {title: '添加家访记录'}

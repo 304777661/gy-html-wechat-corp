@@ -69,7 +69,7 @@
         for (let i = 0; i < files.length; i++) {
           let formData = new FormData()
           const file = files[i]
-          formData.append('resources', file)
+          formData.append('file', file)
           this.$api.teacher.upload(formData).then(imgUrl => {
             // 使pictures这个数组里面的图片能保持上传的位置
             this.$set(this.pictures, oldLength + i, imgUrl)

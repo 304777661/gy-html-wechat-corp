@@ -1,29 +1,27 @@
 <template>
   <div class="visit">
-    <div class="visit-search">
-      <search v-model="keywords" @search="onSearch"></search>
+    <div class="wrapper">
+      <div class="visit-search">
+        <search v-model="query.studentName" @search="loadData"></search>
+      </div>
+      <no-data v-show=" !loading && !visitList.length"/>
+      <div ref="wrapper" class="visit-wrapper">
+        <van-list
+          :loading="loading"
+          :finished="true"
+          @load="loadData">
+          <div class="visit-wrapper-item van-hairline--bottom"
+               v-for="(item,index) in visitList"
+               :key="index"
+               @click="goToDetail(item.id)">
+            <img :src="item.avatar | defaultAvatar" class="visit-wrapper-item__avatar">
+            <span class="visit-wrapper-item-name">{{item.studentName}}</span>
+            <span class="visit-wrapper-item-date">最近家访时间：{{item.visitDate | ymd}}</span>
+          </div>
+        </van-list>
+      </div>
     </div>
-    <no-data v-show=" !loading && !visitList.length"/>
-    <div ref="wrapper" class="visit-wrapper">
-      <van-list v-model="loading"
-                :finished="finished"
-                @load="onLoad">
-        <div class="visit-wrapper-item van-hairline--bottom"
-             v-for="(item,index) in visitList"
-             :key="index"
-             @click="goToDetail(item.id)">
-          <img :src="item.avatar | defaultAvatar" class="visit-wrapper-item__avatar">
-          <span class="visit-wrapper-item-name">{{item.name}}</span>
-          <span class="visit-wrapper-item-date">最近家访时间:{{item.date|| ymd}}</span>
-        </div>
-      </van-list>
-    </div>
-
-    <van-button type="primary"
-                class="btn-primary visit-btn"
-                square="false"
-                @click="checkAll">查看班级课表
-    </van-button>
+    <my-button :content="addVisitBtnTitle" @btnClick="handleAddVisitClick"></my-button>
   </div>
 </template>
 
@@ -33,121 +31,37 @@
 
   export default {
     name: 'List',
+    computed: {
+      query () {
+        return {
+          studentName: null
+        }
+      }
+    },
     data () {
       return {
+        addVisitBtnTitle: '增加家访记录',
         loading: false,
-        finished: false,
-        visitList: [
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          }, {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-          {
-            id: 23,
-            name: 'MAX',
-            avatar: 'http://www.car136.com/photo/mmp/55/3995/b/1221794056424240183.jpg',
-            date: '2018-09-09'
-          },
-        ],
-        keywords: null
+        finished: true,
+        visitList: [],
       }
     },
     methods: {
-      onLoad () {
-
+      async loadData () {
+        this.visitList = await this.$api.teacher.queryHomeVisitingWXList(this.query)
       },
       onSearch () {},
       goToDetail (id) {
-        console.log('gotodetail')
-        this.$router.push(`visit/${id}`)
+        this.$router.push(`/teacher/visit/${id}`)
       },
-      checkAll () {}
+      handleAddVisitClick () {
+        this.$router.push(`/teacher/visitadd`)
+      }
     },
-    created () {
-
+    async created () {
+      this.loading = false
+      this.loadData()
+      this.loading = true
     },
     mounted () {
       this.scroll = new BScroll(this.$refs.wrapper, {click: true})
@@ -158,6 +72,8 @@
 <style scoped lang="sass">
   .visit
     height: 100vh
+    .wrapper
+      height: calc(100vh - 70px)
     /deep/ .van-hairline--bottom
       &:after
         left: 12px

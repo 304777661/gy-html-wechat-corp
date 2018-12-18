@@ -32,6 +32,21 @@ export default {
     return await Axios.post('/homevisitingWX/getHomeVisitingWX.do', query)
   },
 
+  // 家访记录列表
+  async queryHomeVisitingWXList (query) {
+    return await Axios.post('/homevisitingWX/queryHomeVisitingWXList.do', query)
+  },
+
+  // 家访记录增加
+  async addHomeVisitingWX (query) {
+    return await Axios.post('/homevisitingWX/addHomeVisitingWX.do', query)
+  },
+
+  // 教师端 - 学生信息列表查询 - 班主任
+  async queryStudentListByAdviser (query) {
+    return await Axios.post('/studentTeacher/queryStudentListByAdviser.do', query)
+  },
+
   // 工资日期列表查询（使用自然月 -- 作废）
   async querySalaryMonthList (query) {
     return await Axios.post('/salary/querySalaryMonthList.do', query)

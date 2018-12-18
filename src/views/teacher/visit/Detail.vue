@@ -1,12 +1,12 @@
 <template>
   <div class="visit-detail">
     <van-cell-group>
-      <van-cell title="学生" :value="visit.studentName"/>
-      <van-cell title="家访时间" :value="visit.visitDate | ymd"/>
-      <van-cell title="家访对象" :value="visit.visitObject"/>
+      <van-cell title="学生" :value="visit.studentName"></van-cell>
+      <van-cell title="家访时间" :value="visit.visitDate | ymd"></van-cell>
+      <van-cell title="家访对象" :value="visit.visitObject"></van-cell>
     </van-cell-group>
 
-    <van-field class="visit-detail-title" label="家访内容" disabled/>
+    <van-field class="visit-detail-title" label="家访内容" disabled></van-field>
     <van-field v-model="visit.visitContent"
                type="textarea"
                disabled
@@ -14,10 +14,11 @@
                input-align="left"
                :autosize="textAreaSize"
                :value="visit.visitContent"
-               placeholder=""/>
-    <van-field class="visit-detail-title" label="照片" disabled/>
-
-    <picture-map :pictures="visit.attachmentList" :upload="false"/>
+               placeholder=""></van-field>
+    <van-field class="visit-detail-title" label="照片" disabled v-show="visit.attachmentList.length >0"></van-field>
+    <div class="visit-detail-picture">
+      <picture-map :pictures="visit.attachmentList" :upload="false"/>
+    </div>
   </div>
 </template>
 
@@ -27,26 +28,22 @@
   export default {
     name: 'Detail',
     data () {
+      let id = this.$route.params.id
       return {
         loading: false,
-        finished: false,
         textAreaSize: {
           minHeight: 200
         },
-        visit: {}
+        visit: {},
+        id,
       }
     },
-    methods: {
-      onLoad () {}
-    },
+    methods: {},
     async created () {
       this.loading = true
-      this.visit = await this.$api.teacher.getHomeVisitingWX({'id': 1})
+      this.visit = await this.$api.teacher.getHomeVisitingWX({'id': this.id})
       this.loading = false
-      // this.initCommentList()
     },
-    mounted: {},
-
   }
 </script>
 
@@ -62,5 +59,8 @@
     &-title
       color: #9B9B9B
       margin-top: 10px
+    &-picture
+      background: $white
+      padding: 10px 14px
 
 </style>
