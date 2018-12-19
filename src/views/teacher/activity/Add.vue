@@ -76,18 +76,21 @@
           }],
         activity:
           {
-            activityType: '' /*活动类型1教研活动2备课活动：ALL|ACTIVITY_TEACH_GROUP|ACTIVITY_PREPARE_LESSONS*/,
-            gradeId: 0 /*年级Id - 备课活动时必填[可选]*/,
-            activityName: '' /*活动名称*/,
+            activityType: 'ACTIVITY_PREPARE_LESSONS' /*活动类型1教研活动2备课活动：ALL|ACTIVITY_TEACH_GROUP|ACTIVITY_PREPARE_LESSONS*/,
+            gradeId: 11 /*年级Id - 备课活动时必填[可选]*/,
+            activityName: '名名名名名名名名名名名名名' /*活动名称*/,
             activityDate: '',
-            activityLocation: '' /*活动地点*/,
-            activitySponsor: '' /*举办单位*/,
-            activityContent: '' /*活动内容*/,
-            teacherList: [],
+            activityLocation: '地点地点地点地点地点地点地点地点地点地点地点地点' /*活动地点*/,
+            activitySponsor: '单位单位单位单位单位单位单位单位单位单位' /*举办单位*/,
+            activityContent: '内容内容内容内容内容内容内容内容内容内容内容' /*活动内容*/,
+            teacherList: [45],
             attachmentList: [
               {
-                'fileName': 'fileName' /*文件名*/,
-                'fileUrl': 'fileUrl' /*文件路径*/
+                'fileName': 'bcebcb67460a' /*文件名*/,
+                'fileUrl': 'https://gydev-1252687978.piccd.myqcloud.com/gy/corp-upload/80fa5a3c-34fd-4012-bb9f-bcebcb67460a.png' /*文件路径*/
+              }, {
+                'fileName': '2345' /*文件名*/,
+                'fileUrl': 'https://gydev-1252687978.piccd.myqcloud.com/gy/corp-upload/80fa5a3c-34fd-4012-bb9f-bcebcb67460a.png' /*文件路径*/
               }
             ]
 
@@ -125,7 +128,7 @@
           this.activity.gradeId = this.grade.id
         }
         this.activity.activityDate = this.selectDate.Format('yyyy-MM-dd 00:00:00')
-
+        this.$api.teacher.addTeachGroupActivity(this.activity)
       },
       handleGradeConfirm (value, index) {
         console.log(value, index)
@@ -172,7 +175,7 @@
         }
       }
       this.myself = await this.$api.teacher.getSessionUserDetail()
-      this.activity.teacherList.push(this.myself)
+      // this.activity.teacherList.push(this.myself)
     }
   }
 </script>

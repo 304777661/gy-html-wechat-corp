@@ -20,7 +20,7 @@
           'link': 'teacher/bulletin'
         }, {
           'name': '教师信息',
-          'link': 'teacher/detail'
+          'link': 'teacher/info'
         }, {
           'name': '学生信息',
           'link': 'teacher/students'

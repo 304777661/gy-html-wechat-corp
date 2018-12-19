@@ -152,6 +152,26 @@ export default {
     return await Axios.post('/noticeTeacher/getNotice.do', query)
   },
 
+  // 查看教师信息
+  async getTeacherDetail (query) {
+    return await Axios.post('/teacher/getTeacherDetail.do', query)
+  },
+
+  // 查询教师工作经历列表
+  async queryTeacherResumeList (query) {
+    return await Axios.post('/teacher/queryTeacherResumeList.do', query)
+  },
+
+  // 获奖情况列表
+  async queryTeachingResearchList (query) {
+    return await Axios.post('/teacher/queryTeachingResearchList.do', query)
+  },
+
+  // 教研活动新增
+  async addTeachGroupActivity (query) {
+    return await Axios.post('/teachGroupActivity/addTeachGroupActivity.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

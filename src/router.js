@@ -38,9 +38,9 @@ const router = new Router({
       component: teacherView('bulletin/Detail'),
       meta: {title: '公告详情'}
     }, {
-      path: 'detail',
-      name: 'Detail',
-      component: teacherView('detail/Index'),
+      path: 'info',
+      name: 'Info',
+      component: teacherView('info/Index'),
       meta: {title: '教师信息'}
     }, {
       path: 'salary',
