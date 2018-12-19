@@ -89,7 +89,7 @@ export default {
 
   // 查询年级、班级列表
   async queryClassCascadeList (query) {
-    return await Axios.post('/timetable/queryClassCascadeList.do', query)
+    return await Axios.post('/dict/queryClassCascadeList.do', query)
   },
 
   // 会议预订信息列表分页查询
@@ -120,6 +120,36 @@ export default {
   // 会议室列表查询
   async queryMeetingRoomList (query) {
     return await Axios.post('/meetingRoom/queryMeetingRoomList.do', query)
+  },
+
+  // 教师端 - 通知公告列表分页查询 - 教研团队
+  async queryTeachGroupPage (query) {
+    return await Axios.post('/noticeTeacher/queryTeachGroupPage.do', query)
+  },
+
+  // 教研活动列表分页查询
+  async queryTeachGroupActivityPage (query) {
+    return await Axios.post('/teachGroupActivity/queryTeachGroupActivityPage.do', query)
+  },
+
+  // 教研活动删除
+  async deleteTeachGroupActivity (query) {
+    return await Axios.post('/teachGroupActivity/deleteTeachGroupActivity.do', query)
+  },
+
+  // 教研活动详情查询
+  async getTeachGroupActivity (query) {
+    return await Axios.post('/teachGroupActivity/getTeachGroupActivity.do', query)
+  },
+
+  // 查询教研组列表
+  async queryTeachGroupList (query) {
+    return await Axios.post('/teachGroupActivity/queryTeachGroupList.do', query)
+  },
+
+  // 教师端 - 通知公告详情查询
+  async getNotice (query) {
+    return await Axios.post('/noticeTeacher/getNotice.do', query)
   },
 
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

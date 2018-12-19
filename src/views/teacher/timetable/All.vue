@@ -232,16 +232,16 @@
       this.gradeList = await this.$api.teacher.queryClassCascadeList({})
       this.columns[0].values = this.gradeList.map(item => {
         return {
-          label: item.gradeName,
-          value: item.gradeId,
+          label: item.label,
+          value: item.value,
         }
       })
       this.onChange(null, [this.columns[0].values[0], undefined])
       this.gradeLoading = false
       if (this.gradeList && this.gradeList.length > 0) {
         this.curGrade = this.gradeList[0]
-        if (this.curGrade && this.curGrade.classInfoList && this.curGrade.classInfoList.length > 0) {
-          this.curClass = this.curGrade.classInfoList[0]
+        if (this.curGrade && this.curGrade.children && this.curGrade.children.length > 0) {
+          this.curClass = this.curGrade.children[0]
         }
       }
       // 查学期
@@ -360,8 +360,7 @@
       ,
       async request () {
         this.courseList = await this.$api.teacher.queryClassCascadeList(this.query)
-      }
-      ,
+      },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0
       },
@@ -372,10 +371,10 @@
       },
       onChange (picker, values) {
         let curGrade = this.gradeList.find(item => item.gradeId === values[0].value)
-        this.columns[1].values = curGrade.classInfoList.map(item => {
+        this.columns[1].values = curGrade.children.map(item => {
           return {
-            label: item.className,
-            value: item.id,
+            label: item.label,
+            value: item.value,
           }
         })
         picker && picker.setColumnValues(1, this.columns[1].values)

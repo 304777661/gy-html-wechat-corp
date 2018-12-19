@@ -50,7 +50,8 @@ import {
   Tab,
   Tabs,
   RadioGroup,
-  Radio
+  Radio,
+  SwipeCell,
 } from 'vant'
 
 Vue.use(Icon)
@@ -73,7 +74,7 @@ Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(RadioGroup)
 Vue.use(Radio)
-Vue.prototype.$toast = Toast
+Vue.use(SwipeCell)
 
 Vue.component(SelectPicker.name, SelectPicker)
 Vue.component(DivideDatePicker.name, DivideDatePicker)
@@ -89,16 +90,14 @@ Vue.component(MyTabs.name, MyTabs)
 Vue.component(MyButton.name, MyButton)
 // Vue.component(Radio.name, Radio)
 
-Vue.prototype.$enums = enums
-
 Vue.prototype.$eventBus = new Vue()
-
+Vue.prototype.$toast = Toast
+Vue.prototype.$enums = enums
+Vue.prototype.$config = config
 Vue.prototype.$api = {
   teacher: teacherApi,
   parent: parentApi
 }
-
-Vue.prototype.$config = config
 
 // 全局注册过滤器
 Object.keys(filters).forEach(filterName => {

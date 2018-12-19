@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import setWechatTitle from './utils/setWechatTitle'
 
-// import HelloWorld from '@/components/HelloWorld'
-
 function view (path) {
   return () => import(`./views/${path}.vue`)
 }
@@ -55,6 +53,11 @@ const router = new Router({
       component: teacherView('team/Index'),
       meta: {title: '教研团队'}
     }, {
+      path: 'team/:id',
+      name: 'TeamDetail',
+      component: teacherView('team/Detail'),
+      meta: {title: '教研活动详情'}
+    }, {
       path: 'timetable',
       name: 'TimeTable',
       component: teacherView('timetable/Index'),
@@ -64,11 +67,6 @@ const router = new Router({
       name: 'ClassTimeTable',
       component: teacherView('timetable/All'),
       meta: {title: '班级课表'}
-    }, {
-      path: 'team/:id',
-      name: 'TeamDetail',
-      component: teacherView('team/Detail'),
-      meta: {title: '教师风采详情'}
     }, {
       path: 'visit',
       name: 'Visit',
@@ -124,6 +122,31 @@ const router = new Router({
       name: 'MeetingMember',
       component: teacherView('meeting/Member'),
       meta: {title: '选择参会人员'}
+    }, {
+      path: 'activity',
+      name: 'ActivityList',
+      component: teacherView('activity/List'),
+      meta: {title: '集体备课'}
+    }, {
+      path: 'research',
+      name: 'ResearchList',
+      component: teacherView('research/List'),
+      meta: {title: '科研奥赛'}
+    }, {
+      path: 'research/:id',
+      name: 'ResearchDetail',
+      component: teacherView('research/Detail'),
+      meta: {title: '详情'}
+    }, {
+      path: 'activity/:id',
+      name: 'ActivityDetail',
+      component: teacherView('activity/Detail'),
+      meta: {title: '集体备课'}
+    }, {
+      path: 'activity/add/:typeId',
+      name: 'AddActivity',
+      component: teacherView('activity/Add'),
+      meta: {title: '添加活动'}
     }, {
       path: 'meeting/time',
       name: 'MeetingTimeAdd',

@@ -44,7 +44,10 @@
           'link': 'teacher/team'
         }, {
           'name': '科研奥赛',
-          'link': ''
+          'link': 'teacher/research'
+        }, {
+          'name': '集体备课',
+          'link': 'teacher/activity'
         }, {
           'name': '学生家访',
           'link': 'teacher/visit'
@@ -71,8 +74,6 @@
         this.$router.push(router)
       }
     },
-    mounted () {
-    }
   }
 </script>
 

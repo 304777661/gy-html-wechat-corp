@@ -609,6 +609,31 @@ export default {
           return val
       }
     }
-  }
+  },
   // ---------------- 通讯类人员类型  结束 -------------------
+
+  // ---------------- 教研活动类型  开始 -------------------
+  ActivityType: {
+    // 枚举列表
+    list: [
+      {label: '教研活动', value: 'ACTIVITY_TEACH_GROUP'},
+      {label: '备课活动', value: 'ACTIVITY_PREPARE_LESSONS'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'ACTIVITY_TEACH_GROUP':
+          return '教研活动'
+        case 'ACTIVITY_PREPARE_LESSONS':
+          return '备课活动'
+        default:
+          return val
+      }
+    }
+  }
+  // ---------------- 教研活动类型  结束 -------------------
 }

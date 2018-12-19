@@ -107,7 +107,7 @@
         // console.log(`当前值：${value}, 当前索引：${index}`)
         console.log(index)
         this.curGrade = this.gradeList[index[0]]
-        this.curClass = this.curGrade.classInfoList[index[1]]
+        this.curClass = this.curGrade.children[index[1]]
         this.request()
         this.showPopup = false
       },
@@ -123,16 +123,16 @@
 
       this.columns[0].values = this.gradeList.map(item => {
         return {
-          label: item.gradeName,
-          value: item.gradeId,
+          label: item.label,
+          value: item.value,
         }
       })
       this.onChange(null, [this.columns[0].values[0], undefined])
 
       if (this.gradeList && this.gradeList.length > 0) {
         this.curGrade = this.gradeList[0]
-        if (this.curGrade && this.curGrade.classInfoList && this.curGrade.classInfoList.length > 0) {
-          this.curClass = this.curGrade.classInfoList[0]
+        if (this.curGrade && this.curGrade.children && this.curGrade.children.length > 0) {
+          this.curClass = this.curGrade.children[0]
         }
       }
       // 查询学生列表
