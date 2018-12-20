@@ -1,5 +1,6 @@
 <template>
   <div class="visit-detail">
+    <my-loading v-model="loading"/>
     <van-cell-group>
       <van-cell title="学生" :value="visit.studentName"></van-cell>
       <van-cell title="家访时间" :value="visit.visitDate | ymd"></van-cell>
@@ -14,10 +15,13 @@
                input-align="left"
                :autosize="textAreaSize"
                :value="visit.visitContent"
-               placeholder=""></van-field>
-    <van-field class="visit-detail-title" label="照片" disabled v-show="visit.attachmentList.length >0"></van-field>
-    <div class="visit-detail-picture">
-      <picture-map :pictures="visit.attachmentList" :upload="false"/>
+               placeholder="">
+    </van-field>
+    <div v-show="visit.attachmentList && visit.attachmentList.length >0">
+      <van-cell title="照片" class="visit-detail-title"></van-cell>
+      <div class="visit-detail-picture">
+        <picture-map :pictures="visit.attachmentList" :upload="false"/>
+      </div>
     </div>
   </div>
 </template>
@@ -26,19 +30,17 @@
   import PictureMap from 'COMPONENT/PictureMap'
 
   export default {
-    name: 'Detail',
+    name: 'VisitDetail',
     data () {
-      let id = this.$route.params.id
       return {
         loading: false,
         textAreaSize: {
           minHeight: 200
         },
         visit: {},
-        id,
+        id: this.$route.params.id
       }
     },
-    methods: {},
     async created () {
       this.loading = true
       this.visit = await this.$api.teacher.getHomeVisitingWX({'id': this.id})

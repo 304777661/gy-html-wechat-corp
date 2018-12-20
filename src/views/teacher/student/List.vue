@@ -2,56 +2,45 @@
   <div class="student">
 
     <div class="student-header">
-      <span class="student-header-class-name">{{curClass.className || '--'}}</span>
-      <span class="student-header-class-picker" @click="onClassPicker">选择班级</span>
+      <span class="student-header-class-name">{{curClass.label || '--'}}</span>
+      <span class="student-header-class-picker" @click="handleSwitchClassClick">选择班级</span>
     </div>
     <div class="student-search">
       <search v-model="keywords" @search="onSearch"></search>
     </div>
-    <no-data v-show=" !loading && !studentList.length"/>
-
-    <van-list :loading="loading"
-              :finished="finished"
-              @load="onLoad">
-
-      <div class="student-item van-hairline--bottom" v-for="(item,index) in studentList" :key="index"
-           @click="goDetail(item.id)">
-        <img :src="item.avatar | defaultAvatar" class="student-item__avatar">
-        <span class="student-item__name">{{item.name || '--'}}</span>
-        <van-tag size="large" plain v-show="item.position" class="student-item__tag">班长</van-tag>
-      </div>
-    </van-list>
-
-    <van-popup v-model="showPopup" position="bottom" :overlay="true" lazy-render close-on-click-overlay>
+    <no-data v-show="!loading && !studentList.length"/>
+    <div v-if="studentList.length">
+      <van-list v-model="loading"
+                :finished="finished"
+                @load="onLoad">
+        <div class="student-item van-hairline--bottom" v-for="(item,index) in studentList" :key="index"
+             @click="goDetail(item.id)">
+          <img :src="item.avatar | defaultAvatar" class="student-item__avatar">
+          <span class="student-item__name">{{item.name || '--'}}</span>
+          <van-tag size="large" plain v-show="item.position" class="student-item__tag">班长</van-tag>
+        </div>
+      </van-list>
+    </div>
+    <van-popup v-model="showPopup" position="bottom" lazy-render>
       <van-picker :columns="columns"
-                  @change="onChange"
+                  @change="onPickerChange"
                   show-toolbar
-                  @cancel="onCancel"
-                  @confirm="onConfirm"
+                  @cancel="onPickerCancel"
+                  @confirm="onPickerConfirm"
                   :item-height="popupItemHeight"
                   value-key="label"
-                  :loading="gradeLoading" ref="picker"/>
-
+                  :loading="gradeLoading"
+                  ref="picker">
+      </van-picker>
     </van-popup>
   </div>
 </template>
 
 <script>
-
   import config from '@/config'
 
   export default {
     name: 'StudentList',
-    computed: {
-      query () {
-        return {
-          classId: this.curClass.id,
-          keywords: this.keywords,
-          pageNo: 1,
-          pageSize: config.pageSize
-        }
-      }
-    },
     data () {
       return {
         studentList: [],
@@ -66,77 +55,118 @@
         showPopup: false,
         selectGradeId: null,
         selectClassId: null,
-        columns:
-          [{
-            values: [],
-            className: 'student-popup-item'
-          }, {
-            values: [],
-            className: 'student-popup-item'
-          }],
-        gradeLoading:
-          true
+        columns: [{
+          values: [],
+          className: 'student-popup-item'
+        }, {
+          values: [],
+          className: 'student-popup-item'
+        }],
+        gradeLoading: true
+      }
+    },
+    watch: {
+      keywords (newVal) {
+        if (!newVal) {
+          this.loadData(true)
+        }
       }
     },
     methods: {
       goDetail (id) {
-        this.$router.push(`/teacher/student/${id}`)
+        this.$router.push(`/teacher/student/detail/${id}`)
       },
       onLoad () {
+        this.loadData()
       },
-      onSearch () {},
-      onClassPicker () {
+      onSearch () {
+        this.loadData(true)
+      },
+      handleSwitchClassClick () {
         if (this.columns && this.columns.length > 0) {
           this.showPopup = true
+        } else {
+          this.$toast.fail('数据初始化失败')
         }
       },
-      onChange (picker, values) {
-        let curGrade = this.gradeList.find(item => item.gradeId === values[0].value)
-        this.columns[1].values = curGrade.classInfoList.map(item => {
-          return {
-            label: item.className,
-            value: item.id,
-          }
-        })
-        picker && picker.setColumnValues(1, this.columns[1].values)
+      onPickerChange (picker, values) {
+        let curGrade = this.gradeList.find(item => item.value === values[0].value)
+        if (curGrade.children) {
+          this.columns[1].values = curGrade.children.map(item => {
+            return {
+              label: item.label,
+              value: item.value,
+            }
+          })
+          picker && picker.setColumnValues(1, this.columns[1].values)
+        }
       },
-      onCancel () {
+      onPickerCancel () {
         this.showPopup = false
       },
-      async onConfirm (value, index) {
-        // console.log(`当前值：${value}, 当前索引：${index}`)
-        console.log(index)
+      onPickerConfirm (value, index) {
+        this.showPopup = false
+        if (!this.gradeList[index[0]]) {
+          this.$toast.fail('年级数据错误')
+          return
+        }
+        if (!this.curGrade.children || !this.curGrade.children[index[1]]) {
+          this.$toast.fail('班级数据错误')
+          return
+        }
         this.curGrade = this.gradeList[index[0]]
         this.curClass = this.curGrade.children[index[1]]
-        this.request()
-        this.showPopup = false
+        this.loadData(true)
       },
-      async request () {
-        const studentResp = await  this.$api.teacher.queryStudentPage(this.query)
-        this.studentList = studentResp.list
+      async loadData (resetList = false) {
+        this.loading = true
+        if (resetList) {
+          this.studentList = []
+          this.pageNo = 1
+        }
+        let data = await this.$api.teacher.queryStudentPage(this.getQuery())
+        if (resetList) {
+          this.studentList = data.list
+        } else {
+          this.studentList = this.studentList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.loading = false
+        this.pageNo++
+      },
+      getQuery () {
+        return {
+          classId: this.curClass.value,
+          keywords: this.keywords,
+          pageNo: this.pageNo,
+          pageSize: config.pageSize
+        }
       }
     },
     async created () {
       this.gradeLoading = true
       this.gradeList = await this.$api.teacher.queryClassCascadeList({})
-      this.gradeLoading = false
-
-      this.columns[0].values = this.gradeList.map(item => {
-        return {
-          label: item.label,
-          value: item.value,
-        }
-      })
-      this.onChange(null, [this.columns[0].values[0], undefined])
-
       if (this.gradeList && this.gradeList.length > 0) {
         this.curGrade = this.gradeList[0]
+        this.columns[0].values = this.gradeList.map(item => {
+          return {
+            label: item.label,
+            value: item.value,
+          }
+        })
         if (this.curGrade && this.curGrade.children && this.curGrade.children.length > 0) {
           this.curClass = this.curGrade.children[0]
+          this.columns[1].values = this.curGrade.children.map(item => {
+            return {
+              label: item.label,
+              value: item.value,
+            }
+          })
         }
       }
+      this.gradeLoading = false
       // 查询学生列表
-      this.request()
+      this.loadData(true)
     },
   }
 </script>
@@ -156,7 +186,7 @@
       height: 60px
     &-header
       background: $dark-blue
-      height: 120px
+      height: 60px
       position: relative
       $mb: 16px
       &-class-name

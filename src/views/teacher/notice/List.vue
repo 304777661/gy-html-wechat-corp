@@ -1,27 +1,31 @@
 <template>
-  <div class="bulletin">
-    <div class="bulletin-search">
+  <div class="notice">
+    <div class="notice-search">
       <search v-model="keywords" @search="onSearch"></search>
     </div>
+    <my-tabs :tabs="tabs" @tabChanged="handleTabChange"></my-tabs>
     <no-data v-show="!loading && !articleList.length"/>
-    <my-tabs :tabs="tabs" @tabChanged="handleTabChange"/>
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      @load="onLoad">
-      <div class="bulletin-item van-hairline--bottom"
-           v-for="item in articleList"
-           :key="item.id"
-           @click="goDetail(item.id)">
-        <p class="bulletin-item-title">
-          {{item.title}}
-        </p>
-        <p class="bulletin-item-summary">
-          {{item.content}}
-        </p>
-        <p class="bulletin-item-date">{{item.createdTime | ymd}}</p>
-      </div>
-    </van-list>
+    <div class="notice-list" v-if="articleList.length">
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad">
+        <div class="notice-list-item van-hairline--bottom"
+             v-for="(item,index) in articleList"
+             :key="index"
+             @click="goDetail(item.id)">
+          <div class="notice-list-item__header">
+            <p>{{item.title}}</p>
+          </div>
+          <div class="notice-list-item__content">
+            {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+          </div>
+          <div class="notice-list-item__additional">
+            <p>{{item.createdTime | ymd}}</p>
+          </div>
+        </div>
+      </van-list>
+    </div>
   </div>
 </template>
 
@@ -52,6 +56,16 @@
         }]
       }
     },
+    async created () {
+      this.loadData(true)
+    },
+    watch: {
+      keywords (newVal) {
+        if (!newVal) {
+          this.loadData(true)
+        }
+      }
+    },
     methods: {
       async loadData (resetList = false) {
         this.loading = true
@@ -76,7 +90,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`bulletin/${id}`)
+        this.$router.push(`/teacher/notice/detail/${id}`)
       },
       handleTabChange (tabIndex) {
         if (this.curTabIndex === tabIndex) {
@@ -89,6 +103,7 @@
         return {
           noticeType: this.curTabIndex === 0 ? 'NOTICE' : 'SCHOOL_RULE',
           pageNo: this.pageNo,
+          keywords: this.keywords,
           pageSize: config.pageSize
         }
       }
@@ -96,42 +111,30 @@
   }
 </script>
 
-<style lang="sass" scoped>
-  .bulletin
+<style scoped lang="sass">
+
+  .notice
     padding-bottom: $default-gap
-    display: flex
-    flex-direction: column
-    height: 100vh
     &-search
-      padding: 9px $default-gap
+      padding: $default-gap
       background: $white
       margin-bottom: 10px
-    /deep/ .van-list
-      /*position: absolute*/
-      /*left: 0*/
-      /*bottom: 0*/
-      /*top: 194px*/
-      /*right: 0*/
-      max-height: calc(100vh - 48px)
-      flex: 1
-      overflow: auto
-    &-item
-      height: 137px
-      background: $white
-      padding: 14px
-      &-title
-        font-size: 17px
-        color: $black
-        line-height: 22px
-      &-summary
-        margin-top: 8px
-        color: $normal-text-color
-        font-size: 14px
-        line-height: 20px
-        @include text-overflow-line(3)
-      &-date
-        margin-top: 10px
-        color: #ccc
-        font-size: 13px
-        line-height: 18px
+    &-list
+      &-item
+        padding: 14px
+        background: $white
+        &__header
+          font-weight: bold
+          font-size: 18px
+          color: $black
+          line-height: 25px
+          p
+            @include text-overflow
+        &__content
+          font-size: 15px
+          margin-top: 6px
+          color: #9B9B9B
+        &__additional
+          margin-top: 8px
+          color: #9B9B9B
 </style>

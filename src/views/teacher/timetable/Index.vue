@@ -1,6 +1,6 @@
 <template>
   <div class="timetable">
-    <section-picker :content="termTitle" @previousClick="handlePreviousClick()"
+    <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
                     @nextClick="handleNextClick()"></section-picker>
 
     <no-data v-show="!loading && !courseList.length"/>
@@ -38,10 +38,7 @@
       </div>
     </div>
 
-    <van-button type="primary"
-                class="btn-primary"
-                square="false" @click="goAll">查看班级课表
-    </van-button>
+    <my-button :content="'查看班级课表'" @btnClick="goAll"></my-button>
   </div>
 </template>
 
@@ -51,16 +48,6 @@
   export default {
     components: {SectionPicker},
     name: 'TimeTable',
-    computed: {
-      termTitle () {
-        return new Date(this.curTerm.startDate).getFullYear() + '-' + new Date(this.curTerm.endDate).getFullYear() + this.curTerm.name
-      },
-      query () {
-        return {
-          termId: this.curTerm.id
-        }
-      }
-    },
     data () {
       return {
         loading: false,
@@ -80,114 +67,7 @@
           '八',
           '九',
         ],
-        sectionList: [
-          {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 1 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'FRIDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 4 /*课节Id*/,
-            'sectionName': '四' /*课节*/,
-            'dayOfWeek': 'WEDNESDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '周润发' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }, {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 6 /*课节Id*/,
-            'sectionName': '六' /*课节*/,
-            'dayOfWeek': 'THURSDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }, {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 8 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'FRIDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 3 /*课节Id*/,
-            'sectionName': '二' /*课节*/,
-            'dayOfWeek': 'WEDNESDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '历史' /*课程名称*/,
-            'courseIdEven': 1 /*双周课程Id*/,
-            'courseNameEven': '数学' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'timetableId': 1 /*课表Id*/,
-            'sectionId': 4 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'MONDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '数学' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }
-        ],
+        sectionList: [],
         courseList: [],
         weekList: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
       }
@@ -195,14 +75,15 @@
 
     async created () {
       this.loading = true
+      // 查学期
       this.termList = await this.$api.teacher.querySchoolTermList({})
       if (this.termList) {
         this.curTermIndex = this.termList.length - 1
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
+        await this.loadData()
       }
-
-      this.courseList = new Array(this.sections.length)
+      // 处理课程
+      this.courseList = new Array(this.sections.length) //9节课
       for (let i = 0; i < this.courseList.length; i++) {
         this.courseList[i] = new Array(this.weekList.length)
         for (let j = 0; j < this.courseList[i].length; j++) {
@@ -212,15 +93,12 @@
 
       for (let i = 0; i < this.sectionList.length; i++) {
         const course = this.sectionList[i]
-        let sectionIndex = this.sections.indexOf(course.sectionName)
+        let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
         let weekIndex = this.weekList.indexOf(course.dayOfWeek)
-        console.log(sectionIndex + '--' + weekIndex)
-
         if (sectionIndex > -1 && weekIndex > -1) {
           this.courseList[sectionIndex][weekIndex] = course
         }
       }
-      console.log(this.courseList)
       this.loading = false
     },
     methods: {
@@ -291,7 +169,7 @@
         }
         this.curTermIndex--
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
+        this.loadData()
       },
       handleNextClick () {
         if (this.curTermIndex + 1 > this.termList.length) {
@@ -300,13 +178,17 @@
         }
         this.curTermIndex++
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
+        this.loadData()
       },
       goAll () {
-        this.$router.push(`timetable/class`)
+        this.$router.push(`/teacher/timetable/class`)
       },
-      async request () {
-        this.courseList = await this.$api.teacher.queryTeacherTimetableList(this.query)
+      async loadData () {
+        if (!this.curTerm) {
+          this.$toast.fail('学期数据错误')
+          return
+        }
+        this.sectionList = await this.$api.teacher.queryTeacherTimetableList({'termId': this.curTerm.id})
       },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0
@@ -322,19 +204,13 @@
     flex-direction: column
     height: 100vh
     background: #F5F5F5
-    &__semester
-      line-height: 35px
-      text-align: center
-      color: $gray
-      font-weight: bold
-      background: #fff
     &__picker
       padding: 10px 0
       background: #fff
       @include hor-around-center
     &-container
       flex: 1
-      $td-height: 53px
+      $td-height: 56px
       $th-height: 35px
       display: flex
       flex-direction: row

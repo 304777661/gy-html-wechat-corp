@@ -2,15 +2,16 @@
 <template>
   <div class="visit-add">
     <van-cell-group>
-      <van-cell title="学生" is-link :value="query.studentName" @click="handleStudentsClick">
+      <van-cell title="学生" is-link :value="visit.studentName ||'请选择'" @click="handleStudentsClick">
       </van-cell>
-      <van-cell title="家访时间" :value="visitTime | ymd" is-link @click="handleSelectTimeClick"></van-cell>
-      <van-field label="家访对象" v-model="query.visitObject" input-align="right" placeholder="请输入"></van-field>
+      <van-cell title="家访时间" :value="visit.visitDate ? (visit.visitDate | ymd) : '请选择'"
+                is-link @click="handleSelectTimeClick"></van-cell>
+      <van-field label="家访对象" v-model="visit.visitObject" input-align="right" placeholder="请输入"></van-field>
     </van-cell-group>
 
     <van-field class="visit-add-title" label="家访内容" disabled></van-field>
     <van-field
-      v-model="query.visitContent"
+      v-model="visit.visitContent"
       type="textarea"
       input-align="left"
       :autosize="textAreaSize"
@@ -19,7 +20,7 @@
     <van-field class="visit-add-title" label="照片" disabled></van-field>
 
     <div class="visit-add-picture">
-      <picture-map :pictures="query.attachments" :upload="true"/>
+      <picture-map :pictures="imageList" :upload="true"/>
     </div>
 
     <van-popup v-model="showDatePicker" position="bottom" :overlay="true">
@@ -51,7 +52,8 @@
           minHeight: 200
         },
         itemHeight: 70,
-        query: {
+        imageList: [],
+        visit: {
           visitDate: null,
           visitObject: '',
           visitContent: '',
@@ -64,9 +66,8 @@
     methods: {
       handleSelectStudentEvent () {
         this.$eventBus.$on('selectStudent', ({id, name}) => {
-          this.query.studentId = id
-          this.query.studentName = name
-          console.log(this.query.studentName)
+          this.visit.studentId = id
+          this.visit.studentName = name
         })
       },
       handleStudentsClick () {
@@ -74,20 +75,29 @@
       },
       async handleSubmitClick () {
         // 数据校验
-        if (this.query.studentName.length === 0) {
+        if (this.visit.studentName.length === 0) {
           this.$toast.fail('请选择学生')
           return
         }
-        if (this.query.visitObject.length === 0) {
+        if (this.visit.visitObject.length === 0) {
           this.$toast.fail('请输入家访对象')
           return
         }
-        if (this.query.visitContent.length === 0) {
+        if (this.visit.visitContent.length === 0) {
           this.$toast.fail('请输入家访内容')
           return
         }
-        this.query.visitDate = this.visitTime.Format('yyyy-MM-dd 00:00:00')
-        await this.$api.teacher.addHomeVisitingWX(this.query)
+        this.visit.visitDate = this.visitTime.Format('yyyy-MM-dd 00:00:00')
+        if (this.imageList && this.imageList.length > 0) {
+          this.visit.attachmentList = []
+          this.imageList.map(item => {
+            this.visit.attachmentList.push({
+              fileName: item.substr(item.lastIndexOf('/') + 1).toLowerCase(),
+              fileUrl: item
+            })
+          })
+        }
+        await this.$api.teacher.addHomeVisitingWX(this.visit)
         this.$toast.success('添加成功')
         this.$router.back()
       },
@@ -95,7 +105,7 @@
         this.showDatePicker = true
       },
       handleDatePickerConfirm () {
-
+        this.visit.visitDate = this.visitTime.Format('yyyy-MM-dd 00:00:00')
         this.showDatePicker = false
       },
       handleDatePickerCancel () {

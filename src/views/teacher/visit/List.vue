@@ -2,13 +2,14 @@
   <div class="visit">
     <div class="wrapper">
       <div class="visit-search">
-        <search v-model="query.studentName" @search="loadData"></search>
+        <search v-model="studentName" @search="onSearch"></search>
       </div>
-      <no-data v-show=" !loading && !visitList.length"/>
+      <no-data v-show="!loading && !visitList.length"/>
+      <my-loading v-model="loading"/>
       <div ref="wrapper" class="visit-wrapper">
         <van-list
-          :loading="loading"
-          :finished="true"
+          v-model="loading"
+          :finished="finished"
           @load="loadData">
           <div class="visit-wrapper-item van-hairline--bottom"
                v-for="(item,index) in visitList"
@@ -21,50 +22,54 @@
         </van-list>
       </div>
     </div>
-    <my-button :content="addVisitBtnTitle" @btnClick="handleAddVisitClick"></my-button>
+    <my-button :content="'增加家访记录'" @btnClick="handleAddVisitClick"></my-button>
   </div>
 </template>
 
 <script>
   import Search from 'COMPONENT/Search'
-  import BScroll from 'better-scroll'
+  // import BScroll from 'better-scroll'
 
   export default {
-    name: 'List',
-    computed: {
-      query () {
-        return {
-          studentName: null
-        }
-      }
-    },
+    name: 'VisitList',
     data () {
       return {
-        addVisitBtnTitle: '增加家访记录',
-        loading: false,
         finished: true,
+        loading: false,
         visitList: [],
+        studentName: ''
+      }
+    },
+    watch: {
+      studentName (newVal) {
+        if (!newVal) {
+          this.loadData()
+        }
       }
     },
     methods: {
       async loadData () {
-        this.visitList = await this.$api.teacher.queryHomeVisitingWXList(this.query)
+        this.loading = true
+        this.visitList = await this.$api.teacher.queryHomeVisitingWXList({
+          'studentName': (this.studentName.length === 0) ? null : this.studentName
+        })
+        this.loading = false
       },
-      onSearch () {},
+      onSearch () {
+        this.loadData()
+      },
       goToDetail (id) {
-        this.$router.push(`/teacher/visit/${id}`)
+        this.$router.push(`/teacher/visit/detail/${id}`)
       },
       handleAddVisitClick () {
-        this.$router.push(`/teacher/visitadd`)
+        this.$router.push(`/teacher/visit/add`)
       }
     },
     async created () {
-      this.loading = false
       this.loadData()
-      this.loading = true
     },
     mounted () {
-      this.scroll = new BScroll(this.$refs.wrapper, {click: true})
+      // this.scroll = new BScroll(this.$refs.wrapper, {click: true})
     }
   }
 </script>

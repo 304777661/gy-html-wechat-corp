@@ -1,8 +1,8 @@
 <template>
   <div class="section-picker">
-    <van-icon name="arrow-left" @click="handlePreviousClick()" color="#fff" size="26px"/>
+    <van-icon name="arrow-left" @click="handlePreviousClick()" color="#fff" size="26px"></van-icon>
     <span class="section-picker-content">{{content}}</span>
-    <van-icon name="arrow" @click="handleNextClick()" color="#fff" size="26px"/>
+    <van-icon name="arrow" @click="handleNextClick()" color="#fff" size="26px"></van-icon>
   </div>
 </template>
 
@@ -26,7 +26,7 @@
 <style scoped lang="sass">
   .section-picker
     background: $dark-blue
-    $h: 80px
+    $h: 55px
     height: $h
     line-height: $h
     @include hor-between-center

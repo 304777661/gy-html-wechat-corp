@@ -6,7 +6,7 @@
       </p>
       <img :src="student.avatar | defaultAvatar" :alt="student.name" class="student-detail-header__avatar">
     </div>
-    <van-cell-group :border="false">
+    <van-cell-group>
       <van-cell title="班级学号" :value="student.classStudentNo || '--'"></van-cell>
       <van-cell title="全国学籍号" :value="student.nationStudentNo || '--'"></van-cell>
       <van-cell title="身份证号" :value="student.idCard || '--'"></van-cell>

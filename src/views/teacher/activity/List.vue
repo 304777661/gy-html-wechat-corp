@@ -1,15 +1,12 @@
 <template>
   <div class="activity">
-    <my-tabs :tabs="tabs" @tabChanged="handleTabChanged" v-show="isTeachGroupLeader && isPrepareLeader"></my-tabs>
+    <my-tabs :tabs="tabs" @tabChanged="handleTabChanged" v-if="isTeachGroupLeader && isPrepareLeader"></my-tabs>
 
-    <div v-show="curTabIndex === 0">
-      <no-data v-show="!teachGroupLoading && !teachGroupList.length"></no-data>
-      <van-list
-        v-model="teachGroupLoading"
-        :finished="teachGroupLoadingFinished"
-        @load="onLoad">
-
-        <van-swipe-cell v-for="item in teachGroupList"
+    <no-data v-show="!loading && !activityList.length"></no-data>
+    <my-loading v-model="loading"/>
+    <div v-if="activityList && activityList.length>0">
+      <van-list v-model="loading" :finished="finished" @load="onLoad">
+        <van-swipe-cell v-for="item in activityList"
                         :key="item.id"
                         :right-width="cellRightWidth"
                         :on-close="handleSwipeCellClose">
@@ -25,39 +22,10 @@
               <span class="activity-item-footer__date">{{item.activityDate | ymd}}</span>
             </div>
           </div>
-          <span slot="right" class="activity-item-right">删除</span>
+          <span slot="right" class="activity-item-right" @click="handleDeleteClick(item.id)">删除</span>
         </van-swipe-cell>
       </van-list>
     </div>
-
-    <div v-show="curTabIndex === 1">
-      <no-data v-show="!activityLoading && !activityList.length"/>
-
-      <van-list
-        v-model="activityLoading"
-        :finished="activityFinished"
-        @load="onLoad">
-
-        <div class="activity-item"
-             v-for="item in activityList"
-             :key="item.id"
-             @click="goDetail(item.id)">
-
-          <div class="activity-item-header">
-            <span class="activity-item-header__title">{{item.activityName}}</span>
-          </div>
-
-          <div class="activity-item-body">
-            {{item.activityContent.length > 60? item.activityContent.substr(0,60)+'......' : item.activityContent}}
-          </div>
-          <div class="van-hairline--bottom"></div>
-          <div class="activity-item-footer">
-            <span class="activity-item-footer__date">{{item.activityDate | ymd}}</span>
-          </div>
-        </div>
-      </van-list>
-    </div>
-
     <my-button :content="addActivityBtnTitle" @btnClick="handleAddActivityClick"></my-button>
   </div>
 </template>
@@ -70,6 +38,16 @@
     computed: {},
     data () {
       return {
+        curTabIndex: 0,
+        loading: false,
+        finished: false,
+        addActivityBtnTitle: '新增教研活动',
+        isTeachGroupLeader: false,
+        isPrepareLeader: false,
+        showDeleteDialog: false,
+        cellRightWidth: 160,
+        activityList: [],
+        myself: {},
         tabs: [{
           id: 0,
           label: '教研活动'
@@ -77,105 +55,78 @@
           id: 1,
           label: '集体备课'
         }],
-        addActivityBtnTitle: '新增教研活动',
-        cellRightWidth: 160,
-        teachGroupLoading: false,
-        teachGroupLoadingFinished: false,
-        activityLoading: false,
-        activityFinished: false,
-        isTeachGroupLeader: false,
-        isPrepareLeader: false,
-        curTabIndex: 0,
-        teachGroupPageNo: 1,
-        activityPageNo: 1,
-        teachGroupList: [{
-          'id': 1 /*主键*/,
-          'teachGroupId': 1 /*教研组Id*/,
-          'gradeId': 1 /*年级Id*/,
-          'activityType': 'ACTIVITY_PREPARE_LESSONS' /*活动类型1教研活动2备课活动：ALL|ACTIVITY_TEACH_GROUP|ACTIVITY_PREPARE_LESSONS*/,
-          'activityName': 'activityName' /*活动名称*/,
-          'activityDate': '2018-12-18 10:55:26' /*活动日期*/,
-          'activityLocation': 'activityLocation' /*活动地点*/,
-          'activitySponsor': 'activitySponsor' /*举办单位*/,
-          'activityContent': '教研组内容' /*活动内容*/,
-          'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-          'createdTime': '2018-12-18 10:55:26' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-          'updatedTime': '2018-12-18 10:55:26' /*更新时间 默认值：CURRENT_TIMESTAMP*/,
-          'startTime': '2018-12-18 10:55:26' /*开始时间*/,
-          'endTime': '2018-12-18 10:55:26' /*结束时间*/
-        }],
-        activityList: [{
-          'id': 1 /*主键*/,
-          'teachGroupId': 1 /*教研组Id*/,
-          'gradeId': 1 /*年级Id*/,
-          'activityType': 'ACTIVITY_PREPARE_LESSONS' /*活动类型1教研活动2备课活动：ALL|ACTIVITY_TEACH_GROUP|ACTIVITY_PREPARE_LESSONS*/,
-          'activityName': 'activityName' /*活动名称*/,
-          'activityDate': '2018-12-18 10:55:26' /*活动日期*/,
-          'activityLocation': 'activityLocation' /*活动地点*/,
-          'activitySponsor': 'activitySponsor' /*举办单位*/,
-          'activityContent': '活动内容' /*活动内容*/,
-          'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-          'createdTime': '2018-12-18 10:55:26' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-          'updatedTime': '2018-12-18 10:55:26' /*更新时间 默认值：CURRENT_TIMESTAMP*/,
-          'startTime': '2018-12-18 10:55:26' /*开始时间*/,
-          'endTime': '2018-12-18 10:55:26' /*结束时间*/
-        }],
-        showDeleteDialog: false,
-        myself: {
-          'userId': 45,
-          'name': '大老师',
-          'empNo': null,
-          'phone': '13900000000',
-          'avatar': null,
-          'isTeacher': 'YES',
-          'isParent': 'YES',
-          'isTeachGroupLeader': 'YES',
-          'isPrepareLeader': 'YES'
-        }
+        btnTitle: ['新增教研活动', '新增集体备课']
       }
     },
     methods: {
-      handleTabChanged (tabIndex) {
+      async handleTabChanged (tabIndex) {
+        if (this.curTabIndex === tabIndex) {
+          return
+        }
         this.curTabIndex = tabIndex
+        this.changeAddBtnTitle()
+        this.loading = true
+        await this.loadData(this.curTabIndex === 0, true)
+        this.loading = false
       },
-      listQuery (isTeachGroup) {
+      changeAddBtnTitle () {
+        this.addActivityBtnTitle = this.btnTitle[this.curTabIndex % 2]
+      },
+      getQuery (type) {
         return {
-          activityType: isTeachGroup ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS',
-          pageNo: isTeachGroup ? this.teachGroupPageNo : this.activityPageNo,
+          activityType: type,
+          pageNo: this.pageNo,
           pageSize: config.pageSize
         }
       },
       // 删除教研活动
+      handleDeleteClick (id) {
+        this.$dialog.confirm({
+          title: `是否删除当前教研活动？`
+        }).then(async () => {
+          await this.$api.teacher.deleteTeachGroupActivity(id)
+          this.teachGroupList.splice(this.teachGroupList.findIndex(item => item.id === id), 1)
+          this.$toast.success('删除成功')
+        }, () => {
+          console.log('用户取消')
+        })
+      },
       handleSwipeCellClose (clickPosition, instance) {
-        console.log(11111)
         switch (clickPosition) {
           case 'right':
-            this.$dialog.confirm({
-              title: `是否删除当前教研活动？`
-            }).then(() => {
-              console.log('用户取消1')
-              instance && instance.close()
-            }, () => {
-              instance && instance.close()
-              console.log('用户取消2')
-            })
+            instance && instance.close()
             break
         }
-        // await this.$api.teacher.deleteTeachGroupActivity(id)
-        // this.teachGroupList.splice(this.teachGroupList.findIndex(item => item.id === id), 1)
-        // this.$toast.success('删除成功')
       },
-      onLoad () {},
+      onLoad () {
+        this.loadData(this.curTabIndex === 0)
+      },
       goDetail (id) {
-        this.$router.push(`/teacher/activity/${id}`)
+        this.$router.push(`/teacher/activity/detail/${id}`)
       },
       handleAddActivityClick () {
         this.$router.push(`/teacher/activity/add/${this.curTabIndex}`)
-      }
+      },
+      async loadData (isTeachGroup, resetList = false) {
+        if (resetList) {
+          this.activityList = []
+          this.pageNo = 1
+        }
+        let data = isTeachGroup ?
+          await this.$api.teacher.queryTeachGroupActivityPage(this.getQuery('ACTIVITY_TEACH_GROUP')) :
+          await this.$api.teacher.queryTeachGroupActivityPage(this.getQuery('ACTIVITY_PREPARE_LESSONS'))
+        if (resetList) {
+          this.activityList = data.list
+        } else {
+          this.activityList = this.activityList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.pageNo++
+      },
     },
     async created () {
       this.loading = true
-      // this.myself = await this.$api.teacher.getSessionUserDetail({})
+      this.myself = await this.$api.teacher.getSessionUserDetail({})
       if (this.myself && this.myself.isTeachGroupLeader === 'YES') {
         // 教研组组长
         this.isTeachGroupLeader = true
@@ -189,12 +140,13 @@
         this.$router.back()
         return
       }
-      // this.teachGroupList = await this.$api.teacher.queryTeachGroupActivityPage(this.listQuery(true))
-      // this.activityList = await this.$api.teacher.queryTeachGroupActivityPage(this.listQuery(false))
-      if (!this.isTeachGroupLeader && this.isPrepareLeader) {
+      if (this.isTeachGroupLeader) {
+        this.curTabIndex = 0
+        await this.loadData(true, true)
+      } else {
         this.curTabIndex = 1
+        await this.loadData(false, true)
       }
-      console.log(this.myself)
       this.loading = false
     }
   }

@@ -16,62 +16,66 @@
       </div>
     </div>
 
-    <no-data v-show="!loading && JSON.stringify(salary) == '{}'"></no-data>
-
-    <van-cell title="基本工资" :value="salary.salaryBase | rmb"></van-cell>
-    <van-cell title="其中" class="salary-include"></van-cell>
-    <div class="salary-detail">
-      <van-cell title="基本工资1" :value="salary.salaryBase1 | rmb"></van-cell>
-      <van-cell title="之前浮动4%" :value="salary.salaryFloat4 | rmb"></van-cell>
-      <van-cell title="浮动5%" :value="salary.salaryFloat5 | rmb"></van-cell>
-      <van-cell title="浮动10%" :value="salary.salaryFloat10 | rmb"></van-cell>
-      <van-cell title="校龄" :value="salary.schoolAge | rmb"></van-cell>
-      <van-cell title="校龄" :value="salary.salaryWorkAge | rmb"></van-cell>
+    <no-data v-show="!loading && !salary"></no-data>
+    <div v-if="salary !== null">
+      <van-cell title="基本工资" :value="salary.salaryBase | rmb"></van-cell>
+      <van-cell title="其中" class="salary-include"></van-cell>
+      <div class="salary-detail">
+        <van-cell title="基本工资1" :value="salary.salaryBase1 | rmb"></van-cell>
+        <van-cell title="之前浮动4%" :value="salary.salaryFloat4 | rmb"></van-cell>
+        <van-cell title="浮动5%" :value="salary.salaryFloat5 | rmb"></van-cell>
+        <van-cell title="浮动10%" :value="salary.salaryFloat10 | rmb"></van-cell>
+        <van-cell title="校龄" :value="salary.schoolAge | rmb"></van-cell>
+        <van-cell title="校龄" :value="salary.salaryWorkAge | rmb"></van-cell>
+      </div>
+      <div v-for="(item,index) in salary.otherSalaryList" :key="index">
+        <van-cell :title="item.salaryTemplateName" :value="item.salaryValue | rmb"></van-cell>
+      </div>
+      <div class="van-hairline--bottom"></div>
+      <!--<van-cell title="实发数" value="0.00元" class="salary-final"/>-->
     </div>
-    <div v-for="(item,index) in salary.otherSalaryList" :key="index">
-      <van-cell :title="item.salaryTemplateName" :value="item.salaryValue | rmb"></van-cell>
-    </div>
-    <div class="van-hairline--bottom"></div>
-    <!--<van-cell title="实发数" value="0.00元" class="salary-final"/>-->
   </div>
 </template>
 
 <script>
   export default {
     name: 'Detail',
-    computed: {
-      query () {
-        return {salaryMonth: this.selectDate.Format('yyyy-MM-dd hh:mm:ss')}
-      }
-    },
     data () {
       // 默认当月1日
       let selectDate = new Date()
       selectDate.setDate(1)
       return {
+        loading: false,
         selectDate,
-        salary: {},
+        salary: null,
       }
     },
     methods: {
-      handlePreviousClick () {
+      async handlePreviousClick () {
         this.selectDate = new Date(this.selectDate.setMonth(this.selectDate.getMonth() - 1))
+        this.loadData()
       },
-      handleNextClick () {
+      async handleNextClick () {
         let now = new Date()
         if (this.selectDate.getFullYear() > now.getFullYear() || this.selectDate.getMonth() >= now.getMonth()) {
           this.$toast.fail('没有更多数据')
           return
         }
         this.selectDate = new Date(this.selectDate.setMonth(this.selectDate.getMonth() + 1))
+        this.loadData()
+      },
+      getQuery () {
+        return {
+          salaryMonth: this.selectDate.Format('yyyy-MM-dd 00:00:00')
+        }
       },
       async loadData () {
         this.loading = true
-        this.salary = await this.$api.teacher.getSalary(this.query)
+        this.salary = await this.$api.teacher.getSalary(this.getQuery())
         this.loading = false
       }
     },
-    created () {
+    async created () {
       this.loadData()
     }
   }
@@ -103,7 +107,7 @@
     &-final
       color: #24A197
     &-header
-      height: 140px
+      height: 100px
       background: $dark-blue
       color: $white
       @include hor-center-center

@@ -1,16 +1,16 @@
 <!--选择访问学生-->
 <template>
   <div class="select-student">
-    <!--<div class="select-student-search">-->
-    <!--<search v-model="query.keywords" @search="loadData"></search>-->
-    <!--</div>-->
-
-    <no-data v-show=" !loading && !studentList.length"/>
+    <div class="select-student-search">
+      <search v-model="keywords" @search="onSearch"></search>
+    </div>
+    <no-data v-show="!loading && !studentList.length"/>
+    <!--<div v-if="studentList && studentList.length>0">-->
     <div ref="wrapper" class="select-student-wrapper">
       <van-list
-        :loading="loading"
-        :finished="true"
-        @load="loadData">
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad">
         <div class="select-student-wrapper-item van-hairline--bottom"
              v-for="(item,index) in studentList"
              :key="index"
@@ -21,8 +21,8 @@
         </div>
       </van-list>
     </div>
-
-    <my-button :content="okBtnTitle" @btnClick="handleOkClick"></my-button>
+    <!--</div>-->
+    <my-button :content="'确定'" @btnClick="handleOkClick"></my-button>
   </div>
 </template>
 
@@ -31,51 +31,26 @@
     name: 'Students',
     data () {
       return {
-        okBtnTitle: '确定',
-        submitBtnTitle: '提交',
-        studentList: [{
-          'id': 1 /*主键*/,
-          'name': 'name' /*姓名*/,
-          'avatar': null /*头像*/,
-          'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-          'classId': 1 /*班级Id*/,
-          'className': 'className' /*班级名称*/,
-          'gradeId': 1 /*年级Id*/,
-          'grade': 'grade' /*年级*/
-        }, {
-          'id': 1 /*主键*/,
-          'name': 'name' /*姓名*/,
-          'avatar': null /*头像*/,
-          'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-          'classId': 1 /*班级Id*/,
-          'className': 'className' /*班级名称*/,
-          'gradeId': 1 /*年级Id*/,
-          'grade': 'grade' /*年级*/
-        }, {
-          'id': 1 /*主键*/,
-          'name': 'name' /*姓名*/,
-          'avatar': null /*头像*/,
-          'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-          'classId': 1 /*班级Id*/,
-          'className': 'className' /*班级名称*/,
-          'gradeId': 1 /*年级Id*/,
-          'grade': 'grade' /*年级*/
-        }, {
-          'id': 1 /*主键*/,
-          'name': 'name' /*姓名*/,
-          'avatar': null /*头像*/,
-          'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-          'classId': 1 /*班级Id*/,
-          'className': 'className' /*班级名称*/,
-          'gradeId': 1 /*年级Id*/,
-          'grade': 'grade' /*年级*/
-        }],
-        query: {
-          keywords: null
+        loading: false,
+        finished: true,
+        studentList: [],
+        keywords: null
+      }
+    },
+    watch: {
+      keywords (newVal) {
+        if (!newVal) {
+          this.loadData()
         }
       }
     },
     methods: {
+      onSearch () {
+        this.loadData()
+      },
+      onLoad () {
+        this.loadData()
+      },
       handleOkClick () {
         // 数据校验
         let selectedIndex = -1
@@ -95,7 +70,6 @@
         })
         this.$router.back()
       },
-
       handleItemClick (item, index) {
         for (let i = 0; i < this.studentList.length; i++) {
           this.studentList[i].isSelected = false
@@ -104,22 +78,27 @@
         this.$set(this.studentList, index, item)
       },
       async loadData () {
-        // this.studentList = await this.$api.teacher.queryStudentListByAdviser(this.query)
+        this.loading = true
+        let studentList = await this.$api.teacher.queryStudentListByAdviser({'keywords': this.keywords})
+        for (let i = 0; i < studentList.length; i++) {
+          studentList[i].isSelected = false
+        }
+        this.studentList = studentList
+        this.loading = false
       }
     },
     async created () {
-      this.loading = true
-      this.loadData()
-      for (let i = 0; i < this.studentList.length; i++) {
-        this.studentList[i].isSelected = false
-      }
-      this.loading = false
+      await this.loadData()
     }
   }
 </script>
 
 <style scoped lang="sass">
   .select-student
+    &-search
+      padding: $default-gap
+      margin-bottom: 10px
+      background: $white
     &-wrapper
       height: calc(100vh - 70px)
       &-item

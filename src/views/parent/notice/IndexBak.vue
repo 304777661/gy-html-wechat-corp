@@ -141,7 +141,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`bulletin/${id}`)
+        this.$router.push(`/notice/detail/${id}`)
       },
       getQuery () {
         return {

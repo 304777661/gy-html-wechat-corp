@@ -182,6 +182,11 @@ export default {
     return await Axios.post('/teacher/updateTeacher.do', query)
   },
 
+  // 班级课表查询
+  async queryClassTimetable (query) {
+    return await Axios.post('/timetable/queryClassTimetable.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -200,11 +205,6 @@ export default {
   // 教师个人课表信息查询-教师端
   async queryPersonalTimetable () {
     return await Axios.post('/courseTeacher/queryPersonalTimetable.do', {})
-  },
-
-  // 班级课表信息查询-教师端
-  async queryClassTimetable (classId) {
-    return await Axios.post('/courseTeacher/queryClassTimetable.do', {classId})
   },
 
   // 课节设置列表查询

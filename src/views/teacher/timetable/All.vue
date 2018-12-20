@@ -1,13 +1,13 @@
 <template>
   <div class="class-table">
-    <section-picker :content="termTitle" @previousClick="handlePreviousClick()"
+    <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
                     @nextClick="handleNextClick()"></section-picker>
 
     <no-data v-show="!loading && !courseList.length"/>
     <!--<my-loading v-model="loading"/>-->
 
     <div class="class-table-header">
-      <span class="class-table-header-class-name">{{curClass.className || '--'}}</span>
+      <span class="class-table-header-class-name">{{curClass.label || '--'}}</span>
       <span class="class-table-header-class-picker" @click="onClassPicker">选择班级</span>
     </div>
 
@@ -43,11 +43,7 @@
       </div>
     </div>
 
-    <van-button type="primary"
-                class="btn-primary" @click="goTeacherTimeTable">查看班级课表
-    </van-button>
-
-    <van-popup v-model="showPopup" position="bottom" :overlay="true" lazy-render close-on-click-overlay>
+    <van-popup v-model="showPopup" position="bottom">
       <van-picker :columns="columns"
                   @change="onChange"
                   show-toolbar
@@ -55,9 +51,12 @@
                   @confirm="onConfirm"
                   :item-height="popupItemHeight"
                   value-key="label"
-                  :loading="gradeLoading" ref="picker"/>
+                  :loading="gradeLoading" ref="picker">
+      </van-picker>
 
     </van-popup>
+
+    <my-button :content="'查看教师课表'" @btnClick="goTeacherTimeTable"></my-button>
   </div>
 </template>
 
@@ -67,17 +66,6 @@
   export default {
     components: {SectionPicker},
     name: 'class-table',
-    computed: {
-      termTitle () {
-        return new Date(this.curTerm.startDate).getFullYear() + '-' + new Date(this.curTerm.endDate).getFullYear() + this.curTerm.name
-      },
-      query () {
-        return {
-          termId: this.curTerm.id,
-          classId: this.curClass.id
-        }
-      }
-    },
     data () {
       return {
         loading: false,
@@ -111,114 +99,7 @@
           '八',
           '九',
         ],
-        sectionList: [
-          {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 1 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'FRIDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 4 /*课节Id*/,
-            'sectionName': '四' /*课节*/,
-            'dayOfWeek': 'WEDNESDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '周润发' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }, {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 6 /*课节Id*/,
-            'sectionName': '六' /*课节*/,
-            'dayOfWeek': 'THURSDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }, {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 8 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'FRIDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '语文' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 3 /*课节Id*/,
-            'sectionName': '二' /*课节*/,
-            'dayOfWeek': 'WEDNESDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '历史' /*课程名称*/,
-            'courseIdEven': 1 /*双周课程Id*/,
-            'courseNameEven': '数学' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          },
-          {
-            'class-tableId': 1 /*课表Id*/,
-            'sectionId': 4 /*课节Id*/,
-            'sectionName': '一' /*课节*/,
-            'dayOfWeek': 'MONDAY' /*星期0星期日1星期一2星期二6星期六：ALL|MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY*/,
-            'courseId': 1 /*课程Id，当双周课程Id不为空时为单周课程Id*/,
-            'courseName': '数学' /*课程名称*/,
-            'courseIdEven': 0 /*双周课程Id*/,
-            'courseNameEven': 'courseNameEven' /*双周课程名称*/,
-            'teacherId': 1 /*教师Id,当双周教师Id字段不为空时表示单周教师Id*/,
-            'teacherName': '刘德华' /*教师姓名*/,
-            'teacherIdEven': 1 /*双周课教师Id*/,
-            'teacherNameEven': '张学友' /*双周课教师姓名*/,
-            'classId': 1 /*班级Id*/,
-            'className': '第一班' /*班级名*/,
-            'termId': 1 /*学期Id*/,
-            'termName': '第一学期' /*学期名*/
-          }
-        ],
+        sectionList: [],
         courseList: [],
         weekList: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
       }
@@ -226,31 +107,35 @@
 
     async created () {
       this.loading = true
-
       // 查班级年级列表
       this.gradeLoading = true
       this.gradeList = await this.$api.teacher.queryClassCascadeList({})
-      this.columns[0].values = this.gradeList.map(item => {
-        return {
-          label: item.label,
-          value: item.value,
-        }
-      })
-      this.onChange(null, [this.columns[0].values[0], undefined])
-      this.gradeLoading = false
       if (this.gradeList && this.gradeList.length > 0) {
         this.curGrade = this.gradeList[0]
+        this.columns[0].values = this.gradeList.map(item => {
+          return {
+            label: item.label,
+            value: item.value,
+          }
+        })
         if (this.curGrade && this.curGrade.children && this.curGrade.children.length > 0) {
           this.curClass = this.curGrade.children[0]
+          this.columns[1].values = this.curGrade.children.map(item => {
+            return {
+              label: item.label,
+              value: item.value,
+            }
+          })
         }
       }
+      this.gradeLoading = false
       // 查学期
       this.termList = await this.$api.teacher.querySchoolTermList({})
 
       if (this.termList) {
         this.curTermIndex = this.termList.length - 1
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
+        await this.loadData()
       }
 
       this.courseList = new Array(this.sections.length)
@@ -263,13 +148,12 @@
 
       for (let i = 0; i < this.sectionList.length; i++) {
         const course = this.sectionList[i]
-        let sectionIndex = this.sections.indexOf(course.sectionName)
+        let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
         let weekIndex = this.weekList.indexOf(course.dayOfWeek)
         if (sectionIndex > -1 && weekIndex > -1) {
           this.courseList[sectionIndex][weekIndex] = course
         }
       }
-      console.log(this.courseList)
       this.loading = false
     },
     methods: {
@@ -332,34 +216,42 @@
               backgroundColor: '#F8FAFC'
             }
         }
-      }
-      ,
-      handlePreviousClick () {
+      },
+      async handlePreviousClick () {
         if (this.curTermIndex - 1 < 0) {
           this.$toast.fail('已无其他学期')
           return
         }
         this.curTermIndex--
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
-      }
-      ,
-      handleNextClick () {
-        if (this.curTermIndex + 1 > this.termList.length) {
+        this.loadData()
+      },
+      async handleNextClick () {
+        if (this.curTermIndex + 1 >= this.termList.length) {
           this.$toast.fail('已是最新的学期')
           return
         }
         this.curTermIndex++
         this.curTerm = this.termList[this.curTermIndex]
-        this.request()
-      }
-      ,
+        this.loadData()
+      },
       goTeacherTimeTable () {
-        this.$router.push('timetable')
-      }
-      ,
-      async request () {
-        this.courseList = await this.$api.teacher.queryClassCascadeList(this.query)
+        this.$router.push(`/teacher/timetable`)
+      },
+      async loadData () {
+        if (!this.curTerm) {
+          this.$toast.fail('学期数据错误')
+          return
+        }
+        if (!this.curClass) {
+          this.$toast.fail('班级数据错误')
+          return
+        }
+        let query = {
+          termId: this.curTerm.id,
+          classId: this.curClass.value
+        }
+        this.sectionList = await this.$api.teacher.queryClassTimetable(query)
       },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0
@@ -371,24 +263,32 @@
       },
       onChange (picker, values) {
         let curGrade = this.gradeList.find(item => item.gradeId === values[0].value)
-        this.columns[1].values = curGrade.children.map(item => {
-          return {
-            label: item.label,
-            value: item.value,
-          }
-        })
-        picker && picker.setColumnValues(1, this.columns[1].values)
+        if (curGrade && curGrade.children && curGrade.children.length > 0) {
+          this.columns[1].values = curGrade.children.map(item => {
+            return {
+              label: item.label,
+              value: item.value,
+            }
+          })
+          picker && picker.setColumnValues(1, this.columns[1].values)
+        }
       },
       onCancel () {
         this.showPopup = false
       },
       async onConfirm (value, index) {
-        // console.log(`当前值：${value}, 当前索引：${index}`)
-        console.log(index)
-        this.curGrade = this.gradeList[index[0]]
-        this.curClass = this.curGrade.classInfoList[index[1]]
-        this.request()
         this.showPopup = false
+        if (!this.gradeList[index[0]]) {
+          this.$toast.fail('年级数据错误')
+          return
+        }
+        if (!this.curGrade.children || !this.curGrade.children[index[1]]) {
+          this.$toast.fail('班级数据错误')
+          return
+        }
+        this.curGrade = this.gradeList[index[0]]
+        this.curClass = this.curGrade.children[index[1]]
+        this.loadData()
       },
     }
   }
@@ -412,8 +312,8 @@
       &-class-name
         position: absolute
         color: $white
-        font-size: 18px
-        line-height: 24px
+        font-size: 17px
+        line-height: 21px
         left: 14px
         bottom: $mb
       &-class-picker
@@ -423,19 +323,13 @@
         font-size: 12px
         line-height: 17px
         color: #86B6F1
-    &__semester
-      line-height: 35px
-      text-align: center
-      color: $gray
-      font-weight: bold
-      background: #fff
     &__picker
       padding: 10px 0
       background: #fff
       @include hor-around-center
     &-container
       flex: 1
-      $td-height: 53px
+      $td-height: 54px
       $th-height: 35px
       display: flex
       flex-direction: row

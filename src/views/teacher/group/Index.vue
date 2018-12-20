@@ -1,21 +1,18 @@
 <template>
-
   <div class="team">
-
     <div class="team-search">
       <search v-model="keywords" @search="onSearch"></search>
     </div>
-
-    <my-tabs :tabs="tabs" @tabChanged="handleTabChange" :swipeable="true"/>
-
-    <div class="team-list" v-if="teachGroupList.length">
-      <no-data v-show="!loading && !teachGroupList[curTabIndex].articleList.length"/>
+    <my-tabs :tabs="tabs" @tabChanged="handleTabChange" :swipeable="true" v-if="tabs && tabs.length>0"/>
+    <no-data v-show="!loading && !articleList.length"/>
+    <my-loading v-model="loading"/>
+    <div class="team-list" v-if="articleList.length">
       <van-list
         v-model="loading"
         :finished="finished"
         @load="onLoad">
         <div class="team-list-item van-hairline--bottom"
-             v-for="(item,index) in teachGroupList[curTabIndex].articleList"
+             v-for="(item,index) in articleList"
              :key="index"
              @click="handleItemClick(item.id)">
           <div class="team-list-item__header">
@@ -45,57 +42,76 @@
     data () {
       return {
         loading: false,
-        finished: true,
+        finished: false,
         keywords: null,
         curTabIndex: 0,
         teachGroupList: [],
         tabs: [],
+        pageNo: 1,
+        articleList: []
+      }
+    },
+    watch: {
+      keywords (newVal) {
+        if (!newVal) {
+          this.loadData(true)
+        }
       }
     },
     methods: {
       onSearch () {
+        this.loadData(true)
       },
-      onLoad () {},
-      handleTabChange (tabIndex) {
-        this.curTabIndex = tabIndex
-        // 请求
+      onLoad () {
         this.loadData()
       },
-      query () {
+      handleTabChange (tabIndex) {
+        if (this.curTabIndex === tabIndex) {
+          return
+        }
+        this.curTabIndex = tabIndex
+        this.loadData(true)
+      },
+      getQuery () {
         return {
           teachGroupId: this.teachGroupList[this.curTabIndex].id,
           keywords: this.keywords,
-          pageNo: this.teachGroupList[this.curTabIndex].pageNo,
+          pageNo: this.pageNo,
           pageSize: config.pageSize
         }
       },
       handleItemClick (id) {
-        this.$router.push(`/teacher/team/${id}`)
+        this.$router.push(`/teacher/group/detail/${id}`)
       },
-      async loadData () {
-        let resp = await this.$api.teacher.queryTeachGroupPage(this.query())
-        this.teachGroupList[this.curTabIndex].articleList = resp.list
-        console.log(this.teachGroupList[this.curTabIndex].articleList)
+      async loadData (resetList = false) {
+        this.loading = true
+        if (resetList) {
+          this.articleList = []
+          this.pageNo = 1
+        }
+        let data = await this.$api.teacher.queryTeachGroupPage(this.getQuery())
+        if (resetList) {
+          this.articleList = data.list
+        } else {
+          this.articleList = this.articleList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.loading = false
+        this.pageNo++
       }
     },
     async created () {
       this.loading = true
       let teachGroupList = await this.$api.teacher.queryTeachGroupList({})
       if (teachGroupList && teachGroupList.length > 0) {
-        // 初始化tabs
         this.tabs = teachGroupList.map(item => {
           return {
             id: item.id,
             label: item.name
           }
         })
-        for (let i = 0; i < teachGroupList.length; i++) {
-          // 每页单独记录分页信息
-          teachGroupList[i].pageNo = 1
-          teachGroupList[i].articleList = []
-        }
         this.teachGroupList = teachGroupList
-        this.handleTabChange(0)
+        this.loadData()
       }
       this.loading = false
     }

@@ -17,7 +17,7 @@
       return {
         entries: [{
           'name': '通知公告',
-          'link': 'teacher/bulletin'
+          'link': 'teacher/notice'
         }, {
           'name': '教师信息',
           'link': 'teacher/info'
@@ -41,7 +41,7 @@
           'link': ''
         }, {
           'name': '教研团队',
-          'link': 'teacher/team'
+          'link': 'teacher/group'
         }, {
           'name': '科研奥赛',
           'link': 'teacher/research'
@@ -54,6 +54,9 @@
         }, {
           'name': '会议室预约',
           'link': 'teacher/meeting'
+        }, {
+          'name': '家-通知',
+          'link': 'parent/notice'
         }, {
           'name': '家-问卷',
           'link': 'parent/survey'
@@ -88,7 +91,7 @@
     .item-detail
       background: #fff
       line-height: 80px
-      flex: 0 0 33.3333%
+      flex: 0 0 25%
       &-desc
         color: #333
         text-align: center

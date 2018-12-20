@@ -1,7 +1,7 @@
 <template>
   <div class="research-detail">
     <my-loading v-model="loading"/>
-    <div v-show="!loading" class="wrapper">
+    <div class="wrapper">
       <p class="research-detail__title">{{activity.title}}</p>
       <p class="research-detail__time">{{activity.createdTime | ymd}}</p>
       <hr>
@@ -9,7 +9,7 @@
         {{activity.content}}
       </div>
     </div>
-    <div class="research-detail__additional">
+    <div class="research-detail__additional" v-if="activity && activity.attachmentList.length>0">
       <p class="research-detail__additional__sticky van-hairline--bottom">附件</p>
       <div class="research-detail__additional__item van-hairline--bottom"
            v-for="(file,index) in activity.attachmentList" :key="index">
@@ -37,41 +37,7 @@
         loading: false,
         showActionSheet: false,
         curFile: null,
-        activity: {
-          'id': 1 /*主键*/,
-          'publisherId': 1 /*发布用户Id*/,
-          'noticeType': 'TEACH_GROUP' /*通知类型：ALL|NOTICE|SCHOOL_RULE|PATRIARCH_NOTICE|ACTIVITY|SUBJECT_STUDY|TEACHER_TRAIN|OLYMPICS_TRAIN|TEACH_GROUP*/,
-          'title': 'title' /*标题*/,
-          'content': 'content' /*内容*/,
-          'bannerImage': 'bannerImage' /*封面图片 - 类型为教研团队时有值*/,
-          'teachGroupId': 1 /*教研组Id - 类型为教研团队时有值*/,
-          'teachGroupName': 'teachGroupName' /*教研组名称 - 类型为教研团队时有值*/,
-          'endDate': '2018-12-19 09:29:02' /*截止日期*/,
-          'isAttachment': 'NO' /*是否需要附件：ALL|YES|NO*/,
-          'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-          'isTop': 'NO' /*是否置顶：ALL|YES|NO*/,
-          'topTime': '2018-12-19 09:29:02' /*置顶时间*/,
-          'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-          'isFinish': 'NO' /*是否已经结束 - 类型为活动时有值：ALL|YES|NO*/,
-          'isParticipated': 'NO' /*是否已经参与 - 类型为活动时有值：ALL|YES|NO*/,
-          'readNum': 1 /*阅读人数*/,
-          'participationNum': 1 /*参与人数 - 类型为活动时有值*/,
-          'scopeList': [
-            {
-              'id': 1 /*主键*/,
-              'noticeId': 1 /*公告通知Id*/,
-              'scopeType': 'ORGANIZATION' /*范围类型：ALL|ORGANIZATION*/,
-              'businessId': 1 /*业务Id*/,
-              'scopeName': 'scopeName' /*范围名称*/
-            }
-          ],
-          'attachmentList': [
-            {
-              'fileName': '文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名文件名' /*文件名*/,
-              'fileUrl': 'http://192.168.1.222/word.doc' /*文件路径*/
-            }
-          ]
-        }
+        activity: {}
       }
     },
     methods: {
