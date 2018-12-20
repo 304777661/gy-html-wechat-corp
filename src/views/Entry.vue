@@ -66,6 +66,9 @@
         }, {
           'name': '家-成绩',
           'link': 'parent/score'
+        }, {
+          'name': '家-通知',
+          'link': 'parent/bulletin'
         },]
       }
     },

@@ -35,16 +35,6 @@
       Search,
       MyTabs
     },
-    computed: {
-      query () {
-        return {
-          noticeType: 'NOTICE',
-          keywords: this.keywords,
-          pageNo: this.pageNo,
-          pageSize: config.pageSize
-        }
-      }
-    },
     data () {
       return {
         keywords: null,
@@ -52,24 +42,24 @@
         articleList: [],
         loading: false,
         finished: false,
+        curTabIndex: 0,
         tabs: [{
-          id: 1,
+          id: 0,
           label: '通知公告'
         }, {
-          id: 2,
+          id: 1,
           label: '学校规章'
         }]
       }
     },
     methods: {
-      async initData (resetList = false) {
+      async loadData (resetList = false) {
         this.loading = true
         if (resetList) {
           this.articleList = []
           this.pageNo = 1
         }
-        let data = await this.$api.teacher.queryNoticePage(this.query)
-
+        let data = await this.$api.teacher.queryNoticePage(this.getQuery())
         if (resetList) {
           this.articleList = data.list
         } else {
@@ -80,16 +70,27 @@
         this.pageNo++
       },
       onSearch () {
-        this.initData(true)
+        this.loadData(true)
       },
       onLoad () {
-        this.initData()
+        this.loadData()
       },
       goDetail (id) {
         this.$router.push(`bulletin/${id}`)
       },
-      handleTabChange (curTabIndex) {
-        console.log('切换' + curTabIndex)
+      handleTabChange (tabIndex) {
+        if (this.curTabIndex === tabIndex) {
+          return
+        }
+        this.curTabIndex = tabIndex
+        this.loadData(true)
+      },
+      getQuery () {
+        return {
+          noticeType: this.curTabIndex === 0 ? 'NOTICE' : 'SCHOOL_RULE',
+          pageNo: this.pageNo,
+          pageSize: config.pageSize
+        }
       }
     },
   }

@@ -104,7 +104,7 @@
 
     &__total
       margin: $default-gap auto
-      // padding-left: $default-gap
+    // padding-left: $default-gap
     .comment
       width: 100%
       // margin-top: $default-gap

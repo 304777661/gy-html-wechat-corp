@@ -172,6 +172,16 @@ export default {
     return await Axios.post('/teachGroupActivity/addTeachGroupActivity.do', query)
   },
 
+  // 会议订单详情查询
+  async getMeetingOrderDetail (query) {
+    return await Axios.post('/meetingOrder/getMeetingOrderDetail.do', query)
+  },
+
+  // 编辑教师
+  async updateTeacher (query) {
+    return await Axios.post('/teacher/updateTeacher.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

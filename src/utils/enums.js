@@ -634,6 +634,134 @@ export default {
           return val
       }
     }
-  }
+  },
   // ---------------- 教研活动类型  结束 -------------------
+
+  // ---------------- 政治面貌类型  开始 -------------------
+  PoliticsType: {
+    // 枚举列表
+    list: [
+      {label: '共青团员', value: 'LEAGUE'},
+      {label: '共产党员', value: 'COMMUNIST'},
+      {label: '民主党派', value: 'DEMOCRATIC'},
+      {label: '群众', value: 'MASSES'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'LEAGUE':
+          return '共青团员'
+        case 'COMMUNIST':
+          return '共产党员'
+        case 'DEMOCRATIC':
+          return '民主党派'
+        case 'MASSES':
+          return '群众'
+        default:
+          return val
+      }
+    }
+  },
+  // ---------------- 政治面貌类型  结束 -------------------
+
+  // ---------------- 职称类型  开始 -------------------
+  TeacherTitleType: {
+    // 枚举列表
+    list: [
+      {label: '未评', value: 'RANK_UNDECIDED'},
+      {label: '见习', value: 'NOVICIATE'},
+      {label: '中小学二级教师', value: 'SECOND_GRADE'},
+      {label: '中小学一级教师', value: 'FIRST_GRADE'},
+      {label: '中小学高级教师', value: 'HIGHER_GRADE'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'RANK_UNDECIDED':
+          return '未评'
+        case 'NOVICIATE':
+          return '见习'
+        case 'SECOND_GRADE':
+          return '中小学二级教师'
+        case 'FIRST_GRADE':
+          return '中小学一级教师'
+        case 'HIGHER_GRADE':
+          return '中小学高级教师'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 职称类型  结束 -------------------
+
+  // ---------------- 学历类型  开始 -------------------
+  EducationType: {
+    // 枚举列表
+    list: [
+      {label: '专科', value: 'JUNIOR_COLLEGE'},
+      {label: '本科', value: 'REGULAR_COLLEGE'},
+      {label: '硕士研究生', value: 'POSTGRADUATE'},
+      {label: '博士研究生', value: 'DOCTORAL_CANDIDATE'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'JUNIOR_COLLEGE':
+          return '专科'
+        case 'REGULAR_COLLEGE':
+          return '本科'
+        case 'POSTGRADUATE':
+          return '硕士研究生'
+        case 'DOCTORAL_CANDIDATE':
+          return '博士研究生'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 学历类型  结束 -------------------
+
+  // ---------------- 项目类型  开始 -------------------
+  ProjectType: {
+    // 枚举列表
+    list: [
+      {label: '论文', value: 'PAPER'},
+      {label: '赛课及指导学生', value: 'COMPETITION'},
+      {label: '课题、课程', value: 'TOPICS'},
+      {label: '经验交流及学术报告', value: 'ACADEMIC'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'PAPER':
+          return '论文'
+        case 'COMPETITION':
+          return '赛课及指导学生'
+        case 'TOPICS':
+          return '课题、课程'
+        case 'ACADEMIC':
+          return '经验交流及学术报告'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 项目类型  结束 -------------------
+
 }

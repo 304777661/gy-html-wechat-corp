@@ -1,10 +1,12 @@
 <template>
+    <div class="child-edit">
 
+    </div>
 </template>
 
 <script>
   export default {
-    name: 'AddExperience'
+    name: 'ChildEdit'
   }
 </script>
 

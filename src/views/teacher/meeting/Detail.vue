@@ -23,6 +23,7 @@
     name: 'MeetingDetail',
     data () {
       return {
+        id: this.$route.params.id,
         meeting: {
           memberList: [],
           memberCount: 0
@@ -30,9 +31,8 @@
       }
     },
     methods: {},
-    created () {
-      const meetingStr = sessionStorage.getItem('CURRENT_MEETING')
-      this.meeting = JSON.parse(meetingStr)
+    async created () {
+      this.meeting = await this.$api.teacher.getMeetingOrderDetail({'id': this.id})
       this.meeting.memberCount = this.meeting.memberList.length
     }
   }

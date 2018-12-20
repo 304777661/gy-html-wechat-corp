@@ -15,7 +15,7 @@
           <div class="meeting-item van-hairline--bottom"
                v-for="(meeting, index) in allMeetingList"
                :key="index"
-               @click="goDetail(meeting)">
+               @click="goDetail(meeting.id)">
             <div class="meeting-item-header">
               <p class="meeting-item-header__title">{{meeting.subject}}</p>
               <van-tag class="meeting-item-header__tag" plain>{{$enums.MeetingStatus.getName(meeting.meetingStatus)}}
@@ -38,7 +38,7 @@
           <div class="meeting-item van-hairline--bottom"
                v-for="(meeting, index) in selfMeetingList"
                :key="index"
-               @click="goDetail(meeting)">
+               @click="goDetail(meeting.id)">
             <div class="meeting-item-header">
               <p class="meeting-item-header__title">{{meeting.subject}}</p>
               <van-tag class="meeting-item-header__tag" plain>{{$enums.MeetingStatus.getName(meeting.meetingStatus)}}
@@ -124,12 +124,10 @@
 
       },
       handleBookMeeting () {
-        console.log(222)
         this.$router.push(`meeting/book`)
       },
-      goDetail (meeting) {
-        sessionStorage.setItem('CURRENT_MEETING', JSON.stringify(meeting))
-        this.$router.push(`meeting/detail`)
+      goDetail (id) {
+        this.$router.push(`meeting/detail/${id}`)
       },
       query (isSelf) {
         return {

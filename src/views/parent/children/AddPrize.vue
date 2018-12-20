@@ -93,11 +93,11 @@
         this.showMask = false
         this.showDatePicker = false
       },
-      handlePrizeLevelConfirm (val) {
+      handleEntryTypeConfirmClick (val) {
         this.prizeLevel = val
         this.showPrizeLevel = false
       },
-      handlePrizeLevelCancel () {
+      handleEntryTypeCancelClick () {
         this.showPrizeLevel = false
       },
       handlePrizeLevelClick () {

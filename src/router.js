@@ -43,6 +43,21 @@ const router = new Router({
       component: teacherView('info/Index'),
       meta: {title: '教师信息'}
     }, {
+      path: 'info/edit/:type',
+      name: 'InfoEdit',
+      component: teacherView('info/InfoEdit'),
+      meta: {title: '编辑教师信息编辑'}
+    }, {
+      path: 'info/resume/edit/:index',
+      name: 'InfoResumeEdit',
+      component: teacherView('info/ResumeEdit'),
+      meta: {title: '编辑工作经历'}
+    }, {
+      path: 'info/prize/add',
+      name: 'InfoPrizeAdd',
+      component: teacherView('info/PrizeAdd'),
+      meta: {title: '增加获奖经历'}
+    }, {
       path: 'salary',
       name: 'Salary',
       component: teacherView('salary/Index'),
@@ -108,7 +123,7 @@ const router = new Router({
       component: teacherView('meeting/Index'),
       meta: {title: '会议室预约'}
     }, {
-      path: 'meeting/detail',
+      path: 'meeting/detail/:id',
       name: 'MeetingDetail',
       component: teacherView('meeting/Detail'),
       meta: {title: '会议详情'}

@@ -77,6 +77,11 @@ export default {
     return await Axios.post('/studentScore/queryStudentScore.do', query)
   },
 
+  // 家长端 - 通知公告列表分页查询
+  async queryNoticePage (query) {
+    return await Axios.post('/noticeParent/queryNoticePage.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

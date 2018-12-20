@@ -92,12 +92,7 @@
       <div class="info-awards" v-show="curTabIndex === 2">
         <!--获奖情况-->
         <div v-for="(research,index) in researchList" :key="'research'+index">
-          <van-cell :title="researchList.length === 1 ? '获奖情况':('获奖情况'+(index+1))"
-                    class="info-sticky">
-           <span @click="handleResearchClick(index)">
-            <img src="../../../assets/images/edit.png"/>
-            编辑
-          </span>
+          <van-cell :title="researchList.length === 1 ? '获奖情况':('获奖情况'+(index+1))" class="info-sticky">
           </van-cell>
           <van-cell-group>
             <van-cell title="项目名称" :value="research.entryName || '--'"></van-cell>
@@ -280,9 +275,9 @@
       },
       handleAddClick () {
         if (this.curTabIndex === 1) {
-          this.$router.push(`teacher/resume/add`)
+          this.$router.push(`/teacher/info/resume/edit/-1`)
         } else if (this.curTabIndex === 2) {
-          this.$router.push(`teacher/research/add`)
+          this.$router.push(`/teacher/info/prize/add`)
         }
       },
       handleTabChanged (tabIndex) {
@@ -417,13 +412,15 @@
         }
       },
       handleInfoClick () {
-        // todo 编辑教师信息
-
+        console.log(1111)
+        this.$router.push(`/teacher/info/edit/basic`)
       },
       handleChildrenClick () {
-        // todo 编辑
+        this.$router.push(`/teacher/info/edit/children`)
       },
-      handleResumeClick () {},
+      handleResumeClick (index) {
+        this.$router.push(`/teacher/info/resume/edit/${index}`)
+      },
       handleResearchClick () {}
     },
     async created () {
