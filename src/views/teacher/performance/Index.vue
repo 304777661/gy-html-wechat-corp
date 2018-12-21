@@ -86,17 +86,15 @@
       </van-cell-group>
     </div>
     <div class="performance-container" v-show="curTabIndex === 2">
-
       <van-cell-group>
-        <van-cell title="姓名" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="考核时间" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="绩效等级分数" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="绩效金额" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="姓名" :value="staffPerformance.teacherName || '--'"></van-cell>
+        <van-cell title="考核时间" :value="staffPerformance.assessDate | ymd"></van-cell>
+        <van-cell title="绩效等级分数" :value="staffPerformance.performanceScore || '--'"></van-cell>
+        <van-cell title="绩效金额" :value="staffPerformance.performanceBonus | rmb"></van-cell>
       </van-cell-group>
-
       <van-cell-group>
         <van-cell title="考核扣分原因" class="performance-container-title"></van-cell>
-        <van-field v-model="teacherPerformance.teachGroupName " readonly disabled type="textarea">
+        <van-field v-model="staffPerformance.deductionReason" readonly disabled type="textarea">
         </van-field>
       </van-cell-group>
     </div>
@@ -112,8 +110,9 @@
         loading: false,
         sectionContent: '',
         curTerm: {},
-        curDate: {},
+        curDate: new Date(),
         teacherPerformance: {},
+        staffPerformance: {},
         tabs: [{
           id: 0,
           label: '校办绩效考核'
@@ -127,23 +126,25 @@
       }
     },
     methods: {
-      handleTabChanged (tabIndex) {
+      async handleTabChanged (tabIndex) {
         if (this.curTabIndex === tabIndex) {
           return
         }
         this.curTabIndex = tabIndex
         this.updateSectionContent()
+        await this.loadData()
       },
       updateSectionContent () {
         if (this.isStaff()) {
-          this.sectionContent = '第三'
+          this.sectionContent = this.curDate.Format('yyyy年MM月')
         } else {
           this.sectionContent = this.curTerm.name
         }
       },
       async handlePreviousClick () {
         if (this.isStaff()) {
-
+          this.curDate = new Date(this.curDate.setMonth(this.curDate.getMonth() - 1))
+          this.updateSectionContent()
         } else {
           // 上个学期
           const index = this.termList.findIndex(term => term.id === this.curTerm.id)
@@ -154,12 +155,18 @@
           }
           this.curTerm = this.termList[preIndex]
           this.updateSectionContent()
-          await this.loadData()
         }
+        await this.loadData()
       },
       async handleNextClick () {
         if (this.isStaff()) {
-
+          let now = new Date()
+          if (this.curDate.getFullYear() > now.getFullYear() || this.curDate.getMonth() >= now.getMonth()) {
+            this.$toast.fail('没有更多数据')
+            return
+          }
+          this.curDate = new Date(this.curDate.setMonth(this.curDate.getMonth() + 1))
+          this.updateSectionContent()
         } else {
           // 下个学期
           const index = this.termList.findIndex(term => term.id === this.curTerm.id)
@@ -170,8 +177,8 @@
           }
           this.curTerm = this.termList[nextIndex]
           this.updateSectionContent()
-          await this.loadData()
         }
+        await this.loadData()
       },
       isStaff () {
         return this.curTabIndex === 2
@@ -183,7 +190,7 @@
         } else if (this.curTabIndex === 1) {
           this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.id})
         } else if (this.curTabIndex === 2) {
-          this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.id})
+          this.staffPerformance = await this.$api.teacher.queryAssessStaff({'month': this.curDate.Format('yyyy-MM-dd 00:00:00')})
         }
         this.loading = false
       }

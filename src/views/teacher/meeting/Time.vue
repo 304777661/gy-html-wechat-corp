@@ -21,7 +21,7 @@
 
     <van-popup v-model="showDatePicker" position="bottom" :overlay="true">
       <van-datetime-picker
-        v-model="meetingDate"
+        v-model="selectDate"
         type="date"
         show-toolbar
         :item-height="itemHeight"
@@ -51,62 +51,11 @@
         okBtnTitle: '确定',
         meetingRoomId: 0,
         meetingDate: new Date(),
+        selectDate: new Date(),
         address: {},
         itemHeight: 70,
         selectTimeIndexList: [],
-        timeList: [{'id': 1, 'label': '08:00-08:30', 'isUsed': 'YES'}, {
-          'id': 2,
-          'label': '08:30-09:00',
-          'isUsed': 'NO'
-        }, {'id': 3, 'label': '09:00-09:30', 'isUsed': 'NO'}, {
-          'id': 4,
-          'label': '09:30-10:00',
-          'isUsed': 'NO'
-        }, {'id': 5, 'label': '10:00-10:30', 'isUsed': 'NO'}, {
-          'id': 6,
-          'label': '10:30-11:00',
-          'isUsed': 'NO'
-        }, {'id': 7, 'label': '11:00-11:30', 'isUsed': 'NO'}, {
-          'id': 8,
-          'label': '11:30-12:00',
-          'isUsed': 'NO'
-        }, {'id': 9, 'label': '12:00-12:30', 'isUsed': 'NO'}, {
-          'id': 10,
-          'label': '12:30-13:00',
-          'isUsed': 'NO'
-        }, {'id': 11, 'label': '13:00-13:30', 'isUsed': 'NO'}, {
-          'id': 12,
-          'label': '13:30-14:00',
-          'isUsed': 'NO'
-        }, {'id': 13, 'label': '14:00-14:30', 'isUsed': 'NO'}, {
-          'id': 14,
-          'label': '14:30-15:00',
-          'isUsed': 'NO'
-        }, {'id': 15, 'label': '15:00-15:30', 'isUsed': 'YES'}, {
-          'id': 16,
-          'label': '15:30-16:00',
-          'isUsed': 'NO'
-        }, {'id': 17, 'label': '16:00-16:30', 'isUsed': 'NO'}, {
-          'id': 18,
-          'label': '16:30-17:00',
-          'isUsed': 'NO'
-        }, {'id': 19, 'label': '17:00-17:30', 'isUsed': 'NO'}, {
-          'id': 20,
-          'label': '17:30-18:00',
-          'isUsed': 'NO'
-        }, {'id': 21, 'label': '18:00-18:30', 'isUsed': 'NO'}, {
-          'id': 22,
-          'label': '18:30-19:00',
-          'isUsed': 'NO'
-        }, {'id': 23, 'label': '19:00-19:30', 'isUsed': 'NO'}, {
-          'id': 24,
-          'label': '19:30-20:00',
-          'isUsed': 'NO'
-        }, {'id': 25, 'label': '20:00-20:30', 'isUsed': 'NO'}, {
-          'id': 26,
-          'label': '20:30-21:00',
-          'isUsed': 'NO'
-        }, {'id': 27, 'label': '21:00-21:30', 'isUsed': 'NO'}, {'id': 28, 'label': '21:30-22:00', 'isUsed': 'NO'}]
+        timeList: []
       }
     },
     methods: {
@@ -150,7 +99,6 @@
           let endTime = this.timeList[selectTimeIndexList[selectTimeIndexList.length - 1]].label.substr(splitIndex)
           startEndTime = startTime + endTime
         }
-        console.log(startEndTime)
         this.$eventBus.$emit('meetingTime', {
           orderDate: this.meetingDate,
           timeIntervalIdList: selectTimeList,
@@ -186,9 +134,10 @@
       handleDatePickerCancel () {
         this.showDatePicker = false
       },
-      handleDatePickerConfirm (val) {
+      async handleDatePickerConfirm () {
+        this.meetingDate = this.selectDate
         this.showDatePicker = false
-        this.loadData()
+        await this.loadData()
       },
       handleTimeClick (item, index) {
         if (item.isUsed === 'YES') {
@@ -214,7 +163,7 @@
       const params = sessionStorage.getItem('MEETING_ROOM')
       this.address = JSON.parse(params)
       this.meetingRoomId = this.address.id
-      this.loadData()
+      await this.loadData()
     }
   }
 </script>
@@ -254,8 +203,8 @@
       background: $white
       &-td
         text-align: center
-        line-height: 40px
-        font-size: 16px
+        line-height: 36px
+        font-size: 14px
         width: calc(33vw - 20px)
         margin: 4px 5px
         border-radius: 6px

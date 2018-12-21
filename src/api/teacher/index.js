@@ -207,6 +207,16 @@ export default {
     return await Axios.post('/assessTeacherPerformance/getAssessTeacherPerformance.do', query)
   },
 
+  // 家长端 - 学生信息变更详情查询
+  async getStudentChangeRecord (query) {
+    return await Axios.post('/studentParent/getStudentChangeRecord.do', query)
+  },
+
+  // 学工各线考核
+  async queryAssessStaff (query) {
+    return await Axios.post('/assessStaff/queryAssessStaff.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

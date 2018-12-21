@@ -354,6 +354,10 @@ const router = new Router({
       path: 'homework',
       component: parentView('homework/Index'),
       meta: {title: '作业管理'}
+    }, {
+      path: 'audit/detail/:id',
+      component: parentView('audit/Index'),
+      meta: {title: '子女信息审核'}
     }]
   }]
 })

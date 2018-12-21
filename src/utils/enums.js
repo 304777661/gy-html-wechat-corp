@@ -764,4 +764,79 @@ export default {
   },
   // ---------------- 项目类型  结束 -------------------
 
+  // ---------------- 审核状态  开始 -------------------
+  AuditStatus: {
+    // 枚举列表
+    list: [
+      {label: '未审核', value: 'UNAUDITED'},
+      {label: '全部通过', value: 'PASS'},
+      {label: '部分通过', value: 'PART_PASS'},
+      {label: '未通过', value: 'NOT_PASS'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'UNAUDITED':
+          return '未审核'
+        case 'PASS':
+          return '全部通过'
+        case 'PART_PASS':
+          return '部分通过'
+        case 'NOT_PASS':
+          return '未通过'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 审核状态  结束 -------------------
+
+  // ---------------- 变更类型  开始 -------------------
+  ChangeType: {
+    // 枚举列表
+    list: [
+      {label: '姓名', value: 'NAME'},
+      {label: '性别', value: 'SEX'},
+      {label: '身份证号', value: 'ID_CARD'},
+      {label: '户口性质', value: 'RESIDENT'},
+      {label: '政治面貌', value: 'POLITICS'},
+      {label: '家庭住址', value: 'ADDRESS'},
+      {label: '父亲', value: 'FATHER'},
+      {label: '母亲', value: 'MOTHER'},
+      {label: '监护人', value: 'GUARDIAN'},
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'NAME':
+          return '姓名'
+        case 'SEX':
+          return '性别'
+        case 'ID_CARD':
+          return '身份证号'
+        case 'RESIDENT':
+          return '户口性质'
+        case 'POLITICS':
+          return '政治面貌'
+        case 'FATHER':
+          return '父亲'
+        case 'MOTHER':
+          return '母亲'
+        case 'GUARDIAN':
+          return '监护人'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 变更类型  结束 -------------------
+
 }

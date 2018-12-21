@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'Entry',
     data () {
@@ -70,9 +69,9 @@
           'name': '家-成绩',
           'link': 'parent/score'
         }, {
-          'name': '家-通知',
-          'link': 'parent/bulletin'
-        },]
+          'name': '家-审核',
+          'link': 'parent/audit/detail/11'
+        }]
       }
     },
     methods: {
