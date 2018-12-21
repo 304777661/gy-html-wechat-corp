@@ -172,6 +172,16 @@ const router = new Router({
       name: 'MeetingTimeAdd',
       component: teacherView('meeting/Time'),
       meta: {title: '选择会议时间'}
+    }, {
+      path: 'assess',
+      name: 'Assess',
+      component: teacherView('assess/Index'),
+      meta: {title: '班级考评'}
+    }, {
+      path: 'performance',
+      name: 'Performance',
+      component: teacherView('performance/Index'),
+      meta: {title: '绩效考核'}
     }
       //
       //   , {

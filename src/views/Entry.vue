@@ -35,10 +35,10 @@
           'link': 'teacher/mailbox'
         }, {
           'name': '班级考评',
-          'link': ''
+          'link': 'teacher/assess'
         }, {
           'name': '绩效考核',
-          'link': ''
+          'link': 'teacher/performance'
         }, {
           'name': '教研团队',
           'link': 'teacher/group'

@@ -22,7 +22,7 @@
     },
     data () {
       return {
-        lineWidth: 85,
+        lineWidth: 50,
         curTabIndex: 0
       }
     },

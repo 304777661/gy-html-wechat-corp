@@ -187,6 +187,26 @@ export default {
     return await Axios.post('/timetable/queryClassTimetable.do', query)
   },
 
+  // 班级考评-常规检查
+  async queryAssessRoutine (query) {
+    return await Axios.post('/assess/queryAssessRoutine.do', query)
+  },
+
+  // 班级考评-卫生检查
+  async queryAssessSanitation (query) {
+    return await Axios.post('/assess/queryAssessSanitation.do', query)
+  },
+
+  // 通过学期查询周次
+  async querySchoolTermWeekList (query) {
+    return await Axios.post('/assess/querySchoolTermWeekList.do', query)
+  },
+
+  // 教师绩效考核详情查询
+  async getAssessTeacherPerformance (query) {
+    return await Axios.post('/assessTeacherPerformance/getAssessTeacherPerformance.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
