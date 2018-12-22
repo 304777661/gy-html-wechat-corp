@@ -1,42 +1,15 @@
 <template>
   <div class="meeting">
     <div class="wrapper">
-
-
-      <my-tabs :tabs="tabs" @tabChanged="handleTabChange" :swipeable="false"/>
-
-      <div v-show="curTabIndex === 0">
-        <no-data v-show="!allMeetingLoading && !allMeetingList.length"/>
-
+      <my-tabs :tabs="tabs" @tabChanged="handleTabChange"/>
+      <no-data v-show="!loading && !meetingList.length"/>
+      <div v-if="meetingList && meetingList.length>0">
         <van-list
-          :loading="allMeetingLoading"
-          :finished="allMeetingFinished"
-          @load="onLoadAllMeeting">
+          :loading="loading"
+          :finished="finished"
+          @load="onLoad">
           <div class="meeting-item van-hairline--bottom"
-               v-for="(meeting, index) in allMeetingList"
-               :key="index"
-               @click="goDetail(meeting.id)">
-            <div class="meeting-item-header">
-              <p class="meeting-item-header__title">{{meeting.subject}}</p>
-              <van-tag class="meeting-item-header__tag" plain>{{$enums.MeetingStatus.getName(meeting.meetingStatus)}}
-              </van-tag>
-            </div>
-            <p class="meeting-item-info">会议时间：{{meeting.meetingTime}}</p>
-            <p class="meeting-item-info">会议地点：{{meeting.meetingRoomName}}</p>
-            <p class="meeting-item-info">所在校区：{{meeting.campusName}}</p>
-          </div>
-        </van-list>
-      </div>
-
-      <div v-show="curTabIndex === 1">
-        <no-data v-show="!selfMeetingLoading && !selfMeetingList.length"/>
-
-        <van-list
-          :loading="selfMeetingLoading"
-          :finished="selfMeetingFinished"
-          @load="onLoadSelfMeeting">
-          <div class="meeting-item van-hairline--bottom"
-               v-for="(meeting, index) in selfMeetingList"
+               v-for="(meeting, index) in meetingList"
                :key="index"
                @click="goDetail(meeting.id)">
             <div class="meeting-item-header">
@@ -51,7 +24,7 @@
         </van-list>
       </div>
     </div>
-    <my-button :content="bookBtnTitle" @btnClick="handleBookMeeting"></my-button>
+    <my-button :content="'预定会议室'" @btnClick="handleBookMeeting"></my-button>
   </div>
 </template>
 
@@ -62,11 +35,6 @@
     name: 'Meeting',
     data () {
       return {
-        allMeetingLoading: false,
-        selfMeetingLoading: false,
-        allMeetingFinished: true,
-        selfMeetingFinished: true,
-        bookBtnTitle: '预定会议室',
         meetingList: [],
         keywords: null,
         allMeetingPageNo: 1,
@@ -74,54 +42,25 @@
         loading: false,
         finished: false,
         curTabIndex: 0,
-        allMeetingList: [
-          {
-            'meetingTime': 'meetingTime' /*会议时间*/,
-            'subject': 'subject' /*会议主题*/,
-            'meetingRoomName': 'meetingRoomName' /*会议室名称*/,
-            'meetingStatus': 'CANCELED' /*会议状态：ALL|NOT_STARTED|STARTED|CANCELED*/,
-            'memberList': [
-              {
-                'userId': 1 /*用户Id*/,
-                'name': 'name' /*姓名*/,
-                'avatar': 'avatar' /*头像*/
-              }
-            ]
-          }
-        ],
-        selfMeetingList: [
-          {
-            'meetingTime': 'meetingTime' /*会议时间*/,
-            'subject': 'subject' /*会议主题*/,
-            'meetingRoomName': 'meetingRoomName' /*会议室名称*/,
-            'meetingStatus': 'CANCELED' /*会议状态：ALL|NOT_STARTED|STARTED|CANCELED*/,
-            'memberList': [
-              {
-                'userId': 1 /*用户Id*/,
-                'name': 'name' /*姓名*/,
-                'avatar': 'avatar' /*头像*/
-              }
-            ]
-          }
-        ],
         tabs: [{
-          id: 1,
+          id: 0,
           label: '所有会议'
         }, {
-          id: 2,
+          id: 1,
           label: '我的会议'
         }]
       }
     },
     methods: {
       handleTabChange (curTabIndex) {
+        if (this.curTabIndex === curTabIndex) {
+          return
+        }
         this.curTabIndex = curTabIndex
+        this.loadData(true)
       },
-      onLoadAllMeeting () {
-
-      },
-      onLoadSelfMeeting () {
-
+      onLoad () {
+        this.loadData()
       },
       handleBookMeeting () {
         this.$router.push(`meeting/book`)
@@ -129,7 +68,7 @@
       goDetail (id) {
         this.$router.push(`meeting/detail/${id}`)
       },
-      query (isSelf) {
+      getQuery (isSelf) {
         return {
           keywords: null,
           orderDate: null,
@@ -137,24 +76,36 @@
           pageNo: isSelf ? this.allMeetingPageNo : this.selfMeetingPageNo,
           pageSize: config.pageSize
         }
+      },
+      async loadData (resetList = false) {
+        this.loading = true
+        if (resetList) {
+          this.meetingList = []
+          this.pageNo = 1
+        }
+        let data = await this.$api.teacher.queryMeetingPage(this.getQuery(this.curTabIndex === 1))
+        if (resetList) {
+          this.meetingList = data.list
+        } else {
+          this.meetingList = this.meetingList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.loading = false
       }
     },
     async created () {
-      this.loading = true
-      let allMeetingResp = await this.$api.teacher.queryMeetingPage(this.query(false))
-      let selfMeetingResp = await this.$api.teacher.queryMeetingPage(this.query(true))
-      this.allMeetingList = allMeetingResp.list
-      this.selfMeetingList = selfMeetingResp.list
-      this.loading = false
+      await this.loadData(true)
+    },
+    async activated () {
+      await this.loadData(true)
     }
   }
 </script>
 
 <style scoped lang="sass">
   .meeting
-    $mb: 70px
     .wrapper
-      height: calc (100vh - #{$mb})
+      height: calc(100vh - 70px)
     &-item
       background: $white
       padding: 10px 14px

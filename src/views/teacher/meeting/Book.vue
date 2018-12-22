@@ -1,19 +1,19 @@
 <template>
   <div class="meeting-book">
     <van-cell-group>
-      <van-field v-model="query.subject" label="会议主题" placeholder="请输入" input-align="right"></van-field>
+      <van-field v-model="submit.subject" label="会议主题" placeholder="请输入" input-align="right"></van-field>
       <van-cell title="会议室" is-link @click="handleAddressClick" :value="address"></van-cell>
       <van-cell title="所在校区" :value="campusName"></van-cell>
       <van-cell title="会议时间" is-link @click="handleSelectTimeClick" :value="meetingDate"></van-cell>
-      <van-cell title="参会人员"><span>{{memberList.length}}人</span></van-cell>
     </van-cell-group>
 
-    <div class="meeting-book-member">
-      <div class="meeting-book-member-person" v-for="(person,index) in memberList" :key="index">
-        <img :src="person.avatar | defaultAvatar">
-        <p>{{person.name}}</p>
-      </div>
-      <van-icon name="add-o" size="120px" color="#ccc" @click="handleAddMemberClick"></van-icon>
+    <div class="meeting-book-sticky">
+      <van-cell title="参会人员" :value="memberList.length + '人'"></van-cell>
+      <select-member :canAdd="true"
+                     :canDelete="true"
+                     :member-list="memberList"
+                     @addClick="handleAddMemberClick">
+      </select-member>
     </div>
 
     <!--选择考试批次-->
@@ -52,33 +52,26 @@
         campusName: '',
         address: '',
         memberList: [],
-        query: {
-          orderDate: '2018-12-17 03:24:14',
+        submit: {
+          orderDate: '',
           subject: '',
-          meetingRoomId: 1,
+          meetingRoomId: 0,
           timeIntervalIdList: [],
-          memberIdList: [1]
+          memberIdList: []
         },
-        myself: {
-          'userId': 1 /*用户Id*/,
-          'name': 'name' /*姓名*/,
-          'empNo': 'empNo' /*工号*/,
-          'phone': '13487317051' /*手机号码*/,
-          'avatar': 'avatar' /*头像*/,
-          'isTeacher': 'NO' /*是否教师：ALL|YES|NO*/,
-          'isParent': 'NO' /*是否家长：ALL|YES|NO*/
-        },
+        myself: {},
       }
     },
     methods: {
       handleTimeEvent () {
         this.$eventBus.$on('meetingTime', ({orderDate, timeIntervalIdList, startEndTime}) => {
-          this.query.orderDate = orderDate.Format('yyyy-MM-dd hh:mm:ss')
+          this.submit.orderDate = orderDate.Format('yyyy-MM-dd hh:mm:ss')
           this.meetingDate = orderDate.Format('yyyy-MM-dd') + ' ' + startEndTime
-          this.query.timeIntervalIdList = timeIntervalIdList
+          this.submit.timeIntervalIdList = timeIntervalIdList
         })
       },
       handleAddMemberClick () {
+        sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
         this.$router.push(`/teacher/meeting/member`)
       },
       handleSelectTimeClick () {
@@ -88,7 +81,7 @@
           return
         }
         sessionStorage.setItem('MEETING_ROOM', JSON.stringify({
-          id: this.query.meetingRoomId,
+          id: this.submit.meetingRoomId,
           name: this.address,
           campus: this.campusName
         }))
@@ -100,7 +93,7 @@
       onAddressConfirm (columns) {
         this.campusName = columns[0].campus
         this.address = columns[0].address
-        this.query.meetingRoomId = columns[0].value
+        this.submit.meetingRoomId = columns[0].value
         this.showAddressPicker = false
       },
       onAddressCancel () {
@@ -108,11 +101,11 @@
       },
       async handleSubmitClick () {
         // 数据校验
-        if (this.query.subject.length === 0) {
+        if (this.submit.subject.length === 0) {
           this.$toast.fail('请输入会议主题')
           return
         }
-        if (this.query.meetingRoomId <= 0) {
+        if (this.submit.meetingRoomId <= 0) {
           this.$toast.fail('请选择会议室')
           return
         }
@@ -120,18 +113,30 @@
           this.$toast.fail('请选择会议时间')
           return
         }
+        if (this.memberList.length === 0) {
+          this.$toast.fail('请选择参会人员')
+          return
+        }
+        this.memberList.map(item => {
+          this.submit.memberIdList.push(item.id)
+        })
         this.loading = true
-        await this.$api.teacher.addMeetingOrder(this.query)
+        await this.$api.teacher.addMeetingOrder(this.submit)
         this.loading = false
         this.$toast.success('提交成功')
         this.$router.back()
-      }
+      },
+      handleMemberSelectedEvent () {
+        this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {
+          this.memberList = memberSelectedList
+        })
+      },
     },
     async created () {
-      this.myself = await
-        this.$api.teacher.getSessionUserDetail({})
-      this.meetingRoomList = await
-        this.$api.teacher.queryMeetingRoomList()
+      let myself = await this.$api.teacher.getSessionUserDetail({})
+      myself.id = myself.userId
+      this.myself = myself
+      this.meetingRoomList = await this.$api.teacher.queryMeetingRoomList()
       if (this.meetingRoomList && this.meetingRoomList.length > 0) {
         this.columns[0].values = this.meetingRoomList.map(item => {
           return {
@@ -146,12 +151,15 @@
     },
     mounted () {
       this.handleTimeEvent()
+      this.handleMemberSelectedEvent()
     }
   }
 </script>
 
 <style scoped lang="sass">
   .meeting-book
+    &-sticky
+      margin-top: 10px
     &-member
       background: white
       display: flex

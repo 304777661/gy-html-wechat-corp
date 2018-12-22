@@ -15,6 +15,7 @@
         <p>{{member.name}}</p>
       </div>
     </div>
+
   </div>
 </template>
 

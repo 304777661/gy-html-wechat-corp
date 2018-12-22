@@ -24,6 +24,7 @@ import Search from './components/Search'
 import SectionPicker from './components/SectionPicker'
 import MyTabs from './components/MyTabs'
 import MyButton from './components/MyButton'
+import SelectMember from './components/SelectMember'
 // import Radio from './components/Radio'
 import {
   Icon,
@@ -88,6 +89,7 @@ Vue.component(Search.name, Search)
 Vue.component(SectionPicker.name, SectionPicker)
 Vue.component(MyTabs.name, MyTabs)
 Vue.component(MyButton.name, MyButton)
+Vue.component(SelectMember.name, SelectMember)
 // Vue.component(Radio.name, Radio)
 
 Vue.prototype.$eventBus = new Vue()
