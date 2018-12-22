@@ -3,10 +3,9 @@
     <div class="wrapper">
       <van-cell-group>
         <van-field label="活动名称" placeholder="请输入" v-model="activity.activityName" input-align="right"></van-field>
-        <van-cell title="活动时间" :value="activity.activityDate ?  (activity.activityDate | ymd) : '请选择' "
-                  is-link @click="handleTimePicker"></van-cell>
+        <van-cell title="活动时间" :value="activity.activityDate | ymd" is-link @click="handleTimePicker"></van-cell>
         <van-cell title="年级" :value="curGrade.label || '请选择'" is-link @click="handleGradePicker"
-                  v-if="typeId === '0'"></van-cell>
+                  v-if="!isTeachGroup()"></van-cell>
         <van-field label="活动地点" placeholder="请输入" v-model="activity.activityLocation" input-align="right"></van-field>
         <van-field label="举办单位" placeholder="请输入" v-model="activity.activitySponsor" input-align="right"></van-field>
       </van-cell-group>
@@ -19,6 +18,11 @@
         <picture-map :upload="true" :pictures="imageList"></picture-map>
       </div>
       <van-cell title="参与人员" class="activity-add-sticky"></van-cell>
+      <select-member :canAdd="true"
+                     :canDelete="true"
+                     :memberList="memberList"
+                     @addClick="handleAddMemberClick">
+      </select-member>
     </div>
     <van-popup v-model="showDatePicker" position="bottom">
       <van-datetime-picker
@@ -67,43 +71,47 @@
         myself: {},
         gradeLoading: false,
         columns: [],
-        activity: {
-          teacherList: []
-        },
-        imageList: []
+        activity: {},
+        imageList: [],
+        memberList: []
       }
     },
     methods: {
       async handleSubmitClick () {
         // 数据校验
-        if (this.activity.activityName.length === 0) {
+        if (!this.activity.activityName || this.activity.activityName.length === 0) {
           this.$toast.fail('请输入活动名称')
           return
         }
-        if (this.activity.activityLocation.length === 0) {
+        if (!this.activity.activityLocation || this.activity.activityLocation.length === 0) {
           this.$toast.fail('请输入活动地点')
           return
         }
-        if (this.activity.activitySponsor.length === 0) {
+        if (!this.activity.activitySponsor || this.activity.activitySponsor.length === 0) {
           this.$toast.fail('请输入活动单位')
           return
         }
-        if (this.activity.activityContent.length === 0) {
+        if (!this.activity.activityContent || this.activity.activityContent.length === 0) {
           this.$toast.fail('请输入活动内容')
           return
         }
-        if (this.activity.teacherList.length === 0) {
+        if (this.memberList.length === 0) {
           this.$toast.fail('请添加参与人员')
           return
         }
-        if (this.type === 0 && this.curGrade.value <= 0) {
+        if ((!this.isTeachGroup()) && this.curGrade.value <= 0) {
           this.$toast.fail('请选择年级')
           return
         }
-        if (this.type === 0) {
+        if (!this.isTeachGroup()) {
           this.activity.gradeId = this.curGrade.value
         }
         this.activity.activityDate = this.selectDate.Format('yyyy-MM-dd 00:00:00')
+        // 人员
+        this.activity.teacherList = []
+        this.memberList.map(item => {
+          this.activity.teacherList.push(item.id)
+        })
         // 附件
         if (this.imageList && this.imageList.length > 0) {
           this.activity.attachmentList = []
@@ -137,15 +145,28 @@
       },
       handleDatePickerCancel () {
         this.showDatePicker = false
+      },
+      handleAddMemberClick () {
+        sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
+        this.$router.push(`/teacher/activity/member`)
+      },
+      handleMemberSelectedEvent () {
+        this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {
+          this.memberList = memberSelectedList
+        })
+      },
+      isTeachGroup () {
+        return this.typeId === 0 || this.typeId === '0'
       }
     },
     async created () {
-      this.activity.activityType = this.typeId === 0 ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS'
-      if (this.typeId === 0 || this.typeId === '0') {
+      this.activity.activityType = this.isTeachGroup() ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS'
+      this.activity.activityDate = this.selectDate.Format('yyyy-MM-dd 00:00:00')
+      if (!this.isTeachGroup()) {
         this.gradeLoading = true
         this.gradeList = await this.$api.teacher.queryClassCascadeList({})
         if (this.gradeList && this.gradeList.length > 0) {
-          this.curGrade = this.gradeList[0]
+          // this.curGrade = this.gradeList[0]
           this.columns = this.gradeList.map(item => {
             return {
               label: item.label,
@@ -155,8 +176,13 @@
         }
         this.gradeLoading = false
       }
-      this.myself = await this.$api.teacher.getSessionUserDetail()
-      this.activity.teacherList.push(this.myself)
+      let myself = await this.$api.teacher.getSessionUserDetail({})
+      myself.id = myself.userId
+      this.myself = myself
+      this.memberList.push(this.myself)
+    },
+    mounted () {
+      this.handleMemberSelectedEvent()
     }
   }
 </script>

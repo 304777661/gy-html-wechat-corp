@@ -128,6 +128,11 @@ const router = new Router({
       component: teacherView('activity/Add'),
       meta: {title: '添加活动'}
     }, {
+      path: 'activity/member',
+      name: 'ActivityMember',
+      component: teacherView('activity/Member'),
+      meta: {title: '选择参与人员'}
+    }, {
       path: 'visit',
       name: 'Visit',
       component: teacherView('visit/List'),

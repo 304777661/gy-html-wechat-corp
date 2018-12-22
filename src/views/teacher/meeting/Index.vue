@@ -93,9 +93,6 @@
         this.loading = false
       }
     },
-    async created () {
-      await this.loadData(true)
-    },
     async activated () {
       await this.loadData(true)
     }

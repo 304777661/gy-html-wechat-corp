@@ -11,7 +11,7 @@
       <van-cell title="参会人员" :value="memberList.length + '人'"></van-cell>
       <select-member :canAdd="true"
                      :canDelete="true"
-                     :member-list="memberList"
+                     :memberList="memberList"
                      @addClick="handleAddMemberClick">
       </select-member>
     </div>
@@ -70,6 +70,11 @@
           this.submit.timeIntervalIdList = timeIntervalIdList
         })
       },
+      handleMemberSelectedEvent () {
+        this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {
+          this.memberList = memberSelectedList
+        })
+      },
       handleAddMemberClick () {
         sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
         this.$router.push(`/teacher/meeting/member`)
@@ -126,11 +131,7 @@
         this.$toast.success('提交成功')
         this.$router.back()
       },
-      handleMemberSelectedEvent () {
-        this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {
-          this.memberList = memberSelectedList
-        })
-      },
+
     },
     async created () {
       let myself = await this.$api.teacher.getSessionUserDetail({})

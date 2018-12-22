@@ -41,6 +41,7 @@
         curTabIndex: 0,
         loading: false,
         finished: false,
+        pageNo: 1,
         addActivityBtnTitle: '新增教研活动',
         isTeachGroupLeader: false,
         isPrepareLeader: false,
@@ -108,6 +109,7 @@
         this.$router.push(`/teacher/activity/add/${this.curTabIndex}`)
       },
       async loadData (isTeachGroup, resetList = false) {
+        this.loading = true
         if (resetList) {
           this.activityList = []
           this.pageNo = 1
@@ -122,9 +124,10 @@
         }
         this.finished = !data.hasNextPage
         this.pageNo++
+        this.loading = false
       },
     },
-    async created () {
+    async activated () {
       this.loading = true
       this.myself = await this.$api.teacher.getSessionUserDetail({})
       if (this.myself && this.myself.isTeachGroupLeader === 'YES') {
@@ -148,7 +151,7 @@
         await this.loadData(false, true)
       }
       this.loading = false
-    }
+    },
   }
 </script>
 
