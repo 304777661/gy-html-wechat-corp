@@ -1,8 +1,8 @@
 <template>
   <div class="mailbox">
-    <div class="mailbox-list">
-      <no-data v-show=" !loading && !articleList.length"/>
-
+    <no-data v-show="!loading && !articleList.length"/>
+    <my-loading v-model="initLoading"/>
+    <div class="mailbox-list" v-if="articleList && articleList.length>0">
       <van-list
         v-model="loading"
         :finished="finished"
@@ -28,7 +28,7 @@
         </div>
       </van-list>
     </div>
-    <my-button :content="addBtnTitle" @btnClick="handleAddClick"></my-button>
+    <my-button :content="'新增'" @btnClick="handleAddClick"></my-button>
   </div>
 
 </template>
@@ -40,152 +40,26 @@
     data () {
       return {
         pageNo: 1,
-        addBtnTitle: '新增',
-        articleList: [
-          {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'NO' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'NO' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }, {
-            'id': 1 /*主键*/,
-            'parentUserId': 1 /*父母用户Id*/,
-            'studentId': 1 /*学生Id*/,
-            'classId': 1 /*班级Id*/,
-            'title': '这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题这是标题' /*标题*/,
-            'content': '这容这是内容内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容' /*内容*/,
-            'isAnonymous': 'YES' /*是否匿名：ALL|YES|NO*/,
-            'replyStatus': 'REPLIED' /*回复状态：ALL|NO_REPLY|REPLIED*/,
-            'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-            'createdTime': '2018-12-13 09:07:20' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-13 09:07:20' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          },
-        ],
         loading: false,
-        finished: false
+        initLoading: false,
+        finished: false,
+        articleList: [],
       }
     },
-    computed: {
-      query () {
+    methods: {
+      getQuery () {
         return {
           pageNo: this.pageNo,
           pageSize: config.pageSize
         }
-      }
-    }
-    ,
-    methods: {
-      async initData (resetList = false) {
+      },
+      async loadData (resetList = false) {
         this.loading = true
         if (resetList) {
           this.articleList = []
           this.pageNo = 1
         }
-        let data = await this.$api.parent.queryPatriarchMailPage(this.query)
-
+        let data = await this.$api.parent.queryPatriarchMailPage(this.getQuery())
         if (resetList) {
           this.articleList = data.list
         } else {
@@ -196,44 +70,44 @@
         this.pageNo++
       },
       onLoad () {
-        this.initData()
+        this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`mailbox/${id}`)
+        this.$router.push(`/parent/mailbox/detail/${id}`)
       },
       handleAddClick () {
-        this.$router.push(`mailbox/add`)
+        this.$router.push(`/parent/mailbox/add`)
       }
+    },
+    async activated () {
+      this.initLoading = true
+      await this.loadData(true)
+      this.initLoading = false
     }
   }
 </script>
 
 <style lang="sass">
   .mailbox
-    $bom-height: 100px
     &-list
       height: calc(100vh - 70px)
     &-item
       padding: 8px 14px 8px
       background: $white
-      border-bottom: 1px solid #9B9B9B
+      border-bottom: 1px solid $gray-light
       &-header
         position: relative
         line-height: 1
         @include hor-start-center
         &__title
           flex: 1
-          font-size: 17px
+          font-size: 16px
           line-height: 21px
           color: $black
           @include text-overflow
-          // font-weight: bold
+          font-weight: bold
         &__tag
-          background: #24A197
-          padding: 2px 8px
-          font-size: 12px
           margin-left: 10px
-          margin-top: 2px
       &-body
         padding: 8px 0 8px
         font-size: 14px

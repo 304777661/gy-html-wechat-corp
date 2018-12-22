@@ -78,7 +78,7 @@
         // this.selectedIdx = index
         // await this.$api.parent.setCurrentChild({'studentId': index})
         // this.$toast.success('设置成功')
-        this.$router.push(`children/${id}`)
+        this.$router.push(`/parent/children/${id}`)
       }
     }
   }

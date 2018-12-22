@@ -74,7 +74,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`mailbox/detail/${id}`)
+        this.$router.push(`/teacher/mailbox/detail/${id}`)
       },
     },
     async created () {

@@ -2,67 +2,72 @@
   <div class="mailbox-add">
     <div class="mailbox-add-container">
       <p class="mailbox-add-title">标题</p>
-      <van-field v-model="query.title" placeholder="请输入"></van-field>
+      <van-field v-model="mailBox.title" placeholder="请输入"></van-field>
       <div class="van-hairline--bottom"></div>
       <p class="mailbox-add-title">内容</p>
       <div class="mailbox-add-content van-hairline--bottom">
-        <van-field v-model="query.content"
+        <van-field v-model="mailBox.content"
                    type="textarea"
                    :border="false"
                    :autosize="contentHeight"
-                   placeholder="请输入"></van-field>
-        <p class="mailbox-add-content-limit">{{query.content.length}}/500</p>
+                   placeholder="请输入">
+        </van-field>
+        <p class="mailbox-add-content-limit">{{mailBox.content.length}}/500</p>
       </div>
-      <picture-map v-model="query.attachmentList" upload/>
+      <picture-map v-model="imageList" :upload="true"/>
       <p class="van-hairline--top anonymous-title">是否匿名</p>
-      <van-radio-group v-model="query.isAnonymous" @change="handleRadioChange">
+      <van-radio-group v-model="mailBox.isAnonymous" @change="handleRadioChange">
         <van-radio name="YES" class="radio-item">是</van-radio>
         <van-radio name="NO" class="radio-item">否</van-radio>
       </van-radio-group>
     </div>
     <p class="hint">提示：不匿名反馈将发送至班主任处</p>
-    <my-button :content="submitBtnTitle" @btnClick="handleSubmitClick"></my-button>
+    <my-button :content="'提交'" @btnClick="handleSubmitClick"></my-button>
   </div>
 </template>
 
 <script>
   export default {
-    computed: {
-      content () {
-        return this.query.content
-      }
-    },
     data () {
       return {
-        submitBtnTitle: '提交',
-        query: {
+        mailBox: {
           title: '',
           content: '',
           isAnonymous: 'YES',
           attachmentList: []
         },
-        radio: '1',
+        radio: 'YES',
         contentHeight: {
           minHeight: 300,
           maxHeight: 400
-        }
+        },
+        imageList: []
       }
     },
     methods: {
       async handleSubmitClick () {
-        if (!this.query.title) {
+        if (!this.mailBox.title) {
           this.$toast('请输入标题')
           return
-        } else if (!this.query.content) {
+        } else if (!this.mailBox.content) {
           this.$toast('请输入内容')
           return
         }
-        await this.$api.parent.addPatriarchMailbox(this.query)
+        // 附件
+        if (this.imageList && this.imageList.length > 0) {
+          this.imageList.map(item => {
+            this.mailBox.attachmentList.push({
+              fileName: item.substr(item.lastIndexOf('/') + 1).toLowerCase(),
+              fileUrl: item
+            })
+          })
+        }
+        await this.$api.parent.addPatriarchMailbox(this.mailBox)
         this.$toast.success('新增成功')
         this.$router.back()
       },
       handleRadioChange () {
-        console.log(this.query.isAnonymous)
+        console.log(this.mailBox.isAnonymous)
       }
     },
     watch: {

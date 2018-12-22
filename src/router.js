@@ -305,25 +305,33 @@ const router = new Router({
       component: parentView('timetable/Index'),
       meta: {title: '学生课表'}
     }, {
+      path: 'mailbox',
+      component: parentView('mailbox/Index'),
+      meta: {title: '意见反馈'}
+    }, {
+      path: 'mailbox/detail/:id',
+      component: parentView('mailbox/Detail'),
+      meta: {title: '意见详情'}
+    }, {
+      path: 'mailbox/add',
+      component: parentView('mailbox/Add'),
+      meta: {title: '新增反馈'}
+    }, {
       path: 'survey',
       name: 'Survey',
       component: parentView('survey/Index'),
       meta: {title: '问卷调查'}
     }, {
-      path: 'survey/:id',
+      path: 'survey/detail/:id',
       name: 'SurveyDetail',
       component: parentView('survey/Detail'),
       meta: {title: '问卷调查'}
-    }, {
-      path: 'mailbox',
-      component: parentView('mailbox/Index'),
-      meta: {title: '校长信箱'}
     }, {
       path: 'children',
       component: parentView('children/Index'),
       meta: {title: '子女档案'}
     }, {
-      path: 'children/:id',
+      path: 'children/detail/:id',
       name: 'ChildrenDetail',
       component: parentView('children/Detail'),
       meta: {title: '子女详情'}
@@ -332,38 +340,6 @@ const router = new Router({
       name: 'ChildrenAddPrize',
       component: parentView('children/AddPrize'),
       meta: {title: '增加获奖情况'}
-    }, {
-      path: 'mailbox/add',
-      component: parentView('mailbox/Add'),
-      meta: {title: '新增信箱'}
-    }, {
-      path: 'mailbox/:id',
-      component: parentView('mailbox/Detail'),
-      meta: {title: '信箱详情'}
-    }, {
-      path: 'curriculum',
-      component: parentView('curriculum/Index'),
-      meta: {title: '学生课表'}
-    }, {
-      path: 'interaction',
-      component: parentView('interaction/Index'),
-      meta: {title: '课堂互动'}
-    }, {
-      path: 'interaction/:date',
-      component: parentView('interaction/CommentDetail'),
-      meta: {title: '课堂互动'}
-    }, {
-      path: 'leave',
-      component: parentView('leave/Index'),
-      meta: {title: '请假'}
-    }, {
-      path: 'leave/add',
-      component: parentView('leave/Add'),
-      meta: {title: '新增请假'}
-    }, {
-      path: 'homework',
-      component: parentView('homework/Index'),
-      meta: {title: '作业管理'}
     }, {
       path: 'audit/detail/:id',
       component: parentView('audit/Index'),

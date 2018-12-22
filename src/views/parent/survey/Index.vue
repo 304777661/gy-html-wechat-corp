@@ -1,9 +1,7 @@
 <!--问卷调查-->
 <template>
   <div class="survey">
-
     <no-data v-show="!loading && !surveyList.length"/>
-
     <van-list
       v-model="loading"
       :finished="finished"
@@ -40,57 +38,47 @@
 
   export default {
     name: 'SurveyIndex',
-    computed: {
-      query () {
-        return {
-          pageNo: this.pageNo,
-          pageSize: config.pageSize
-        }
-      },
-    },
     data () {
       return {
         keywords: null,
         pageNo: 1,
         loading: false,
         finished: true,
-        surveyList: [
-          // {
-          //   'id': 1,
-          //   'title': '这是标题这是标题这是标题这是标题',
-          //   'content': '这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容这是内容',
-          //   'endTime': '2018-12-13 09:07:20',
-          //   'createdTime': '2018-12-13 09:07:20',
-          //   'isFinish': 'NO',
-          //   'isParticipated': 'NO',
-          //   'participatedNum': 1,
-          //   'scopeList': [{
-          //     'id': 1,
-          //     'surveyId': 1,
-          //     'scopeType': 'ORGANIZATION',
-          //     'businessId': 1,
-          //     'scopeName': 'scopeName'
-          //   }],
-          //   loading: false,
-          //   finished: true,
-          //   status: '进行中',
-          // }
-        ]
+        surveyList: []
       }
     },
     methods: {
-      onLoad () {},
+      onLoad () {
+        this.loadData()
+      },
       goDetail (id) {
-        this.$router.push(`survey/${id}`)
-      }
+        this.$router.push(`/parent/survey/detail/${id}`)
+      },
+      getQuery () {
+        return {
+          pageNo: this.pageNo,
+          pageSize: config.pageSize
+        }
+      },
+      async loadData (resetList = false) {
+        this.loading = true
+        if (resetList) {
+          this.articleList = []
+          this.pageNo = 1
+        }
+        let data = await this.$api.parent.querySurveyPage(this.getQuery())
+        if (resetList) {
+          this.articleList = data.list
+        } else {
+          this.articleList = this.articleList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.loading = false
+        this.pageNo++
+      },
     },
     async created () {
-      this.loading = true
-      const resp = await this.$api.parent.querySurveyPage(this.query)
-      this.surveyList = resp.list
-      console.log(this.surveyList)
-      this.loading = false
-      this.finished = !resp.hasNextPage
+      await this.loadData(true)
     }
   }
 </script>
@@ -101,7 +89,7 @@
     &-item
       padding: 8px 14px 8px
       background: $white
-      border-bottom: 1px solid #9B9B9B
+      border-bottom: 1px solid $gray-light
       &-header
         position: relative
         line-height: 1
@@ -112,7 +100,7 @@
           line-height: 21px
           color: $black
           @include text-overflow
-        // font-weight: bold
+          font-weight: bold
         &__tag
           font-size: 12px
           margin-left: 10px

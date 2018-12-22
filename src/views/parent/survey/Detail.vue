@@ -1,6 +1,6 @@
 <template>
   <div class="survey-detail" :class="editable ? '' : 'survey-detail-full'">
-    <!--<my-loading v-model="loading"/>-->
+    <my-loading v-model="loading"/>
     <div class="survey-detail-header">
       <div class="survey-detail-header-title">
         <p class="survey-detail-header-title__name">{{article.title}}</p>
@@ -53,155 +53,28 @@
         </van-field>
       </div>
     </div>
-    <my-button :content="submitBtnTitle" @btnClick="handleSubmit" v-show="editable"></my-button>
+    <my-button :content="'提交'" @btnClick="handleSubmit" v-show="editable"></my-button>
   </div>
 </template>
 
 <script>
   export default {
     name: 'SurveyDetail',
-    computed: {
-      query () {
-        return {
-          id: this.id
-        }
-      },
-      submitParams () {
-        return {
-          'surveyId': this.id,
-          'questionList': this.article.questionList
-        }
-      }
-    },
     data () {
-      const id = this.$route.params.id
       return {
-        id,
-        submitBtnTitle: '提交',
+        id: this.$route.params.id,
         isFinish: true,
         editable: false,
         loading: true,
         textAreaAutoSize: {
           minHeight: 100,
         },
-        article: {
-          'id': 1 /*主键Id*/,
-          'endTime': '2018-12-13 14:34:17' /*截止时间*/,
-          'title': '标题标题标题标题标题标题标题标题标题标题标题' /*标题*/,
-          'content': '内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是我是内容我是内容我是内容我是内容我是内容我是内容我是内容是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我',
-          'isFinish': 'NO' /*是否已经结束：ALL|YES|NO*/,
-          'isParticipated': 'NO' /*是否已经参与：ALL|YES|NO*/,
-          'participatedNum': 4/*已参数人数*/,
-          'scopeList': [
-            {
-              'id': 1 /*主键*/,
-              'surveyId': 1 /*问卷调查Id*/,
-              'scopeType': 'ORGANIZATION' /*范围类型：ALL|ORGANIZATION*/,
-              'businessId': 1 /*业务Id*/,
-              'scopeName': 'scopeName' /*范围名称*/
-            }
-          ],
-          'questionList': [
-            {
-              'id': 0 /*主键Id*/,
-              'surveyId': 1 /*问卷调查Id*/,
-              'title': '这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题' /*题目*/,
-              'answer': '这里是答案这里是答案这里是答案这里是答案这里是答案。。。。。' /*答案*/,
-              'questionType': 'COMPLETION' /*问题类型：ALL|RADIO|MULTIPLE|COMPLETION*/,
-              'optionList': [
-                {
-                  'id': 1 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '没问题' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 2 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '没问题' /*选项*/,
-                  'isSelected': 'YES' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 3/*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '有问题' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                }
-              ]
-            },
-            {
-              'id': 1 /*主键Id*/,
-              'surveyId': 1 /*问卷调查Id*/,
-              'title': '这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题' /*题目*/,
-              'answer': '这里是答案这里是答案这里是答案这里是答案这里是答案。。。。。' /*答案*/,
-              'questionType': 'RADIO' /*问题类型：ALL|RADIO|MULTIPLE|COMPLETION*/,
-              'optionList': [
-                {
-                  'id': 1 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '没问题' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 2 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '没问题' /*选项*/,
-                  'isSelected': 'YES' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 3/*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '有问题' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                }
-              ]
-            },
-            {
-              'id': 2 /*主键Id*/,
-              'surveyId': 2 /*问卷调查Id*/,
-              'title': '这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题这里是问题标题' /*题目*/,
-              'answer': '这里是答案这里是答案这里是答案这里是答案这里是答案。。。。。' /*答案*/,
-              'questionType': 'MULTIPLE' /*问题类型：ALL|RADIO|MULTIPLE|COMPLETION*/,
-              'optionList': [
-                {
-                  'id': 1 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '多选题1' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 2 /*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '多选题1' /*选项*/,
-                  'isSelected': 'YES' /*是否被选中：ALL|YES|NO*/
-                },
-                {
-                  'id': 3/*主键*/,
-                  'questionId': 1 /*问题Id*/,
-                  'optionTitle': '多选题1' /*选项*/,
-                  'isSelected': 'NO' /*是否被选中：ALL|YES|NO*/
-                }
-              ]
-            }
-          ],
-          'userId': 1 /*用户Id*/,
-          'name': 'name' /*姓名*/,
-          'phone': '13487317051' /*手机号码*/,
-          'surveyId': 1 /*问卷调查Id*/,
-          'participatedTime': '2018-12-13 09:07:20' /*参与时间*/,
-          'childrenList': [
-            {
-              'id': 1 /*Id*/,
-              'studentName': 'studentName' /*学生姓名*/,
-              'className': 'className' /*班级名称*/
-            }
-          ]
-        }
+        article: {}
       }
     },
     async created () {
       this.loading = true
-      this.article = await this.$api.parent.getSurvey(this.query)
+      this.article = await this.$api.parent.getSurvey({'id': this.id})
       this.editable = !(this.article.isParticipated === 'YES' || this.article.isFinish === 'YES')
       this.loading = false
     },
@@ -233,7 +106,7 @@
             }
           }
           // 提交
-          await this.$api.parent.addSurveyRecord(this.submitParams)
+          await this.$api.parent.addSurveyRecord(this.getSubmitParams())
           this.$toast.success('提交成功')
           this.$router.back()
         }
@@ -250,6 +123,12 @@
         }
         if (type === 'MULTIPLE') {
           option.isSelected = (option.isSelected === 'YES') ? 'NO' : 'YES'
+        }
+      },
+      getSubmitParams () {
+        return {
+          surveyId: this.id,
+          questionList: this.article.questionList
         }
       }
     }

@@ -1,41 +1,39 @@
 <template>
   <div class="mailbox-detail">
     <my-loading v-model="loading"/>
-    <div v-show="!loading">
-      <div class="mailbox-detail__title">
-        <span>{{article.title}}</span>
-        <!--<span v-show="$route.params.type === 'ACTIVITY'" class="ongoing">{{article.isEnd?'已结束':'进行中'}}</span>-->
+    <div class="mailbox-detail-wrapper">
+      <div v-show="!loading">
+        <p class="mailbox-detail-wrapper-header">
+          <span class="mailbox-detail-wrapper-header__title">{{article.title || '未知'}}</span>
+          <van-tag class="mailbox-detail-wrapper-header__tag" color="#24A197"
+                   v-show="article.isAnonymous === 'YES'">匿名
+          </van-tag>
+        </p>
+        <p class="mailbox-detail-wrapper__time">{{article.createdTime | ymd}}</p>
+        <hr>
+        <div class="mailbox-detail-wrapper__content">
+          {{article.content}}
+        </div>
       </div>
+    </div>
+    <div class="mailbox-detail-reply" v-if="replyList && replyList.length>0">
+      <p class="mailbox-detail-reply-count van-hairline--bottom">{{replyList ? replyList.length : '0'}}条回复</p>
 
-      <div class="mailbox-detail__infoBar">
-        <span class="mailbox-detail__time">{{article.createdTime | ymd}}</span>
-      </div>
-
-      <div class="mailbox-detail__content">
-        {{article.content}}
-      </div>
-      <div class="mailbox-detail__image">
-        <picture-map :pictures="article.imageList"/>
-      </div>
-
-      <p class="mailbox-detail__total">全部回复({{commentTotal}})</p>
-
-      <!--{{commentList}}-->
-      <div class="comment text-center gray" v-if="!commentLoading && !commentList.length">暂无评论</div>
-      <van-list :loading="commentLoading"
-                :finished="finished"
-                @load="initCommentList">
-        <div class="comment"
-             v-for="(comment, idx) in commentList"
-             :key="idx">
-          <div class="comment-left">
-            <img :src="comment.avatar | defaultAvatar" class="comment-left__avatar">
+      <van-list
+        v-model="replyLoading"
+        :finished="finished"
+        @load="onLoad">
+        <div class="mailbox-detail-reply-item van-hairline--bottom"
+             v-for="item in replyList"
+             :key="item.id">
+          <div class="mailbox-detail-reply-item-header">
+              <span
+                class="mailbox-detail-reply-item-header-name">{{article.isAnonymous === 'YES' ? '学校' : '班主任'}}</span>
+            <span class="mailbox-detail-reply-item-header-time">{{item.createdTime | ymd}}</span>
           </div>
-          <div class="comment-right">
-            <p class="comment-right__name">{{comment.userName}}</p>
-            <p class="comment-right__comment">{{comment.content}}</p>
-            <p class="comment-right__time">{{comment.createdTime | ymd}}</p>
-          </div>
+          <p class="mailbox-detail-reply-item-content">
+            {{item.content}}
+          </p>
         </div>
       </van-list>
     </div>
@@ -43,89 +41,105 @@
 </template>
 
 <script>
+  import config from '@/config'
+
   export default {
+    name: 'MailboxDetail',
     data () {
       return {
-        loading: true,
-        article: {},
-        commentList: [],
-        commentTotal: 0,
-        commentLoading: false,
-        finished: false,
-        query: {
-          rectorMailId: this.$route.params.id,
-          pageNo: 1,
-          pageSize: this.$config.pageSize
-        }
+        id: this.$route.params.id,
+        loading: false,
+        pageNo: 1,
+        replyContent: '',
+        showReply: false,
+        replyList: [],
+        replyLoading: false,
+        finished: true,
+        article: {}
       }
     },
     async created () {
       this.loading = true
-      this.article = await this.$api.parent.getRectorMail({'rectorMailId': this.$route.params.id})
+      this.article = await this.$api.parent.getPatriarchMailbox({'id': this.id})
+      this.loadReplyData(true)
       this.loading = false
-
-      this.initCommentList()
     },
     methods: {
-      async initCommentList () {
-        this.commentLoading = true
-        let commentData = await this.$api.parent.queryRectorReplyPage(this.query)
-        this.commentList = this.commentList.concat(commentData.list)
-        this.commentTotal = commentData.total
-        this.commentLoading = false
-        this.finished = !commentData.hasNextPage
-        this.query.pageNo++
+      async loadReplyData (resetList = false) {
+        this.replyLoading = true
+        if (resetList) {
+          this.replyList = []
+          this.pageNo = 1
+        }
+        let data = await this.$api.parent.queryPatriarchMailboxReplyPage(this.getReplyQuery())
+        if (resetList) {
+          this.replyList = data.list
+        } else {
+          this.replyList = this.replyList.concat(data.list)
+        }
+        this.finished = !data.hasNextPage
+        this.replyLoading = false
+        this.pageNo++
+      },
+      onLoad () {
+        this.loadReplyData()
+      },
+      getReplyQuery () {
+        return {
+          mailId: this.id,
+          pageNo: this.pageNo,
+          pageSize: config.pageSize
+        }
       }
     }
   }
 </script>
 
-<style lang="sass">
-  .mailbox-detail
-    padding: 20px
-    background: white
-    &__title
-      font-size: $font-large
-      font-weight: bold
-      @include hor-between-center
-      .ongoing
-        font-weight: normal
-        font-size: $font-small
-        color: $orange
-    &__infoBar
-      margin: 10px 0
-      color: $gray
-      font-size: $font-small
-      @include hor-between-center
-    &__content
-      line-height: 1.5
-    &__image
-      margin-top: $default-gap - 5px
+<style scoped lang="sass">
 
-    &__total
-      margin: $default-gap auto
-    // padding-left: $default-gap
-    .comment
-      width: 100%
-      // margin-top: $default-gap
-      padding: $default-gap 0
-      background: #fff
-      border-bottom: 1px solid $gray-light
-      @include clearfix
-      &-left
-        float: left
-        &__avatar
-          @include circle(45px)
-      &-right
-        float: left
-        width: calc(100% - 60px)
-        margin-left: $default-gap
-        &__name, &__time
-          font-size: $font-small
-          color: $gray
-        &__comment
-          margin: 10px auto
-          white-space: pre-wrap
-          word-wrap: break-word
-          word-break: break-all
+  .mailbox-detail
+    position: relative
+    &-wrapper
+      background: $white
+      padding: 14px
+      &-header
+        @include hor-start-center
+        &__title
+          font-size: $font-large
+          line-height: 24px
+          flex: 1
+      &__time
+        font-size: 13px
+        line-height: 18px
+        color: #ccc
+        margin-top: 8px
+        padding-bottom: 2px
+      &__content
+        margin-top: 10px
+        line-height: 1.5
+    &-reply
+      margin-top: 10px
+      background: $white
+      &-count
+        padding-left: 14px
+        font-size: 14px
+        line-height: 30px
+        color: #24A197
+      &-item
+        height: auto
+        padding: 14px 12px
+        &-header
+          @include hor-between-center
+          &-name
+            color: $black
+            font-size: 14px
+            margin-top: 1px
+          &-time
+            margin-right: 8px
+            color: #9B9B9B
+        &-content
+          margin-top: 8px
+          color: #9B9B9B
+          line-height: 21px
+          font-size: 15px
 </style>

@@ -63,10 +63,10 @@
         this.loadData()
       },
       handleBookMeeting () {
-        this.$router.push(`meeting/book`)
+        this.$router.push(`/teacher/meeting/book`)
       },
       goDetail (id) {
-        this.$router.push(`meeting/detail/${id}`)
+        this.$router.push(`/teacher/meeting/detail/${id}`)
       },
       getQuery (isSelf) {
         return {
@@ -91,6 +91,7 @@
         }
         this.finished = !data.hasNextPage
         this.loading = false
+        this.pageNo++
       }
     },
     async activated () {
