@@ -1,6 +1,5 @@
 <template>
   <div class="child-edit">
-    <my-loading v-model="loading"/>
     <div class="wrapper">
       <van-cell-group>
         <van-field label="家庭电话" v-model="teacher.homeTel" placeholder="请输入" input-align="right" clearable></van-field>
@@ -25,7 +24,7 @@
         <van-field label="备注" v-model="child.remark" placeholder="请输入" input-align="right" clearable></van-field>
       </div>
     </div>
-
+    <my-loading v-model="loading"/>
     <van-popup v-model="showSexPicker"
                position="bottom"
                :lazy-render="false">

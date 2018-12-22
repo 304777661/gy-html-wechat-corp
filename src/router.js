@@ -133,7 +133,7 @@ const router = new Router({
       component: teacherView('activity/Add'),
       meta: {title: '添加活动'}
     }, {
-      path: 'activity/member',
+      path: 'activity/member/:orgId',
       name: 'ActivityMember',
       component: teacherView('activity/Member'),
       meta: {title: '选择参与人员'}

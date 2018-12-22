@@ -226,4 +226,19 @@ export default {
   async upload (query) {
     return await Axios.post('/oss/upload.do', query)
   },
+
+  // 查询教研组列表
+  async queryTeachGroupListWithUser (query) {
+    return await Axios.post('/teachGroup/queryTeachGroupListWithUser.do', query)
+  },
+
+  // 查询备课组年级列表
+  async queryGradeList (query) {
+    return await Axios.post('/teachGroup/queryGradeList.do', query)
+  },
+
+  // 查询教研组 - 年级级联列表
+  async queryTeachGroupListWithUser (query) {
+    return await Axios.post('/teachGroup/queryTeachGroupListWithUser.do', query)
+  },
 }

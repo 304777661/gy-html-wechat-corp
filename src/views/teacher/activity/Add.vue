@@ -4,6 +4,8 @@
       <van-cell-group>
         <van-field label="活动名称" placeholder="请输入" v-model="activity.activityName" input-align="right"></van-field>
         <van-cell title="活动时间" :value="activity.activityDate | ymd" is-link @click="handleTimePicker"></van-cell>
+        <van-cell title="教研组" :value="curTeachGroup.label || '请选择'" is-link @click="handleTeachGroupPicker"
+                  v-if="!isTeachGroup()"></van-cell>
         <van-cell title="年级" :value="curGrade.label || '请选择'" is-link @click="handleGradePicker"
                   v-if="!isTeachGroup()"></van-cell>
         <van-field label="活动地点" placeholder="请输入" v-model="activity.activityLocation" input-align="right"></van-field>
@@ -47,6 +49,17 @@
       </van-picker>
     </van-popup>
 
+    <van-popup v-model="showPopup" position="bottom">
+      <van-picker :columns="teacherGroupColumns"
+                  show-toolbar
+                  @cancel="handleTeacherGroupCancel"
+                  @confirm="handleTeacherGroupConfirm"
+                  :item-height="popupItemHeight"
+                  value-key="label"
+                  :loading="gradeLoading" ref="picker">
+      </van-picker>
+    </van-popup>
+
     <my-button :content="'提交'" @btnClick="handleSubmitClick"></my-button>
   </div>
 </template>
@@ -59,28 +72,55 @@
         typeId: this.$route.params.typeId,
         showPopup: false,
         showDatePicker: false,
+        showTeachGroupPicker: false,
         popupItemHeight: 60,
         itemHeight: 70,
         textAreaSize: {
           minHeight: 200
         },
         curGrade: {},
+        curTeachGroup: {},
         gradeList: [],
         minDate: new Date(),
         selectDate: new Date(),
         myself: {},
         gradeLoading: false,
         columns: [],
+        teacherGroupColumns: [],
         activity: {},
         imageList: [],
-        memberList: []
+        memberList: [],
+        teachGroupList: [],
+        orgId: null
       }
     },
     methods: {
+      handleTeachGroupPicker () {
+        this.showTeachGroupPicker = true
+      },
+      handleTeacherGroupCancel () {
+        this.showTeachGroupPicker = false
+      },
+      handleTeacherGroupConfirm (item) {
+        this.orgId = item.tag
+        let index = this.teachGroupList.findIndex(teachGroupItem => teachGroupItem.value === item.value)
+        this.curTeachGroup = this.teachGroupList[index]
+        this.columns = this.teachGroupList[index].map(item => {
+          return {
+            label: item.label,
+            value: item.value,
+          }
+        })
+        this.showTeachGroupPicker = false
+      },
       async handleSubmitClick () {
         // 数据校验
         if (!this.activity.activityName || this.activity.activityName.length === 0) {
           this.$toast.fail('请输入活动名称')
+          return
+        }
+        if (!this.curTeachGroup || this.curTeachGroup.value < 0) {
+          this.$toast.fail('请选择教研组')
           return
         }
         if (!this.activity.activityLocation || this.activity.activityLocation.length === 0) {
@@ -148,7 +188,7 @@
       },
       handleAddMemberClick () {
         sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
-        this.$router.push(`/teacher/activity/member`)
+        this.$router.push(`/teacher/activity/member/${this.orgId}`)
       },
       handleMemberSelectedEvent () {
         this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {
@@ -162,19 +202,17 @@
     async created () {
       this.activity.activityType = this.isTeachGroup() ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS'
       this.activity.activityDate = this.selectDate.Format('yyyy-MM-dd 00:00:00')
-      if (!this.isTeachGroup()) {
-        this.gradeLoading = true
-        this.gradeList = await this.$api.teacher.queryClassCascadeList({})
-        if (this.gradeList && this.gradeList.length > 0) {
-          // this.curGrade = this.gradeList[0]
-          this.columns = this.gradeList.map(item => {
-            return {
-              label: item.label,
-              value: item.value,
-            }
-          })
-        }
-        this.gradeLoading = false
+      this.teachGroupList = this.$api.teacher.queryTeachGroupListWithUser({})
+
+      if (this.teachGroupList && this.teachGroupList.length > 0) {
+        this.curTeachGroup = this.teachGroupList[0]
+        this.teacherGroupColumns = this.teachGroupList.map(item => {
+          return {
+            label: item.label,
+            value: item.value,
+            tag: item.tag
+          }
+        })
       }
       let myself = await this.$api.teacher.getSessionUserDetail({})
       myself.id = myself.userId
