@@ -37,8 +37,6 @@
         </table>
       </div>
     </div>
-
-    <my-button :content="'查看班级课表'" @btnClick="goAll"></my-button>
   </div>
 </template>
 
@@ -56,17 +54,7 @@
         curTerm: {},
         curTermIndex: -1,
         termList: null,
-        sections: [
-          '一',
-          '二',
-          '三',
-          '四',
-          '五',
-          '六',
-          '七',
-          '八',
-          '九',
-        ],
+        sections: ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
         sectionList: [],
         courseList: [],
         weekList: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
@@ -180,15 +168,12 @@
         this.curTerm = this.termList[this.curTermIndex]
         this.loadData()
       },
-      goAll () {
-        this.$router.push(`/teacher/timetable/class`)
-      },
       async loadData () {
         if (!this.curTerm) {
           this.$toast.fail('学期数据错误')
           return
         }
-        this.sectionList = await this.$api.teacher.queryTeacherTimetableList({'termId': this.curTerm.id})
+        this.sectionList = await this.$api.parent.parentTimetable({'termId': this.curTerm.id})
       },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0

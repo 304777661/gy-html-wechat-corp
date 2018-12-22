@@ -82,6 +82,11 @@ export default {
     return await Axios.post('/noticeParent/queryNoticePage.do', query)
   },
 
+  // 家长端学生课表查询
+  async parentTimetable (query) {
+    return await Axios.post('/timetable/parentTimetable.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

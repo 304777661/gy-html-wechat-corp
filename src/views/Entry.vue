@@ -57,17 +57,20 @@
           'name': '家-通知',
           'link': 'parent/notice'
         }, {
-          'name': '家-问卷',
-          'link': 'parent/survey'
+          'name': '家-成绩',
+          'link': 'parent/score'
         }, {
-          'name': '家-信箱',
-          'link': 'parent/mailbox'
+          'name': '家-课表',
+          'link': 'parent/timetable'
         }, {
           'name': '家-子女',
           'link': 'parent/children'
         }, {
-          'name': '家-成绩',
-          'link': 'parent/score'
+          'name': '家-意见',
+          'link': 'parent/mailbox'
+        }, {
+          'name': '家-问卷',
+          'link': 'parent/survey'
         }, {
           'name': '家-审核',
           'link': 'parent/audit/detail/11'

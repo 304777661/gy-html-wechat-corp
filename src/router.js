@@ -287,14 +287,23 @@ const router = new Router({
     meta: {title: '家长端'},
     children: [{
       path: 'notice',
-      name: 'Notice',
+      name: 'ParentNotice',
       component: parentView('notice/Index'),
       meta: {title: '学校通知'}
     }, {
       path: 'notice/detail/:id',
-      name: 'NoticeDetail',
+      name: 'ParentNoticeDetail',
       component: parentView('bulletin/Detail'),
       meta: {title: '通知详情'}
+    }, {
+      path: 'score',
+      component: parentView('score/Index'),
+      meta: {title: '成绩查询'}
+    }, {
+      path: 'timetable',
+      name: 'ParentTimeTable',
+      component: parentView('timetable/Index'),
+      meta: {title: '学生课表'}
     }, {
       path: 'survey',
       name: 'Survey',
@@ -343,10 +352,6 @@ const router = new Router({
       path: 'interaction/:date',
       component: parentView('interaction/CommentDetail'),
       meta: {title: '课堂互动'}
-    }, {
-      path: 'score',
-      component: parentView('score/Index'),
-      meta: {title: '成绩查询'}
     }, {
       path: 'leave',
       component: parentView('leave/Index'),

@@ -1,9 +1,5 @@
 <template>
   <div class="score">
-
-    <!--<my-loading v-model="loading"/>-->
-    <!--<no-data v-show="!loading && !scoreList.length"/>-->
-
     <div class="score-header">
       <div class="score-header__item" @click="handleTermClick">
         <span>{{curTerm.name || '--'}}</span>
@@ -15,6 +11,7 @@
         <van-icon name="arrow-down"></van-icon>
       </div>
     </div>
+    <no-data v-show="!loading && !scoreList.length"/>
 
     <div class="score-table">
       <table>
@@ -30,7 +27,7 @@
         </tr>
       </table>
     </div>
-
+    <my-loading v-model="loading"/>
     <!--选择学期-->
     <van-popup
       v-model="showTermPicker"
@@ -81,53 +78,21 @@
       return {
         showTermPicker: false,
         showExamPicker: false,
+        loading: false,
         termLoading: false,
         examLoading: false,
         defaultTermTitle: '学期',
         defaultExamTitle: '考试批次',
         curTerm: {},
         itemHeight: 70,
-        termColumns: [{
-          values: [],
-        }],
-        examColumns: [{
-          values: [],
-        }],
+        termColumns: [],
+        examColumns: [],
         curExamBatch: {},
         passScore: 60,
         loading: false,
-        scoreList: [
-          {
-            'courseId': 1 /*科目Id*/,
-            'courseName': 'courseName' /*科目名称*/,
-            'score': 1.0 /*成绩*/,
-            'classRank': 1 /*班级排名*/
-          }
-        ],
-        termList: [
-          {
-            'id': 1 /**/,
-            'schoolYearId': 1 /*学年Id*/,
-            'name': 'name' /*学期名*/,
-            'startDate': '2018-12-14 10:41:57' /*学期开始日期*/,
-            'endDate': '2018-12-14 10:41:57' /*学期结束日期*/,
-            'firstWeekStartDate': '2018-12-14 10:41:57' /*第一周开始日期*/,
-            'createdTime': '2018-12-14 10:41:57' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-14 10:41:57' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }
-        ],
-        examBatchList: [
-          {
-            'id': 1 /**/,
-            'gradeId': 1 /**/,
-            'termId': 1 /*学期Id*/,
-            'examDate': '2018-12-14 10:41:57' /*考试日期*/,
-            'examDesc': 'examDesc' /*考试描述*/,
-            'examType': 'UNIFIED_EXAM' /*考试类型1统考2段考：ALL|UNITED_EXAM|MID_TERM_EXAM|END_TERM_EXAM|MONTHLY_EXAM|UNIFIED_EXAM*/,
-            'createdTime': '2018-12-14 10:41:57' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-            'updatedTime': '2018-12-14 10:41:57' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-          }
-        ]
+        scoreList: [],
+        termList: [],
+        examBatchList: []
       }
     },
     async created () {
@@ -139,7 +104,7 @@
           id: this.termList[0].id,
           name: this.termList[0].name
         }
-        this.termColumns[0].values = this.termList.map(item => {
+        this.termColumns = this.termList.map(item => {
           return {
             label: item.name,
             value: item.id,
@@ -154,40 +119,42 @@
           id: this.examBatchList[0].id,
           examDesc: this.examBatchList[0].examDesc
         }
-        this.examColumns[0].values = this.examBatchList.map(item => {
+        this.examColumns = this.examBatchList.map(item => {
           return {
             label: item.examDesc,
             value: item.id
           }
         })
       }
-      this.queryData()
+      this.loadData()
       this.loading = false
     },
     methods: {
-      async queryData () {
+      async loadData () {
+        this.loading = true
         this.scoreList = await this.$api.parent.queryStudentScore(this.query)
+        this.loading = false
       },
       onTermCancel () {
         this.showTermPicker = false
       },
-      onTermConfirm (columns) {
-        this.curTerm.id = columns[0].value
-        this.curTerm.name = columns[0].label
+      onTermConfirm (item) {
+        this.curTerm.id = item.value
+        this.curTerm.name = item.label
         this.showTermPicker = false
         this.loading = true
-        this.queryData()
+        this.loadData()
         this.loading = false
       },
       onExamCancel () {
         this.showExamPicker = false
       },
-      onExamConfirm (columns) {
-        this.curExamBatch.id = columns[0].value
-        this.curExamBatch.examDesc = columns[0].label
+      onExamConfirm (item) {
+        this.curExamBatch.id = item.value
+        this.curExamBatch.examDesc = item.label
         this.showExamPicker = false
         this.loading = true
-        this.queryData()
+        this.loadData()
         this.loading = false
       },
       handleTermClick () {
@@ -232,10 +199,12 @@
         th
           width: 25%
           border-style: none
+          padding-bottom: 8px
         td
           font-size: $font-large
           color: #333333
-          border: 1px solid $gray
+          line-height: 25px
+          border-bottom: 1px solid $gray-light
           &.course
             color: #999
             font-size: $font-normal
