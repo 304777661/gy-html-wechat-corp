@@ -12,7 +12,7 @@
           </span>
           </van-cell>
           <van-cell title="姓名" :value="teacher.name || '--'"></van-cell>
-          <van-cell title="性别" :value="getSex(teacher.sex) || '--'"></van-cell>
+          <van-cell title="性别" :value="teacher.sex | sexLabel"></van-cell>
           <van-cell title="当前状态" :value="getJobStatus(teacher.jobStatus) || '--'"></van-cell>
           <van-cell-group v-for="(course,index) in teacher.courseList" :key="'course'+index">
             <van-cell :title="(teacher.courseList.length === 1) ? '教授科目' : ('教授科目'+(index +1))"
@@ -53,7 +53,7 @@
         <!--家庭信息-->
         <van-cell-group>
           <van-cell title="家庭信息" class="info-sticky">
-           <span @click="handleInfoClick()">
+           <span @click="handleChildrenClick()">
             <img src="../../../assets/images/edit.png"/>
             编辑
           </span>
@@ -62,7 +62,7 @@
           <div class="info-basic-children" v-for="(child,index) in teacher.teacherChildList" :key="'child'+index">
             <van-cell :title="'子女信息'+(index+1)" class="info-basic-children-title"></van-cell>
             <van-cell title="姓名" :value="child.name || '--'"></van-cell>
-            <van-cell title="性别" :value="getSex(child.sex) || '--'"></van-cell>
+            <van-cell title="性别" :value="child.sex | sexLabel"></van-cell>
             <van-cell title="年龄" :value="(child.age || '--')+'岁'"></van-cell>
             <van-cell title="学校或单位" :value="child.unit || '--'"></van-cell>
             <van-cell title="备注" :value="child.remark || '--'"></van-cell>
@@ -270,9 +270,6 @@
           return '增加获奖情况'
         }
       },
-      initData () {
-
-      },
       handleAddClick () {
         if (this.curTabIndex === 1) {
           this.$router.push(`/teacher/info/resume/edit/-1`)
@@ -387,16 +384,6 @@
         }
         return returnAge // 返回周岁年龄
       },
-      getSex (sex) {
-        switch (sex) {
-          case 'Male':
-            return '男'
-          case 'Female':
-            return '女'
-          default:
-            return '--'
-        }
-      },
       getEntryType (entryType) {
         switch (entryType) {
           case 'PAPER':
@@ -416,7 +403,7 @@
         this.$router.push(`/teacher/info/edit/basic`)
       },
       handleChildrenClick () {
-        this.$router.push(`/teacher/info/edit/children`)
+        this.$router.push(`/teacher/info/edit/child`)
       },
       handleResumeClick (index) {
         this.$router.push(`/teacher/info/resume/edit/${index}`)

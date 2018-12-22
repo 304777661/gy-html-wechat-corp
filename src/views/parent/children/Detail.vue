@@ -229,11 +229,16 @@
         }
       },
       handleTabChange (curTabIndex) {
+        if (this.curTabIndex === curTabIndex) {
+          return
+        }
         this.curTabIndex = curTabIndex
+
       },
 
-      handlePrizeEdit (prize) {},
+      handlePrizeEdit (prize) {
 
+      },
       handleAddPrizeClick () {
         this.$router.push(`/parent/children/prize/add`)
       },
@@ -291,9 +296,9 @@
         border-radius: 8px
         padding: 6px 25px
     &-tab
+      margin-top: 10px
       &-prize
         position: relative
-        margin-top: 10px
         &-title
           background: $white
           padding: 10px 16px

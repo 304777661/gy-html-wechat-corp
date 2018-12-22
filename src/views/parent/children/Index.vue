@@ -24,45 +24,7 @@
     data () {
       return {
         selectedIdx: null,
-        childrenList: [
-          {
-            'id': 1 /*主键*/,
-            'name': 'name' /*姓名*/,
-            'avatar': 'avatar' /*头像*/,
-            'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-            'classId': 1 /*班级Id*/,
-            'className': 'className' /*班级名称*/,
-            'gradeId': 1 /*年级Id*/,
-            'grade': 'grade' /*年级*/
-          }, {
-            'id': 1 /*主键*/,
-            'name': 'name' /*姓名*/,
-            'avatar': 'avatar' /*头像*/,
-            'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-            'classId': 1 /*班级Id*/,
-            'className': 'className' /*班级名称*/,
-            'gradeId': 1 /*年级Id*/,
-            'grade': 'grade' /*年级*/
-          }, {
-            'id': 1 /*主键*/,
-            'name': 'name' /*姓名*/,
-            'avatar': 'avatar' /*头像*/,
-            'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-            'classId': 1 /*班级Id*/,
-            'className': 'className' /*班级名称*/,
-            'gradeId': 1 /*年级Id*/,
-            'grade': 'grade' /*年级*/
-          }, {
-            'id': 1 /*主键*/,
-            'name': 'name' /*姓名*/,
-            'avatar': 'avatar' /*头像*/,
-            'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-            'classId': 1 /*班级Id*/,
-            'className': 'className' /*班级名称*/,
-            'gradeId': 1 /*年级Id*/,
-            'grade': 'grade' /*年级*/
-          }
-        ]
+        childrenList: []
       }
     },
     async created () {
@@ -78,7 +40,7 @@
         // this.selectedIdx = index
         // await this.$api.parent.setCurrentChild({'studentId': index})
         // this.$toast.success('设置成功')
-        this.$router.push(`/parent/children/${id}`)
+        this.$router.push(`/parent/children/detail/${id}`)
       }
     }
   }

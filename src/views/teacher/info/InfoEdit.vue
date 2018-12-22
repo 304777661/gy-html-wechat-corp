@@ -1,12 +1,10 @@
 <template>
   <div class="info-edit">
     <div class="wrapper">
-
-
       <!--基本信息-->
-      <van-cell-group v-if="type==='basic'">
+      <van-cell-group>
         <van-field label="姓名" v-model="teacher.name" placeholder="请输入" clearable input-align="right"></van-field>
-        <van-cell title="性别" :value="getSex(teacher.sex)" is-link @click="handleSexClick"></van-cell>
+        <van-cell title="性别" :value="teacher.sex | sexLabel" is-link @click="handleSexClick"></van-cell>
         <van-cell title="当前状态" :value="getJobStatus(teacher.jobStatus) || '--'"></van-cell>
         <van-cell-group v-for="(course,index) in teacher.courseList" :key="'course'+index">
           <van-cell :title="(teacher.courseList.length === 1) ? '教授科目' : ('教授科目'+(index +1))"
@@ -41,19 +39,6 @@
         <van-cell title="评定时间1" :value="teacherAcquireTime1 | ymd" is-link @click="handleTitleAcquire1Click"></van-cell>
         <van-cell title="职称2" :value="getJobTitle(teacherTitle2)" is-link @click="handleTeacherTitle2Click"></van-cell>
         <van-cell title="评定时间2" :value="teacherAcquireTime2 | ymd" is-link @click="handleTitleAcquire2Click"></van-cell>
-      </van-cell-group>
-
-      <!--家庭信息-->
-      <van-cell-group v-if="type==='children'">
-        <van-cell title="家庭电话" :value="teacher.homeTel || '--'"></van-cell>
-        <div class="info-basic-children" v-for="(child,index) in teacher.teacherChildList" :key="'child'+index">
-          <van-cell :title="'子女信息'+(index+1)" class="info-basic-children-title"></van-cell>
-          <van-cell title="姓名" :value="child.name || '--'"></van-cell>
-          <van-cell title="性别" :value="getSex(child.sex) || '--'"></van-cell>
-          <van-cell title="年龄" :value="(child.age || '--')+'岁'"></van-cell>
-          <van-cell title="学校或单位" :value="child.unit || '--'"></van-cell>
-          <van-cell title="备注" :value="child.remark || '--'"></van-cell>
-        </div>
       </van-cell-group>
     </div>
     <my-button :content="submitBtnTitle" @btnClick="handleSubmitClick"></my-button>
@@ -165,7 +150,6 @@
     name: 'EditInfo',
     data () {
       return {
-        type: this.$route.params.type,
         itemHeight: 60,
         pickerItemHeight: 70,
         joinPartyTime: new Date(),
@@ -294,16 +278,6 @@
           }
         }
         return returnAge // 返回周岁年龄
-      },
-      getSex (sex) {
-        switch (sex) {
-          case 'Male':
-            return '男'
-          case 'Female':
-            return '女'
-          default:
-            return '--'
-        }
       },
       getEntryType (entryType) {
         switch (entryType) {
@@ -435,8 +409,7 @@
             })
           }
         }
-        console.log(1111111111)
-        this.teacher.firstEducation = 'REGULAR_COLLEGE'
+        // this.teacher.firstEducation = 'REGULAR_COLLEGE'
         await this.$api.teacher.updateTeacher(this.teacher)
         this.$toast.success('提交成功')
         this.$router.back()

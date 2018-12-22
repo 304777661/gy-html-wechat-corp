@@ -43,10 +43,15 @@ const router = new Router({
       component: teacherView('info/Index'),
       meta: {title: '教师信息'}
     }, {
-      path: 'info/edit/:type',
-      name: 'InfoEdit',
+      path: 'info/edit/basic',
+      name: 'InfoEditBasic',
       component: teacherView('info/InfoEdit'),
       meta: {title: '编辑教师信息编辑'}
+    }, {
+      path: 'info/edit/child',
+      name: 'InfoEditChild',
+      component: teacherView('info/ChildEdit'),
+      meta: {title: '编辑教师家庭编辑'}
     }, {
       path: 'info/resume/edit/:index',
       name: 'InfoResumeEdit',
@@ -187,99 +192,7 @@ const router = new Router({
       name: 'Performance',
       component: teacherView('performance/Index'),
       meta: {title: '绩效考核'}
-    }
-      //
-      //   , {
-      //   path: 'moments',
-      //   name: 'Moments',
-      //   component: teacherView('moments/List'),
-      //   meta: {title: '校园风采'}
-      // }, {
-      //   path: 'filter',
-      //   component: teacherView('moments/Filter')
-      // }, {
-      //   path: 'moments/add',
-      //   component: teacherView('moments/Add'),
-      //   meta: {title: '发布风采'}
-      // }, {
-      //   path: 'moments/:id',
-      //   component: teacherView('moments/Detail'),
-      //   meta: {title: '风采详情'}
-      // }, {
-      //   path: 'leave',
-      //   name: 'Leave',
-      //   component: teacherView('leave/List'),
-      //   meta: {title: '请假管理'}
-      // }, {
-      //   path: 'interactive',
-      //   component: teacherView('interaction/Index'),
-      //   meta: {title: '课堂互动'}
-      // }, {
-      //   path: 'interactive/:id',
-      //   component: teacherView('interaction/Add'),
-      //   meta: {title: '互动填写'}
-      // }, {
-      //   path: 'homework',
-      //   component: teacherView('homework/Index'),
-      //   meta: {title: '作业管理'}
-      // }, {
-      //   path: 'homework/add',
-      //   component: teacherView('homework/Add'),
-      //   meta: {title: '新增作业'}
-      // }, {
-      //   path: 'homework/:id',
-      //   component: teacherView('homework/Add'),
-      //   meta: {title: '作业详情'}
-      // }, {
-      //   path: 'course',
-      //   component: teacherView('course/Index'),
-      //   meta: {title: '班级课表'}
-      // }, {
-      //   path: 'course/all',
-      //   component: teacherView('course/All'),
-      //   meta: {title: '班级课表'}
-      // }, {
-      //   path: 'survey',
-      //   component: teacherView('survey/List'),
-      //   meta: {title: '问卷调查'}
-      // }, {
-      //   path: 'survey/vote',
-      //   component: teacherView('survey/vote/Add'),
-      //   meta: {title: '新增投票'}
-      // }, {
-      //   path: 'survey/vote/:id',
-      //   component: teacherView('survey/vote/Detail'),
-      //   meta: {title: '投票详情'}
-      // }, {
-      //   path: 'survey/certify',
-      //   component: teacherView('survey/vote/Add'),
-      //   meta: {title: '新增签字证明'}
-      // }, {
-      //   path: 'survey/certify/:id',
-      //   component: teacherView('survey/certify/Detail'),
-      //   meta: {title: '签字证明详情'}
-      // }, {
-      //   path: 'survey/psq',
-      //   component: teacherView('survey/vote/Add'),
-      //   meta: {title: '新增问卷调查'}
-      // }, {
-      //   path: 'survey/psq/next',
-      //   component: teacherView('survey/psq/Add'),
-      //   meta: {title: '添加问题'}
-      // }, {
-      //   path: 'survey/psq/:surveyId',
-      //   component: teacherView('survey/psq/List'),
-      //   meta: {title: '问卷详情'}
-      // }, {
-      //   path: 'survey/psq/:surveyId/:surveyRecordId',
-      //   component: teacherView('survey/psq/Detail'),
-      //   meta: {title: '查看问卷结果'}
-      // }, {
-      //   path: 'file',
-      //   component: teacherView('file/List'),
-      //   meta: {title: '教案管理'}
-      // }
-    ]
+    }]
   }, {
     path: '/parent',
     name: 'Parent',

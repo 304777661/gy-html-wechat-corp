@@ -106,7 +106,6 @@
           title: `是否删除${this.memberSelectedList[index].name}？`
         }).then(() => {
           let deletedItem = this.memberSelectedList.splice(index, 1)
-          console.log(deletedItem)
           for (let i = 0; i < this.organList.length; i++) {
             let item = this.organList[i]
             if (this.isUser(item) && item.id === deletedItem.id) {

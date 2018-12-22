@@ -188,6 +188,12 @@ export default {
     return boy
   },
 
+  sexLabel (val) {
+    if (val === 'Female') {return '女'}
+    if (val === 'Male') {return '男'}
+    return ''
+  },
+
   rmb (val) {
     if (!val) {
       return '0.00元'
