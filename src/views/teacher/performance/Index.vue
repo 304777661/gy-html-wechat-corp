@@ -26,63 +26,67 @@
     <div class="performance-container" v-show="curTabIndex === 1">
       <van-cell-group>
         <van-cell title="基本信息" class="performance-container-sticky"></van-cell>
-        <van-cell title="教研组" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="姓名" :value="teacherPerformance.teacherName || '--'"></van-cell>
-        <van-cell title="职务" :value="teacherPerformance.roster || '--'"></van-cell>
-        <van-cell title="年级" :value="teacherPerformance.performance || '--'"></van-cell>
-        <van-cell title="德育" :value="teacherPerformance.education || '--'"></van-cell>
+        <van-cell title="学科" :value="teacherAssess.courseName || '--'"></van-cell>
+        <van-cell title="姓名" :value="teacherAssess.teacherName || '--'"></van-cell>
+        <van-cell title="职务" :value="teacherAssess.position || '--'"></van-cell>
+        <van-cell title="年级" :value="teacherAssess.gradeName || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="合计" class="performance-container-sticky"></van-cell>
-        <van-cell title="总得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="总得分" :value="teacherAssess.scoreTotal || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="工作量" class="performance-container-sticky"></van-cell>
-        <van-cell title="等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="等级" :value="$enums.AssessLevel.getName(teacherAssess.workloadLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.workloadScore || '--'"></van-cell>
+      </van-cell-group>
+      <van-cell-group>
+        <van-cell title="晨读" class="performance-container-sticky"></van-cell>
+        <van-cell title="等级" :value="$enums.AssessLevel.getName(teacherAssess.morningLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.morningScore || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="备课" class="performance-container-sticky"></van-cell>
-        <van-cell title="个人备课等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="集体备课等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="个人备课等级" :value="$enums.AssessLevel.getName(teacherAssess.prepareLevel)|| '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.prepareScore || '--'"></van-cell>
+        <van-cell title="集体备课等级" :value="$enums.AssessLevel.getName(teacherAssess.activityLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.activityScore || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="课堂" class="performance-container-sticky"></van-cell>
-        <van-cell title="等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="等级" :value="$enums.AssessLevel.getName(teacherAssess.classroomLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.classroomScore || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="作业" class="performance-container-sticky"></van-cell>
-        <van-cell title="等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="等级" :value="$enums.AssessLevel.getName(teacherAssess.homeworkLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.homeworkScore || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="教学成绩" class="performance-container-sticky"></van-cell>
-        <van-cell title="成绩" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="等级" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="成绩" :value="teacherAssess.scoreAvg || '--'"></van-cell>
+        <van-cell title="等级" :value="$enums.AssessLevel.getName(teacherAssess.scoreLevel) || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.scoreScore || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="论文" class="performance-container-sticky"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.scorePaper || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="赛课及指导学生" class="performance-container-sticky"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.scoreCompetition || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="课题、课程" class="performance-container-sticky"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.scoreTopics || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="经验交流及学术报告" class="performance-container-sticky"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.scoreAcademic || '--'"></van-cell>
       </van-cell-group>
       <van-cell-group>
         <van-cell title="教研合计" class="performance-container-sticky"></van-cell>
-        <van-cell title="得分" :value="teacherPerformance.teachGroupName || '--'"></van-cell>
+        <van-cell title="得分" :value="teacherAssess.researchScore || '--'"></van-cell>
       </van-cell-group>
     </div>
     <div class="performance-container" v-show="curTabIndex === 2">
@@ -112,6 +116,7 @@
         curTerm: {},
         curDate: new Date(),
         teacherPerformance: {},
+        teacherAssess: {},
         staffPerformance: {},
         tabs: [{
           id: 0,
@@ -188,7 +193,7 @@
         if (this.curTabIndex === 0) {
           this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.id})
         } else if (this.curTabIndex === 1) {
-          this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.id})
+          this.teacherAssess = await this.$api.teacher.getAssessTeacher({'termId': this.curTerm.id})
         } else if (this.curTabIndex === 2) {
           this.staffPerformance = await this.$api.teacher.queryAssessStaff({'month': this.curDate.Format('yyyy-MM-dd 00:00:00')})
         }

@@ -217,6 +217,11 @@ export default {
     return await Axios.post('/assessStaff/queryAssessStaff.do', query)
   },
 
+  // 教师考核详情查询
+  async getAssessTeacher (query) {
+    return await Axios.post('/assessTeacher/getAssessTeacher.do', query)
+  },
+
   /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -839,4 +839,32 @@ export default {
   },
   // ---------------- 变更类型  结束 -------------------
 
+  // ---------------- 变更类型  开始 -------------------
+  AssessLevel: {
+    // 枚举列表
+    list: [
+      {label: 'A', value: 'LEVEL_A'},
+      {label: 'B', value: 'LEVEL_B'},
+      {label: 'C', value: 'LEVEL_C'}
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'LEVEL_A':
+          return 'A'
+        case 'LEVEL_B':
+          return 'B'
+        case 'LEVEL_C':
+          return 'C'
+        default:
+          return val
+      }
+    },
+  },
+  // ---------------- 变更类型  结束 -------------------
+
 }
