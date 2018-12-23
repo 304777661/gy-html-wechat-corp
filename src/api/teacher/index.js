@@ -227,7 +227,7 @@ export default {
     return await Axios.post('/oss/upload.do', query)
   },
 
-  // 查询教研组列表
+  // 查询教研组 - 年级级联列表
   async queryTeachGroupListWithUser (query) {
     return await Axios.post('/teachGroup/queryTeachGroupListWithUser.do', query)
   },
@@ -237,8 +237,19 @@ export default {
     return await Axios.post('/teachGroup/queryGradeList.do', query)
   },
 
-  // 查询教研组 - 年级级联列表
-  async queryTeachGroupListWithUser (query) {
-    return await Axios.post('/teachGroup/queryTeachGroupListWithUser.do', query)
+  // 查询课程列表
+  async queryCourseList (query) {
+    return await Axios.post('/teacher/queryCourseList.do', query)
   },
+
+  // 增加教师工作经历
+  async addTeacherResume (query) {
+    return await Axios.post('/teacher/addTeacherResume.do', query)
+  },
+
+  // 更新教师工作经历
+  async updateTeacherResume (query) {
+    return await Axios.post('/teacher/updateTeacherResume.do', query)
+  },
+
 }

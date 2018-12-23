@@ -1,7 +1,7 @@
 <template>
   <div class="work-add">
     <div class="wrapper">
-      <van-cell title="开始时间" :value="resume.startTernName" @click="handleStartTermClick" is-link></van-cell>
+      <van-cell title="开始时间" :value="resume.startTermName" @click="handleStartTermClick" is-link></van-cell>
       <van-cell title="结束时间" :value="resume.endTermName" @click="handleEndTermClick" is-link></van-cell>
       <van-cell title="教授科目" :value="resume.courseName" @click="handleCourseClick" is-link></van-cell>
       <van-cell title="年级" :value="resume.gradeName" @click="handleGradeClick" is-link></van-cell>
@@ -19,7 +19,7 @@
                   @confirm="handlePickerConfirmClick"></van-picker>
     </van-popup>
 
-    <my-button :content="submitBtnTitle" @btnClick="handleSubmitClick"></my-button>
+    <my-button :content="'提交'" @btnClick="handleSubmitClick"></my-button>
 
   </div>
 </template>
@@ -30,10 +30,9 @@
     data () {
       return {
         index: this.$route.params.index,
-        submitBtnTitle: '提交',
         resume: {
           startTermId: 0 /*开始学期Id*/,
-          startTernName: '' /*开始学期时间*/,
+          startTermName: '' /*开始学期时间*/,
           endTermId: 0 /*结束学期Id*/,
           endTermName: '' /*结束学期时间*/,
           courseId: 0 /*教授课程Id*/,
@@ -48,7 +47,12 @@
         itemHeight: 60,
         pickerType: '',
         termColumns: [],
-        gradeColumns: []
+        gradeColumns: [],
+        courseColumns: [],
+        termList: [],
+        gradeList: [],
+        courseList: [],
+        pickerLoading: false
       }
     },
     methods: {
@@ -61,8 +65,8 @@
         console.log(item)
         switch (this.pickerType) {
           case 'START_TERM':
-            this.resume.startTernId = item.value
-            this.resume.startTernName = item.label
+            this.resume.startTermId = item.value
+            this.resume.startTermName = item.label
             break
           case 'END_TERM':
             this.resume.endTermId = item.value
@@ -93,8 +97,7 @@
       },
       handleCourseClick () {
         this.pickerType = 'COURSE'
-        // todo
-        this.columns = []
+        this.columns = this.courseColumns
         this.showPicker = true
       },
       handleGradeClick () {
@@ -107,9 +110,9 @@
         this.columns = this.$enums.YesNoStatus.list
         this.showPicker = true
       },
-      handleSubmitClick () {
+      async handleSubmitClick () {
         // 数据校验
-        if (!this.resume.startTernName || this.resume.startTernName.length === 0) {
+        if (!this.resume.startTermName || this.resume.startTermName.length === 0) {
           this.$toast.fail('请选择开始时间')
           return
         }
@@ -129,12 +132,18 @@
           this.$toast.fail('请输入年级')
           return
         }
-        // todo 添加工作经历
+        console.log(this.resume)
+        if (this.index >= 0) {
+          await this.$api.teacher.updateTeacherResume(this.resume)
+        } else {
+          await this.$api.teacher.addTeacherResume(this.resume)
+        }
         this.$toast.success('提交成功')
         this.$router.back()
       },
     },
     async created () {
+      this.pickerLoading = true
       this.termList = await this.$api.teacher.querySchoolTermList({})
       if (this.termList && this.termList.length > 0) {
         this.termColumns = this.termList.map(item => {
@@ -153,6 +162,16 @@
           }
         })
       }
+      this.courseList = await this.$api.teacher.queryCourseList({})
+      if (this.courseList && this.courseList.length > 0) {
+        this.courseColumns = this.courseList.map(item => {
+          return {
+            label: item.name,
+            value: item.id,
+          }
+        })
+      }
+      this.pickerLoading = false
       // 判断是编辑还是新增
       if (this.index && this.index > 0) {
         let resumeList = await this.$api.teacher.queryTeacherResumeList({})
