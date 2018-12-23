@@ -58,7 +58,7 @@
         obtainTime: new Date(),
         submitBtnTitle: '提交',
         pickerItemHeight: 70,
-        minDate: new Date(),
+        minDate: new Date(1970, 1, 1),
         showType: false,
         showDatePicker: false,
         prizeLevelColumns: this.$enums.ProjectType.list,
@@ -112,8 +112,8 @@
             })
           })
         }
-        await this.$api.parent.addStudentPrize(this.query)
-        this.$toast.success('提交成功')
+        await this.$api.parent.addStudentPrize(this.prize)
+        this.$toast.success('已提交审核')
         this.$router.back()
       },
     },

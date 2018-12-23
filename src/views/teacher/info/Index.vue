@@ -70,6 +70,7 @@
         </van-cell-group>
       </div>
       <div class="info-work" v-show="curTabIndex === 1">
+        <no-data v-show="!loading && !resumeList.length"/>
         <!--工作经历-->
         <van-cell-group>
           <div v-for="(resume,index) in resumeList" :key="'resume'+index">
@@ -90,6 +91,7 @@
         </van-cell-group>
       </div>
       <div class="info-awards" v-show="curTabIndex === 2">
+        <no-data v-show="!loading && !researchList.length"/>
         <!--获奖情况-->
         <div v-for="(research,index) in researchList" :key="'research'+index">
           <van-cell :title="researchList.length === 1 ? '获奖情况':('获奖情况'+(index+1))" class="info-sticky">
@@ -129,137 +131,9 @@
           id: 2,
           label: '获奖情况',
         }],
-        teacher: {
-          'teacherInfoId': 1 /*教师信息Id*/,
-          'userId': 1 /*教师用户Id*/,
-          'name': '张三' /*姓名*/,
-          'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-          'avatar': 'avatar' /*头像*/,
-          'idCard': '4301222' /*身份证号*/,
-          'phone': '13487317051' /*手机号*/,
-          'email': 'email' /*邮箱*/,
-          'position': 'position' /*职位*/,
-          'gradeId': 1 /*教学年级Id*/,
-          'grade': '三年级' /*教学年级*/,
-          'jobStatus': 'SERVING' /*工作状态0离职1在职：ALL|DIMISSION|SERVING*/,
-          'homeTel': 'homeTel' /*家庭电话*/,
-          'birthday': '2018-12-19 09:29:02' /*出生年月*/,
-          'folk': '汉族' /*民族*/,
-          'residence': '长沙' /*籍贯*/,
-          'politicsStatus': 'MASSES' /*政治面貌1团员2共产党员3民主党派4群众：ALL|LEAGUE|COMMUNIST|DEMOCRATIC|MASSES*/,
-          'joinPartyTime': '2018-12-19 09:29:02' /*加入组织时间*/,
-          'firstEducation': 'DOCTORAL_CANDIDATE' /*第一学历：ALL|JUNIOR_COLLEGE|REGULAR_COLLEGE|POSTGRADUATE|DOCTORAL_CANDIDATE*/,
-          'highestEducation': 'DOCTORAL_CANDIDATE' /*最高学历：ALL|JUNIOR_COLLEGE|REGULAR_COLLEGE|POSTGRADUATE|DOCTORAL_CANDIDATE*/,
-          'graduateTime': '2018-12-19 09:29:02' /*毕业时间*/,
-          'graduateSchool': '高级中学' /*毕业学校*/,
-          'joinWorkTime': '2018-12-19 09:29:02' /*参加工作时间*/,
-          'workYears': 1 /*工龄*/,
-          'joinSchoolTime': '2018-12-19 09:29:02' /*来校时间*/,
-          'lastWorkUnit': '元公司做' /*原工作单位*/,
-          'isGradeLeader': 'NO' /*是否年级组长：ALL|YES|NO*/,
-          'isAdviser': 'NO' /*是否班主任：ALL|YES|NO*/,
-          'courseList': [
-            {
-              'id': 1 /**/,
-              'name': '语文' /*课程名称*/,
-              'courseType': 'OPTIONAL' /*课程类型1必修课2选修课：ALL|REQUIRED|OPTIONAL*/,
-              'isDelete': 'NO' /*删除标识0否1是：ALL|YES|NO*/,
-              'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-              'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-            }
-          ],
-          'orgList': [
-            {
-              'id': 1 /**/,
-              'name': '超级部门' /*名称*/,
-              'orgType': 'PARENT_ORG' /*机构类型0根部门1行政部门2教研组3家长组：ALL|ROOT_ORG|ADMIN_ORG|TEACH_ORG|PARENT_ORG*/,
-              'parentOrgId': 1 /*父级机构Id*/,
-              'orderNum': 1 /*排序号*/,
-              'isDelete': 'NO' /*是否删除0否1是：ALL|YES|NO*/,
-              'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-              'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-            }
-          ],
-          'teacherTitleList': [
-            {
-              'id': 1 /**/,
-              'userId': 1 /*教师用户Id*/,
-              'title': 'HIGHER_GRADE' /*职称类型：ALL|NOVICIATE|RANK_UNDECIDED|SECOND_GRADE|FIRST_GRADE|HIGHER_GRADE*/,
-              'acquireTime': '2018-12-19 09:29:02' /*评定时间*/,
-              'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-              'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-            }
-          ],
-          'teacherPositionList': [
-            {
-              'id': 1 /**/,
-              'teacherId': 1 /*教师ID*/,
-              'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-              'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-            }
-          ],
-          'teacherChildList': [
-            {
-              'id': 1 /**/,
-              'userId': 1 /*教师用户Id*/,
-              'name': 'name' /**/,
-              'sex': 'Female' /*性别0男1女：ALL|Male|Female*/,
-              'age': 1 /*年龄*/,
-              'unit': 'unit' /*学校或单位*/,
-              'remark': 'remark' /*备注*/,
-              'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-              'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-            }
-          ]
-        },
-        resumeList: [{
-          'id': 1 /**/,
-          'userId': 1 /*教师用户Id*/,
-          'startTermId': 1 /*开始学期Id*/,
-          'startTernName': 'startTernName' /*开始学期时间*/,
-          'endTermId': 1 /*结束学期Id*/,
-          'endTermName': 'endTermName' /*结束学期时间*/,
-          'courseId': 1 /*教授课程Id*/,
-          'courseName': 'courseName' /*教授课程名称*/,
-          'gradeId': 1 /*年级Id*/,
-          'gradeName': 'gradeName' /*年级名称*/,
-          'className': 'className' /*班级名称*/,
-          'isAdviser': 'NO' /*是否班主任0否1是：ALL|YES|NO*/
-        }],
-        researchList: [
-          {
-            'id': 1 /*主键id*/,
-            'teacherId': 1 /*教师id*/,
-            'teacherName': 'teacherName' /*教师名称*/,
-            'sex': 'Female' /*性别：ALL|Male|Female*/,
-            'entryName': 'entryName' /*项目名称*/,
-            'entryType': 'ACADEMIC' /*项目类型：ALL|PAPER|COMPETITION|TOPICS|ACADEMIC*/,
-            'awardUnit': 'awardUnit' /*颁奖单位*/,
-            'achievement': 'achievement' /*成绩*/,
-            'obtainTime': '2018-12-19 09:29:02' /*获奖时间*/,
-            'examineResult': 'NOT_PASS' /*审核结果：ALL|UNAUDITED|ADOPT|NOT_PASS*/,
-            'score': 1.0 /*评分*/,
-            'attachments': [
-              {
-                'fileName': 'fileName' /*文件名*/,
-                'fileUrl': 'fileUrl' /*文件路径*/
-              }
-            ],
-            'orgName': 'orgName' /*扩展属性(拼接字符串)*/,
-            'organizations': [
-              {
-                'id': 1 /**/,
-                'name': 'name' /*名称*/,
-                'orgType': 'PARENT_ORG' /*机构类型0根部门1行政部门2教研组3家长组：ALL|ROOT_ORG|ADMIN_ORG|TEACH_ORG|PARENT_ORG*/,
-                'parentOrgId': 1 /*父级机构Id*/,
-                'orderNum': 1 /*排序号*/,
-                'isDelete': 'NO' /*是否删除0否1是：ALL|YES|NO*/,
-                'createdTime': '2018-12-19 09:29:02' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-                'updatedTime': '2018-12-19 09:29:02' /*更新时间 默认值：CURRENT_TIMESTAMP*/
-              }
-            ]
-          }
-        ],
+        teacher: {},
+        resumeList: [],
+        researchList: [],
       }
     },
     methods: {
@@ -277,11 +151,12 @@
           this.$router.push(`/teacher/info/prize/add`)
         }
       },
-      handleTabChanged (tabIndex) {
+      async handleTabChanged (tabIndex) {
         if (this.curTabIndex === tabIndex) {
           return
         }
         this.curTabIndex = tabIndex
+        await this.loadData()
       },
       getJobStatus (jobStatus) {
         if (jobStatus === 'DIMISSION') {
@@ -408,12 +283,18 @@
       handleResumeClick (index) {
         this.$router.push(`/teacher/info/resume/edit/${index}`)
       },
-      handleResearchClick () {}
+      async loadData () {
+        if (this.curTabIndex === 0) {
+          this.teacher = await this.$api.teacher.getTeacherDetail({})
+        } else if (this.curTabIndex === 1) {
+          this.resumeList = await this.$api.teacher.queryTeacherResumeList({})
+        } else if (this.curTabIndex === 2) {
+          this.researchList = await this.$api.teacher.queryTeachingResearchList({})
+        }
+      }
     },
     async created () {
-      // this.teacher = await this.$api.teacher.getTeacherDetail({})
-      // this.resumeList = await this.$api.teacher.queryTeacherResumeList({})
-      this.researchList = await this.$api.teacher.queryTeachingResearchList({})
+      await this.loadData()
     }
   }
 </script>
