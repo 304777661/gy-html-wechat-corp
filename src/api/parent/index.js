@@ -92,4 +92,13 @@ export default {
     return await Axios.post('/oss/upload.do', query)
   },
 
+  // 家长端 - 通知公告详情查询
+  async getNotice (query) {
+    return await Axios.post('/noticeParent/getNotice.do', query)
+  },
+
+  // 家长端 - 通知公告参与 - 活动
+  async participationNotice (query) {
+    return await Axios.post('/noticeParent/participationNotice.do', query)
+  },
 }

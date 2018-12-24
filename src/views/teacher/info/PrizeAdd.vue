@@ -113,7 +113,7 @@
           })
         }
         await this.$api.parent.addStudentPrize(this.prize)
-        this.$toast.success('已提交审核')
+        this.$toast.success('已提交，请耐心等待审核')
         this.$router.back()
       },
     },

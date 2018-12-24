@@ -206,7 +206,7 @@ const router = new Router({
     }, {
       path: 'notice/detail/:id',
       name: 'ParentNoticeDetail',
-      component: parentView('bulletin/Detail'),
+      component: parentView('notice/Detail'),
       meta: {title: '通知详情'}
     }, {
       path: 'score',
