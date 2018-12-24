@@ -1,62 +1,62 @@
 <template>
   <div class="class-table">
-    <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
-                    @nextClick="handleNextClick()"></section-picker>
+    <div class="wrapper">
+      <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
+                      @nextClick="handleNextClick()"></section-picker>
 
-    <no-data v-show="!loading && !courseList.length"/>
-    <!--<my-loading v-model="loading"/>-->
+      <no-data v-show="!loading && !courseList.length"/>
+      <!--<my-loading v-model="loading"/>-->
 
-    <div class="class-table-header">
-      <span class="class-table-header-class-name">{{curClass.label || '--'}}</span>
-      <span class="class-table-header-class-picker" @click="onClassPicker">选择班级</span>
-    </div>
-
-    <div class="class-table-container" v-show="!loading && courseList.length">
-      <div class="class-table-container-section">
-        <p v-for="(item,index) in sections" :key="index" class="class-table-container-section__label">{{item}}</p>
+      <div class="class-table-header">
+        <span class="class-table-header-class-name">{{curClass.label || '--'}}</span>
+        <span class="class-table-header-class-picker" @click="onClassPicker">选择班级</span>
       </div>
-      <div class="class-table-container__table">
-        <table>
-          <tr>
-            <th v-for="week in weekList"
-                :key="week">{{$enums.DayOfWeek.getName(week)}}
-            </th>
-          </tr>
-          <tr v-for="(section, sectionIdx) in courseList" :key="'section' + sectionIdx">
-            <td v-for="(course, courseIdx) in section" :key="'course' + courseIdx">
-              <div class="td" :class="[showEvenCourse(course) ? 'td-split-line' : '']"
-                   :style="[generateColorAndBgColor(course.courseName)]">
-                <p v-show="!showEvenCourse(course)">{{course.courseName}}</p>
-                <p class="td-class-name" v-show="!showEvenCourse(course)">{{course.className}}</p>
-                <div class="td-single-class-name" v-show="showEvenCourse(course)">
-                  <p>{{course.courseName}}</p>
-                  <p>单</p>
+
+      <div class="class-table-container" v-show="!loading && courseList.length">
+        <div class="class-table-container-section">
+          <p v-for="(item,index) in sections" :key="index" class="class-table-container-section__label">{{item}}</p>
+        </div>
+        <div class="class-table-container__table">
+          <table>
+            <tr>
+              <th v-for="week in weekList"
+                  :key="week">{{$enums.DayOfWeek.getName(week)}}
+              </th>
+            </tr>
+            <tr v-for="(section, sectionIdx) in courseList" :key="'section' + sectionIdx">
+              <td v-for="(course, courseIdx) in section" :key="'course' + courseIdx">
+                <div class="td" :class="[showEvenCourse(course) ? 'td-split-line' : '']"
+                     :style="[generateColorAndBgColor(course.courseName)]">
+                  <p v-show="!showEvenCourse(course)">{{course.courseName}}</p>
+                  <p class="td-class-name" v-show="!showEvenCourse(course)">{{course.className}}</p>
+                  <div class="td-single-class-name" v-show="showEvenCourse(course)">
+                    <p>{{course.courseName}}</p>
+                    <p>单</p>
+                  </div>
+                  <div class="td-even-class-name" v-show="showEvenCourse(course)">
+                    <p>双</p>
+                    <p>{{course.courseNameEven}}</p>
+                  </div>
                 </div>
-                <div class="td-even-class-name" v-show="showEvenCourse(course)">
-                  <p>双</p>
-                  <p>{{course.courseNameEven}}</p>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
-
+    <my-button :content="'查看教师课表'" @btnClick="goTeacherTimeTable"></my-button>
     <van-popup v-model="showPopup" position="bottom">
       <van-picker :columns="columns"
                   @change="onChange"
                   show-toolbar
                   @cancel="onCancel"
                   @confirm="onConfirm"
-                  :item-height="popupItemHeight"
                   value-key="label"
                   :loading="gradeLoading" ref="picker">
       </van-picker>
 
     </van-popup>
 
-    <my-button :content="'查看教师课表'" @btnClick="goTeacherTimeTable"></my-button>
   </div>
 </template>
 
@@ -83,10 +83,10 @@
         columns:
           [{
             values: [],
-            className: 'class-table-popup-item'
+            // className: 'class-table-popup-item'
           }, {
             values: [],
-            className: 'class-table-popup-item'
+            // className: 'class-table-popup-item'
           }],
         sections: [
           '一',
@@ -294,21 +294,21 @@
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
   .class-table
     $td-default-bg: #F8FAFC
-    display: flex
-    flex-direction: column
-    height: 100vh
     background: #F5F5F5
+    .wrapper
+      height: calc(100vh - 70px)
     &-popup-item
       line-height: 60px
       height: 60px
     &-header
       background: $dark-blue
-      height: 24px
+      height: 40px
       position: relative
       $mb: 10px
+      margin-top: -2px
       &-class-name
         position: absolute
         color: $white
@@ -352,9 +352,7 @@
           text-align: center
           vertical-align: middle
           border-radius: $border-radius
-          // $shadow-color: #bccaec
-          // box-shadow: 0 0 20px 4px $shadow-color, 0 10px 0 -3px #fff, 0 11px 20px -3px $shadow-color, 0 20px 0 -6px #fff, 0 21px 20px -6px $shadow-color
-          z-index: 2
+          z-index: 0
           overflow: hidden
         td
           height: $td-height

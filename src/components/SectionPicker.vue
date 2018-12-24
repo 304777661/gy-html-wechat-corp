@@ -1,8 +1,8 @@
 <template>
   <div class="section-picker">
-    <van-icon name="arrow-left" @click="handlePreviousClick()" color="#fff" size="26px"></van-icon>
+    <van-icon name="arrow-left" class="icon-size" @click="handlePreviousClick()" color="#fff"></van-icon>
     <span class="section-picker-content">{{content}}</span>
-    <van-icon name="arrow" @click="handleNextClick()" color="#fff" size="26px"></van-icon>
+    <van-icon name="arrow" class="icon-size" @click="handleNextClick()" color="#fff"></van-icon>
   </div>
 </template>
 
@@ -31,6 +31,8 @@
     line-height: $h
     @include hor-between-center
     padding: 0 60px
+    .icon-size
+      font-size: 13px
     &-content
       color: $white
       text-align: center

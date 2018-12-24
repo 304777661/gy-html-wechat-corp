@@ -27,7 +27,6 @@
                   show-toolbar
                   @cancel="onPickerCancel"
                   @confirm="onPickerConfirm"
-                  :item-height="popupItemHeight"
                   value-key="label"
                   :loading="gradeLoading"
                   ref="picker">

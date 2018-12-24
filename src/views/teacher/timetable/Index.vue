@@ -1,43 +1,44 @@
 <template>
   <div class="timetable">
-    <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
-                    @nextClick="handleNextClick()"></section-picker>
+    <div class="wrapper">
+      <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
+                      @nextClick="handleNextClick()"></section-picker>
 
-    <no-data v-show="!loading && !courseList.length"/>
-    <my-loading v-model="loading"/>
+      <no-data v-show="!loading && !courseList.length"/>
+      <my-loading v-model="loading"/>
 
-    <div class="timetable-container" v-show="!loading && courseList.length">
-      <div class="timetable-container-section">
-        <p v-for="(item,index) in sections" :key="index" class="timetable-container-section__label">{{item}}</p>
-      </div>
-      <div class="timetable-container__table">
-        <table>
-          <tr>
-            <th v-for="week in weekList"
-                :key="week">{{$enums.DayOfWeek.getName(week)}}
-            </th>
-          </tr>
-          <tr v-for="(section, sectionIdx) in courseList" :key="'section' + sectionIdx">
-            <td v-for="(course, courseIdx) in section" :key="'course' + courseIdx">
-              <div class="td" :class="[showEvenCourse(course) ? 'td-split-line' : '']"
-                   :style="[generateColorAndBgColor(course.courseName)]">
-                <p v-show="!showEvenCourse(course)">{{course.courseName}}</p>
-                <p class="td-class-name" v-show="!showEvenCourse(course)">{{course.className}}</p>
-                <div class="td-single-class-name" v-show="showEvenCourse(course)">
-                  <p>{{course.courseName}}</p>
-                  <p>单</p>
+      <div class="timetable-container" v-show="!loading && courseList.length">
+        <div class="timetable-container-section">
+          <p v-for="(item,index) in sections" :key="index" class="timetable-container-section__label">{{item}}</p>
+        </div>
+        <div class="timetable-container__table">
+          <table>
+            <tr>
+              <th v-for="week in weekList"
+                  :key="week">{{$enums.DayOfWeek.getName(week)}}
+              </th>
+            </tr>
+            <tr v-for="(section, sectionIdx) in courseList" :key="'section' + sectionIdx">
+              <td v-for="(course, courseIdx) in section" :key="'course' + courseIdx">
+                <div class="td" :class="[showEvenCourse(course) ? 'td-split-line' : '']"
+                     :style="[generateColorAndBgColor(course.courseName)]">
+                  <p v-show="!showEvenCourse(course)">{{course.courseName}}</p>
+                  <p class="td-class-name" v-show="!showEvenCourse(course)">{{course.className}}</p>
+                  <div class="td-single-class-name" v-show="showEvenCourse(course)">
+                    <p>{{course.courseName}}</p>
+                    <p>单</p>
+                  </div>
+                  <div class="td-even-class-name" v-show="showEvenCourse(course)">
+                    <p>双</p>
+                    <p>{{course.courseNameEven}}</p>
+                  </div>
                 </div>
-                <div class="td-even-class-name" v-show="showEvenCourse(course)">
-                  <p>双</p>
-                  <p>{{course.courseNameEven}}</p>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
-
     <my-button :content="'查看班级课表'" @btnClick="goAll"></my-button>
   </div>
 </template>
@@ -56,17 +57,7 @@
         curTerm: {},
         curTermIndex: -1,
         termList: null,
-        sections: [
-          '一',
-          '二',
-          '三',
-          '四',
-          '五',
-          '六',
-          '七',
-          '八',
-          '九',
-        ],
+        sections: ['一', '二', '三', '四', '五', '六', '七', '八', '九',],
         sectionList: [],
         courseList: [],
         weekList: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
@@ -197,24 +188,24 @@
   }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
   .timetable
     $td-default-bg: #F8FAFC
-    display: flex
-    flex-direction: column
-    height: 100vh
     background: #F5F5F5
+    .wrapper
+      height: calc(100vh - 70px)
     &__picker
       padding: 10px 0
       background: #fff
       @include hor-around-center
     &-container
-      flex: 1
-      $td-height: 56px
+      $td-height: 54px
       $th-height: 35px
       display: flex
       flex-direction: row
       position: relative
+      flex: 1
+      padding-bottom: $td-height
       &-section
         width: 30px
         color: $black
@@ -233,9 +224,7 @@
           text-align: center
           vertical-align: middle
           border-radius: $border-radius
-          // $shadow-color: #bccaec
-          // box-shadow: 0 0 20px 4px $shadow-color, 0 10px 0 -3px #fff, 0 11px 20px -3px $shadow-color, 0 20px 0 -6px #fff, 0 21px 20px -6px $shadow-color
-          z-index: 2
+          z-index: 0
           overflow: hidden
         td
           height: $td-height

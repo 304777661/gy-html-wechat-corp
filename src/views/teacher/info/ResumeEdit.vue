@@ -12,7 +12,6 @@
 
     <van-popup v-model="showPicker" position="bottom" :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="columns"
                   value-key="label"
                   @cancel="handlePickerCancelClick"

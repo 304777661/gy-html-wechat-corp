@@ -2,11 +2,6 @@ import Axios from 'axios'
 
 export default {
 
-  // 教师端 - 学生详情查询
-  async getStudent (query) {
-    return await Axios.post('/studentTeacher/getStudent.do', query)
-  },
-
   // 查询学期列表
   async querySchoolTermList (query) {
     return await Axios.post('/schoolTerm/querySchoolTermList.do', query)
@@ -144,7 +139,7 @@ export default {
 
   // 查询教研组列表
   async queryTeachGroupList (query) {
-    return await Axios.post('/teachGroupActivity/queryTeachGroupList.do', query)
+    return await Axios.post('/teachGroup/queryTeachGroupList.do', query)
   },
 
   // 教师端 - 通知公告详情查询

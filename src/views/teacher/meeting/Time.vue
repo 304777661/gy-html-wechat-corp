@@ -17,14 +17,13 @@
         </div>
       </div>
     </div>
-    <my-button :content="okBtnTitle" @btnClick="handleOkClick"></my-button>
+    <my-button :content="'确定'" @btnClick="handleOkClick"></my-button>
 
     <van-popup v-model="showDatePicker" position="bottom" :overlay="true">
       <van-datetime-picker
         v-model="selectDate"
         type="date"
         show-toolbar
-        :item-height="itemHeight"
         @confirm="handleDatePickerConfirm"
         @cancel="handleDatePickerCancel"
         :min-date="minDate">
@@ -48,7 +47,6 @@
       return {
         showDatePicker: false,
         minDate: new Date(),
-        okBtnTitle: '确定',
         meetingRoomId: 0,
         meetingDate: new Date(),
         selectDate: new Date(),
@@ -148,7 +146,7 @@
         this.$set(this.timeList, index, item)
       },
       formatMeetingTime () {
-        return this.meetingDate.Format('yyyy-MM-dd hh:mm:ss')
+        return this.meetingDate.Format('yyyy-MM-dd 00:00:00')
       },
       async loadData () {
         this.loading = false

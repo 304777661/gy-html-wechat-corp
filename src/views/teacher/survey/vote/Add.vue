@@ -77,13 +77,12 @@
         ref="picker"
         v-model="currentDate"
         type="datetime"
-        :item-height="itemHeight"
         :min-date="minDate"
         :max-date="maxDate"
         :formatter="formatter"
         @confirm="doEndDateConfirm"
-        @cancel="doEndDateCancel"
-      />
+        @cancel="doEndDateCancel">
+      </van-datetime-picker>
     </van-popup>
 
   </div>

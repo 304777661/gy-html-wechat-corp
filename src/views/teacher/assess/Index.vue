@@ -145,7 +145,6 @@
 
     <van-popup v-model="showTermPicker" position="bottom">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="termColumns"
                   value-key="label"
                   @cancel="handleTermPickerCancelClick"
@@ -154,7 +153,6 @@
 
     <van-popup v-model="showWeekPicker" position="bottom">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="weekColumns"
                   value-key="label"
                   @cancel="handleWeekPickerCancelClick"
@@ -292,7 +290,7 @@
       color: $black
     &-header
       background: $dark-blue
-      height: 36px
+      height: 40px
       @include hor-center-center
       &__item
         color: $white

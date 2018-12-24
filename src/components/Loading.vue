@@ -1,6 +1,6 @@
 <template>
   <div class="loading" v-show="loading">
-    <van-loading size="30px"/>
+    <van-loading class="icon-size"></van-loading>
     <span class="loading__text">{{text}}</span>
   </div>
 </template>
@@ -32,6 +32,8 @@
     line-height: 50px
     font-size: 13px
     color: $gray
+    .icon-size
+      font-size: 15px
     &__text
       margin-left: 5px
 </style>

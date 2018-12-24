@@ -46,12 +46,12 @@ const router = new Router({
       path: 'info/edit/basic',
       name: 'InfoEditBasic',
       component: teacherView('info/InfoEdit'),
-      meta: {title: '编辑教师信息编辑'}
+      meta: {title: '编辑教师信息'}
     }, {
       path: 'info/edit/child',
       name: 'InfoEditChild',
       component: teacherView('info/ChildEdit'),
-      meta: {title: '编辑教师家庭编辑'}
+      meta: {title: '编辑家庭信息'}
     }, {
       path: 'info/resume/edit/:index',
       name: 'InfoResumeEdit',
@@ -244,15 +244,19 @@ const router = new Router({
       component: parentView('children/Index'),
       meta: {title: '子女档案'}
     }, {
+      path: 'children/setting',
+      component: parentView('children/Setting'),
+      meta: {title: '子女档案'}
+    }, {
       path: 'children/detail/:id',
       name: 'ChildrenDetail',
       component: parentView('children/Detail'),
       meta: {title: '子女详情'}
     }, {
-      path: 'children/prize/add',
-      name: 'ChildrenAddPrize',
-      component: parentView('children/AddPrize'),
-      meta: {title: '增加获奖情况'}
+      path: 'children/prize/edit/:index',
+      name: 'ChildrenEditPrize',
+      component: parentView('children/PrizeEdit'),
+      meta: {title: '编辑获奖情况'}
     }, {
       path: 'audit/detail/:id',
       component: parentView('audit/Index'),

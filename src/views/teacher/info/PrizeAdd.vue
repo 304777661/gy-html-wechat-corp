@@ -20,7 +20,6 @@
         show-toolbar
         :columns="prizeLevelColumns"
         value-key="label"
-        :item-height="pickerItemHeight"
         @cancel="handleEntryTypeCancelClick"
         @confirm="handleEntryTypeConfirmClick">
       </van-picker>
@@ -34,7 +33,6 @@
         class="time-picker"
         @cancel="handleTimeCancel"
         @confirm="handleTimeConfirm"
-        :item-height="pickerItemHeight"
         :min-date="minDate">
       </van-datetime-picker>
     </van-popup>

@@ -31,7 +31,6 @@
         v-model="selectDate"
         type="date"
         show-toolbar
-        :item-height="itemHeight"
         @confirm="handleDatePickerConfirm"
         @cancel="handleDatePickerCancel"
         :min-date="minDate">
@@ -43,7 +42,6 @@
                   show-toolbar
                   @cancel="handleGradeCancel"
                   @confirm="handleGradeConfirm"
-                  :item-height="popupItemHeight"
                   value-key="label"
                   :loading="gradeLoading" ref="picker">
       </van-picker>
@@ -54,7 +52,6 @@
                   show-toolbar
                   @cancel="handleTeacherGroupCancel"
                   @confirm="handleTeacherGroupConfirm"
-                  :item-height="popupItemHeight"
                   value-key="label"
                   :loading="gradeLoading" ref="picker">
       </van-picker>

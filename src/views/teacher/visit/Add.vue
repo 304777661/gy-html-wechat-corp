@@ -1,40 +1,42 @@
 <!--添加家访记录-->
 <template>
   <div class="visit-add">
-    <van-cell-group>
-      <van-cell title="学生" is-link :value="visit.studentName ||'请选择'" @click="handleStudentsClick">
-      </van-cell>
-      <van-cell title="家访时间" :value="visit.visitDate ? (visit.visitDate | ymd) : '请选择'"
-                is-link @click="handleSelectTimeClick"></van-cell>
-      <van-field label="家访对象" v-model="visit.visitObject" input-align="right" placeholder="请输入"></van-field>
-    </van-cell-group>
+    <div class="wrapper">
 
-    <van-field class="visit-add-title" label="家访内容" disabled></van-field>
-    <van-field
-      v-model="visit.visitContent"
-      type="textarea"
-      input-align="left"
-      :autosize="textAreaSize"
-      placeholder="请输入">
-    </van-field>
-    <van-field class="visit-add-title" label="照片" disabled></van-field>
 
-    <div class="visit-add-picture">
-      <picture-map :pictures="imageList" :upload="true"/>
+      <van-cell-group>
+        <van-cell title="学生" is-link :value="visit.studentName ||'请选择'" @click="handleStudentsClick">
+        </van-cell>
+        <van-cell title="家访时间" :value="visit.visitDate ? (visit.visitDate | ymd) : '请选择'"
+                  is-link @click="handleSelectTimeClick"></van-cell>
+        <van-field label="家访对象" v-model="visit.visitObject" input-align="right" placeholder="请输入"></van-field>
+      </van-cell-group>
+
+      <van-field class="visit-add-title" label="家访内容" disabled></van-field>
+      <van-field
+        v-model="visit.visitContent"
+        type="textarea"
+        input-align="left"
+        :autosize="textAreaSize"
+        placeholder="请输入">
+      </van-field>
+      <van-field class="visit-add-title" label="照片" disabled></van-field>
+
+      <div class="visit-add-picture">
+        <picture-map :pictures="imageList" :upload="true"/>
+      </div>
+
+      <van-popup v-model="showDatePicker" position="bottom" :overlay="true">
+        <van-datetime-picker
+          v-model="visitTime"
+          type="date"
+          show-toolbar
+          @confirm="handleDatePickerConfirm"
+          @cancel="handleDatePickerCancel"
+          :min-date="minDate">
+        </van-datetime-picker>
+      </van-popup>
     </div>
-
-    <van-popup v-model="showDatePicker" position="bottom" :overlay="true">
-      <van-datetime-picker
-        v-model="visitTime"
-        type="date"
-        show-toolbar
-        :item-height="itemHeight"
-        @confirm="handleDatePickerConfirm"
-        @cancel="handleDatePickerCancel"
-        :min-date="minDate">
-      </van-datetime-picker>
-    </van-popup>
-
     <my-button :content="submitBtnTitle" @btnClick="handleSubmitClick"></my-button>
   </div>
 </template>
@@ -120,6 +122,8 @@
 
 <style scoped lang="sass">
   .visit-add
+    .wrapper
+      height: calc(100vh - 80px)
     &-title
       margin-top: 10px
     &-picture

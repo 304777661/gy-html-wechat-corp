@@ -5,7 +5,7 @@
       <van-cell-group>
         <van-field label="姓名" v-model="teacher.name" placeholder="请输入" clearable input-align="right"></van-field>
         <van-cell title="性别" :value="teacher.sex | sexLabel" is-link @click="handleSexClick"></van-cell>
-        <van-cell title="当前状态" :value="getJobStatus(teacher.jobStatus) || '--'"></van-cell>
+        <van-cell title="当前状态" :value="$enums.JobStatus.getName(teacher.jobStatus) || '--'"></van-cell>
         <van-cell-group v-for="(course,index) in teacher.courseList" :key="'course'+index">
           <van-cell :title="(teacher.courseList.length === 1) ? '教授科目' : ('教授科目'+(index +1))"
                     :value="course.name || '--'">
@@ -23,11 +23,11 @@
         <van-cell title="年龄" :value="teacher.birthday ? (getAge(teacher.birthday)+'岁'): '--'"></van-cell>
         <van-cell title="民族" :value="teacher.folk || '--'"></van-cell>
         <van-cell title="籍贯" :value="teacher.residence || '--'"></van-cell>
-        <van-cell title="政治面貌" :value="getPoliticsStatus(teacher.politicsStatus)" is-link
+        <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(teacher.politicsStatus)" is-link
                   @click="handlePoliticsClick"></van-cell>
         <van-cell title="加入时间" :value="teacher.joinPartyTime | ymd" is-link @click="handleJoinPartyTime"></van-cell>
-        <van-cell title="第一学历" :value="getEducation(teacher.firstEducation) || '--'"></van-cell>
-        <van-cell title="最高学历" :value="getEducation(teacher.highestEducation) || '请选择'" is-link
+        <van-cell title="第一学历" :value="$enums.EducationType.getName(teacher.firstEducation) || '--'"></van-cell>
+        <van-cell title="最高学历" :value="$enums.HighestEducation.getName(teacher.highestEducation) || '请选择'" is-link
                   @click="handleHighEducationClick"></van-cell>
         <van-cell title="毕业时间" :value="teacher.graduateTime | ymd"></van-cell>
         <van-cell title="毕业学校" :value="teacher.graduateSchool || '--'"></van-cell>
@@ -35,9 +35,11 @@
         <van-cell title="工龄" :value="teacher.workYears ? (teacher.workYears +'年') : '--'"></van-cell>
         <van-cell title="来校时间" :value="teacher.joinSchoolTime | ymd"></van-cell>
         <van-cell title="原工作单位" :value="teacher.lastWorkUnit || '--'"></van-cell>
-        <van-cell title="职称1" :value="getJobTitle(teacherTitle1)" is-link @click="handleTeacherTitle1Click"></van-cell>
+        <van-cell title="职称1" :value="$enums.TeacherTitleType.getName(teacherTitle1)" is-link
+                  @click="handleTeacherTitle1Click"></van-cell>
         <van-cell title="评定时间1" :value="teacherAcquireTime1 | ymd" is-link @click="handleTitleAcquire1Click"></van-cell>
-        <van-cell title="职称2" :value="getJobTitle(teacherTitle2)" is-link @click="handleTeacherTitle2Click"></van-cell>
+        <van-cell title="职称2" :value="$enums.TeacherTitleType.getName(teacherTitle2)" is-link
+                  @click="handleTeacherTitle2Click"></van-cell>
         <van-cell title="评定时间2" :value="teacherAcquireTime2 | ymd" is-link @click="handleTitleAcquire2Click"></van-cell>
       </van-cell-group>
     </div>
@@ -47,7 +49,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="sexColumns"
                   value-key="label"
                   @cancel="handleSexCancelClick"
@@ -58,7 +59,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="politicsColumns"
                   value-key="label"
                   @cancel="handlePoliticsCancelClick"
@@ -69,7 +69,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="highEducationColumns"
                   value-key="label"
                   @cancel="handleHighEducationCancelClick"
@@ -80,7 +79,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="title1Columns"
                   value-key="label"
                   @cancel="handleTeacherTitle1CancelClick"
@@ -91,7 +89,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="title2Columns"
                   value-key="label"
                   @cancel="handleTeacherTitle2CancelClick"
@@ -108,7 +105,6 @@
         class="time-picker"
         @cancel="handleJoinPartyTimeCancel"
         @confirm="handleJoinPartyTimeConfirm"
-        :item-height="pickerItemHeight"
         :min-date="minDate">
       </van-datetime-picker>
     </van-popup>
@@ -123,7 +119,6 @@
         class="time-picker"
         @cancel="handleTitleAcquire1Cancel"
         @confirm="handleTitleAcquire1Confirm"
-        :item-height="pickerItemHeight"
         :min-date="minDate">
       </van-datetime-picker>
     </van-popup>
@@ -138,7 +133,6 @@
         class="time-picker"
         @cancel="handleTitleAcquire2Cancel"
         @confirm="handleTitleAcquire2Confirm"
-        :item-height="pickerItemHeight"
         :min-date="minDate">
       </van-datetime-picker>
     </van-popup>
@@ -161,7 +155,7 @@
         politicsColumns: this.$enums.PoliticsType.list,
         title1Columns: this.$enums.TeacherTitleType.list,
         title2Columns: this.$enums.TeacherTitleType.list,
-        highEducationColumns: this.$enums.EducationType.list,
+        highEducationColumns: this.$enums.HighestEducation.list,
         showSexPicker: false,
         showPoliticsPicker: false,
         showJoinPartyPicker: false,
@@ -178,59 +172,6 @@
       }
     },
     methods: {
-      getJobStatus (jobStatus) {
-        if (jobStatus === 'DIMISSION') {
-          return '离职'
-        } else if (jobStatus === 'SERVING') {
-          return '在职'
-        } else {
-          return '--'
-        }
-      },
-      getPoliticsStatus (politicsStatus) {
-        switch (politicsStatus) {
-          case 'YOUNG_PIONEER':
-            return '少先队员'
-          case 'LEAGUE_MEMBER':
-            return '共青团员'
-          case 'COMMUNIST':
-            return '共产党员'
-          case 'MASSES':
-            return '群众'
-          default:
-            return ''
-        }
-      },
-      getEducation (education) {
-        switch (education) {
-          case 'JUNIOR_COLLEGE':
-            return '专科'
-          case 'REGULAR_COLLEGE':
-            return '本科'
-          case 'POSTGRADUATE':
-            return '硕士研究生'
-          case 'DOCTORAL_CANDIDATE':
-            return '博士研究生'
-          default:
-            return ''
-        }
-      },
-      getJobTitle (jobTitle) {
-        switch (jobTitle) {
-          case 'NOVICIATE':
-            return '见习'
-          case 'RANK_UNDECIDED':
-            return '未评'
-          case 'SECOND_GRADE':
-            return '中小学二级教师'
-          case 'FIRST_GRADE':
-            return '中小学一级教师'
-          case 'HIGHER_GRADE':
-            return '中小学高级教师'
-          default:
-            return jobTitle
-        }
-      },
       getAge (strBirthday) {
         if (!strBirthday) {
           return '--'
@@ -278,20 +219,6 @@
           }
         }
         return returnAge // 返回周岁年龄
-      },
-      getEntryType (entryType) {
-        switch (entryType) {
-          case 'PAPER':
-            return '论文'
-          case 'COMPETITION':
-            return '赛课及指导学生'
-          case 'TOPICS':
-            return '课题、课程'
-          case 'ACADEMIC':
-            return '经验交流及学术报告'
-          default:
-            return '--'
-        }
       },
       handleSexClick () {
         this.showSexPicker = true

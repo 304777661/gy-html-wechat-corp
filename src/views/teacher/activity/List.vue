@@ -26,7 +26,9 @@
         </van-swipe-cell>
       </van-list>
     </div>
-    <my-button :content="addActivityBtnTitle" @btnClick="handleAddActivityClick"></my-button>
+    <my-button v-if="isTeachGroupLeader || isPrepareLeader"
+               :content="addActivityBtnTitle"
+               @btnClick="handleAddActivityClick"></my-button>
   </div>
 </template>
 

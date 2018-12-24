@@ -17,7 +17,7 @@
              @click="handleItemClick(item,index)">
           <img :src="item.avatar | defaultAvatar" class="select-student-wrapper-item__avatar">
           <span class="select-student-wrapper-item-name">{{item.name}}</span>
-          <van-icon name="checked" size="40px" color="#4A77AF" v-show="item.isSelected"></van-icon>
+          <van-icon name="checked" class="icon-size" color="#4A77AF" v-show="item.isSelected"></van-icon>
         </div>
       </van-list>
     </div>
@@ -95,6 +95,8 @@
 
 <style scoped lang="sass">
   .select-student
+    .icon-size
+      font-size: 20px
     &-search
       padding: $default-gap
       margin-bottom: 10px

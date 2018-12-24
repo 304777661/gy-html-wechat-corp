@@ -702,14 +702,17 @@ export default {
   },
   // ---------------- 职称类型  结束 -------------------
 
-  // ---------------- 学历类型  开始 -------------------
+  // ---------------- Education枚举  开始 -------------------
   EducationType: {
     // 枚举列表
     list: [
+      {label: '全日制本科', value: 'FULL_COLLEGE'},
+      {label: '函授本科', value: 'CORRESPONDENCE_COLLEGE'},
+      {label: '自考本科', value: 'SELF_COLLEGE'},
       {label: '专科', value: 'JUNIOR_COLLEGE'},
-      {label: '本科', value: 'REGULAR_COLLEGE'},
-      {label: '硕士研究生', value: 'POSTGRADUATE'},
-      {label: '博士研究生', value: 'DOCTORAL_CANDIDATE'},
+      {label: '高中', value: 'HIGH_SCHOOL'},
+      {label: '初中', value: 'JUNIOR_SCHOOL'},
+      {label: '小学', value: 'PRIMARY_SCHOOL'}
     ],
     // 查询条件列表
     allList: function () {
@@ -718,20 +721,26 @@ export default {
     // 根据枚举值获取名称
     getName: function (val) {
       switch (val) {
+        case 'FULL_COLLEGE':
+          return '全日制本科'
+        case 'CORRESPONDENCE_COLLEGE':
+          return '函授本科'
+        case 'SELF_COLLEGE':
+          return '自考本科'
         case 'JUNIOR_COLLEGE':
           return '专科'
-        case 'REGULAR_COLLEGE':
-          return '本科'
-        case 'POSTGRADUATE':
-          return '硕士研究生'
-        case 'DOCTORAL_CANDIDATE':
-          return '博士研究生'
+        case 'HIGH_SCHOOL':
+          return '高中'
+        case 'JUNIOR_SCHOOL':
+          return '初中'
+        case 'PRIMARY_SCHOOL':
+          return '小学'
         default:
           return val
       }
-    },
+    }
   },
-  // ---------------- 学历类型  结束 -------------------
+  // ---------------- Education枚举  结束 -------------------
 
   // ---------------- 项目类型  开始 -------------------
   ProjectType: {
@@ -867,4 +876,68 @@ export default {
   },
   // ---------------- 变更类型  结束 -------------------
 
+  // ---------------- HighestEducation枚举  开始 -------------------
+  HighestEducation: {
+    // 枚举列表
+    list: [
+      {label: '博士', value: 'DOCTORAL_CANDIDATE'},
+      {label: '在职硕士', value: 'JOB_POSTGRADUATE'},
+      {label: '全日制硕士', value: 'FULL_POSTGRADUATE'},
+      {label: '全日制本科', value: 'FULL_COLLEGE'},
+      {label: '函授本科', value: 'CORRESPONDENCE_COLLEGE'},
+      {label: '自考本科', value: 'SELF_COLLEGE'},
+      {label: '专科', value: 'JUNIOR_COLLEGE'}
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'DOCTORAL_CANDIDATE':
+          return '博士'
+        case 'JOB_POSTGRADUATE':
+          return '在职硕士'
+        case 'FULL_POSTGRADUATE':
+          return '全日制硕士'
+        case 'FULL_COLLEGE':
+          return '全日制本科'
+        case 'CORRESPONDENCE_COLLEGE':
+          return '函授本科'
+        case 'SELF_COLLEGE':
+          return '自考本科'
+        case 'JUNIOR_COLLEGE':
+          return '专科'
+        default:
+          return val
+      }
+    }
+  },
+  // ---------------- HighestEducation枚举  结束 -------------------
+
+  // ---------------- JobStatus枚举  开始 -------------------
+  JobStatus: {
+    // 枚举列表
+    list: [
+      {label: '离职', value: 'DIMISSION'},
+      {label: '在职', value: 'SERVING'}
+    ],
+    // 查询条件列表
+    allList: function () {
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName: function (val) {
+      switch (val) {
+        case 'DIMISSION':
+          return '离职'
+        case 'SERVING':
+          return '在职'
+        default:
+          return val
+      }
+    }
+  }
+  // ---------------- JobStatus枚举  结束 -------------------
 }

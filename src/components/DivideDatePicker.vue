@@ -10,7 +10,6 @@
                @click-overlay="resetPickerIndex">
       <van-picker ref="picker"
                   show-toolbar
-                  :item-height="itemHeight"
                   :columns="columns"
                   value-key="label"
                   @cancel="onCancel"

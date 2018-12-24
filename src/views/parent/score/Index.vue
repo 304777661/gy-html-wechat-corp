@@ -38,7 +38,6 @@
                   show-toolbar
                   :loading="termLoading"
                   value-key="label"
-                  :item-height="itemHeight"
                   ref="termPicker"
                   @cancel="onTermCancel"
                   @confirm="onTermConfirm">
@@ -56,7 +55,6 @@
                   show-toolbar
                   :loading="termLoading"
                   value-key="label"
-                  :item-height="itemHeight"
                   ref="examPicker">
 
       </van-picker>
@@ -78,7 +76,6 @@
       return {
         showTermPicker: false,
         showExamPicker: false,
-        loading: false,
         termLoading: false,
         examLoading: false,
         defaultTermTitle: '学期',
@@ -125,8 +122,8 @@
             value: item.id
           }
         })
+        await this.loadData()
       }
-      this.loadData()
       this.loading = false
     },
     methods: {
@@ -172,7 +169,7 @@
   .score
     &-header
       background: $dark-blue
-      height: 36px
+      height: 40px
       @include hor-center-center
       &__item
         color: $white

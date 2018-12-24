@@ -3,12 +3,12 @@
     <div class="select-member-item" v-for="(member,index) in memberList" :key="'member' + index">
       <img :src="member.avatar | defaultAvatar">
       <p>{{member.name}}</p>
-      <van-icon class="select-member-item-delete" v-if="canDelete" name="clear" size="30px"
+      <van-icon class="select-member-item-delete icon-size" v-if="canDelete" name="clear"
                 @click="handleDeleteClick(index)">
       </van-icon>
     </div>
     <div class="select-member-item">
-      <van-icon v-if="canAdd" name="add-o" size="80px" color="#ccc" @click="handleAddClick"></van-icon>
+      <van-icon v-if="canAdd" name="add-o" class="icon-size-add" color="#ccc" @click="handleAddClick"></van-icon>
       <p></p>
     </div>
   </div>
@@ -58,6 +58,10 @@
     flex-wrap: wrap
     padding: 6px
     background: $white
+    .icon-size
+      font-size: 15px
+    .icon-size-add
+      font-size: 40px
     &-item
       padding: 2px 10px 2px 8px
       position: relative

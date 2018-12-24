@@ -25,11 +25,13 @@
       </div>
     </div>
     <hr>
-    <picture-map :upload="article.isParticipated === 'NO' && article.isFinish === 'NO'"
+    <picture-map v-if="article.isAttachment === 'YES'"
+                 :upload="article.isParticipated === 'NO' && article.isFinish === 'NO'"
                  :pictures="imageList"></picture-map>
-    <my-button v-if="article.isParticipated === 'YES'" :content="'取消报名'" @btnClick="handleCancelClick"></my-button>
-    <my-button v-else-if="article.isParticipated === 'NO' && article.isFinish==='NO'" :content="'我要报名'"
-               @btnClick="handleApplyClick"></my-button>
+    <my-button v-if="article.isAttachment==='YES' && article.isParticipated === 'NO' && article.isFinish==='NO'"
+               :content="'我要报名'"
+               @btnClick="handleApplyClick">
+    </my-button>
   </div>
 </template>
 
@@ -39,50 +41,15 @@
       return {
         loading: false,
         imageList: [],
-        article: {
-          'id': 1 /*主键*/,
-          'publisherId': 1 /*发布用户Id*/,
-          'noticeType': 'TEACH_GROUP' /*通知类型：ALL|NOTICE|SCHOOL_RULE|PATRIARCH_NOTICE|ACTIVITY|SUBJECT_STUDY|TEACHER_TRAIN|OLYMPICS_TRAIN|TEACH_GROUP*/,
-          'title': 'title' /*标题*/,
-          'content': 'content' /*内容*/,
-          'bannerImage': 'bannerImage' /*封面图片 - 类型为教研团队时有值*/,
-          'teachGroupId': 1 /*教研组Id - 类型为教研团队时有值*/,
-          'teachGroupName': 'teachGroupName' /*教研组名称 - 类型为教研团队时有值*/,
-          'endDate': '2018-12-22 18:17:25' /*截止日期*/,
-          'isAttachment': 'NO' /*是否需要附件：ALL|YES|NO*/,
-          'isDelete': 'NO' /*是否删除：ALL|YES|NO*/,
-          'isTop': 'NO' /*是否置顶：ALL|YES|NO*/,
-          'topTime': '2018-12-22 18:17:25' /*置顶时间*/,
-          'createdTime': '2018-12-22 18:17:25' /*创建时间 默认值：CURRENT_TIMESTAMP*/,
-          'isFinish': 'NO' /*是否已经结束 - 类型为活动时有值：ALL|YES|NO*/,
-          'isParticipated': 'NO' /*是否已经参与 - 类型为活动时有值：ALL|YES|NO*/,
-          'readNum': 1 /*阅读人数*/,
-          'participationNum': 1 /*参与人数 - 类型为活动时有值*/,
-          'scopeList': [
-            {
-              'id': 1 /*主键*/,
-              'noticeId': 1 /*公告通知Id*/,
-              'scopeType': 'ORGANIZATION' /*范围类型：ALL|ORGANIZATION*/,
-              'businessId': 1 /*业务Id*/,
-              'scopeName': 'scopeName' /*范围名称*/
-            }
-          ],
-          'attachmentList': [
-            {
-              'fileName': 'fileName' /*文件名*/,
-              'fileUrl': 'fileUrl' /*文件路径*/
-            }
-          ]
-        }
+        article: {},
       }
     },
     methods: {
-      handleCancelClick () {
-        // 取消报名
-      },
       async handleApplyClick () {
         // 我要报名
         await this.$api.parent.participationNotice(this.getQuery())
+        this.$toast.success('报名成功')
+        this.$router.back()
       },
       getQuery () {
         // 附件

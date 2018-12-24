@@ -7,13 +7,13 @@
 
       <van-cell-group>
         <van-cell title="子女信息" class="child-edit-sticky">
-          <van-icon class="child-edit-sticky__add" name="add" size="40px" color="#24A197" @click="handleAddClick()">
+          <van-icon class="child-edit-sticky__add icon-size" name="add" color="#24A197" @click="handleAddClick()">
           </van-icon>
         </van-cell>
       </van-cell-group>
       <div class="child-edit-item" v-for="(child,index) in teacher.teacherChildList" :key="'child'+index">
         <van-cell :title="'子女信息'+(index+1)" class="child-edit-item-title">
-          <van-icon class="child-edit-item__del" name="delete" size="36px" color="#ccc"
+          <van-icon class="child-edit-item__del icon-size" name="delete" color="#ccc"
                     @click="handleDeleteClick(index)">
           </van-icon>
         </van-cell>
@@ -29,7 +29,6 @@
                position="bottom"
                :lazy-render="false">
       <van-picker show-toolbar
-                  :item-height="itemHeight"
                   :columns="sexColumns"
                   value-key="label"
                   @cancel="handleSexCancelClick"
@@ -142,6 +141,8 @@
   .child-edit
     .wrapper
       height: calc(100vh - 70px)
+    .icon-size
+      font-size: 18px
     &-item
       margin-top: 10px
       &__del

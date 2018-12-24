@@ -13,7 +13,7 @@
           </van-cell>
           <van-cell title="姓名" :value="teacher.name || '--'"></van-cell>
           <van-cell title="性别" :value="teacher.sex | sexLabel"></van-cell>
-          <van-cell title="当前状态" :value="getJobStatus(teacher.jobStatus) || '--'"></van-cell>
+          <van-cell title="当前状态" :value="$enums.JobStatus.getName(teacher.jobStatus) || '--'"></van-cell>
           <van-cell-group v-for="(course,index) in teacher.courseList" :key="'course'+index">
             <van-cell :title="(teacher.courseList.length === 1) ? '教授科目' : ('教授科目'+(index +1))"
                       :value="course.name || '--'">
@@ -31,10 +31,10 @@
           <van-cell title="年龄" :value="(getAge(teacher.birthday) || '--')+'岁'"></van-cell>
           <van-cell title="民族" :value="teacher.folk || '--'"></van-cell>
           <van-cell title="籍贯" :value="teacher.residence || '--'"></van-cell>
-          <van-cell title="政治面貌" :value="getPoliticsStatus(teacher.politicsStatus) || '--'"></van-cell>
+          <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(teacher.politicsStatus) || '--'"></van-cell>
           <van-cell title="加入时间" :value="teacher.joinPartyTime | ymd"></van-cell>
-          <van-cell title="第一学历" :value="getEducation(teacher.firstEducation) || '--'"></van-cell>
-          <van-cell title="最高学历" :value="getEducation(teacher.highestEducation) || '--'"></van-cell>
+          <van-cell title="第一学历" :value="$enums.EducationType.getName(teacher.firstEducation) || '--'"></van-cell>
+          <van-cell title="最高学历" :value="$enums.HighestEducation.getName(teacher.highestEducation) || '--'"></van-cell>
           <van-cell title="毕业时间" :value="teacher.graduateTime | ymd"></van-cell>
           <van-cell title="毕业学校" :value="teacher.graduateSchool || '--'"></van-cell>
           <van-cell title="参加工作时间" :value="teacher.joinWorkTime | ymd"></van-cell>
@@ -43,7 +43,7 @@
           <van-cell title="原工作单位" :value="teacher.lastWorkUnit || '--'"></van-cell>
           <div v-for="(position,index) in teacher.teacherTitleList" :key="'position'+index">
             <van-cell :title="(teacher.teacherTitleList.length ===1) ? '职称':('职称'+(index+1))"
-                      :value="getJobTitle(position.title) || '--'">
+                      :value="$enums.TeacherTitleType.getName(position.title) || '--'">
             </van-cell>
             <van-cell title="评定时间" :value="position.acquireTime | ymd">
             </van-cell>
@@ -98,7 +98,7 @@
           </van-cell>
           <van-cell-group>
             <van-cell title="项目名称" :value="research.entryName || '--'"></van-cell>
-            <van-cell title="类型" :value="getEntryType(research.entryType) || '--'"></van-cell>
+            <van-cell title="类型" :value="$enums.ProjectType.getName(research.entryType) || '--'"></van-cell>
             <van-cell title="颁奖单位" :value="research.awardUnit || '--'"></van-cell>
             <van-cell title="获奖等级或获得的成绩" :value="research.achievement || '--'"></van-cell>
             <van-cell title="获奖时间" :value="research.obtainTime || ymd"></van-cell>
@@ -158,59 +158,6 @@
         this.curTabIndex = tabIndex
         await this.loadData()
       },
-      getJobStatus (jobStatus) {
-        if (jobStatus === 'DIMISSION') {
-          return '离职'
-        } else if (jobStatus === 'SERVING') {
-          return '在职'
-        } else {
-          return '--'
-        }
-      },
-      getPoliticsStatus (politicsStatus) {
-        switch (politicsStatus) {
-          case 'YOUNG_PIONEER':
-            return '少先队员'
-          case 'LEAGUE_MEMBER':
-            return '共青团员'
-          case 'COMMUNIST':
-            return '共产党员'
-          case 'MASSES':
-            return '群众'
-          default:
-            return '--'
-        }
-      },
-      getEducation (education) {
-        switch (education) {
-          case 'JUNIOR_COLLEGE':
-            return '专科'
-          case 'REGULAR_COLLEGE':
-            return '本科'
-          case 'POSTGRADUATE':
-            return '硕士研究生'
-          case 'DOCTORAL_CANDIDATE':
-            return '博士研究生'
-          default:
-            return '--'
-        }
-      },
-      getJobTitle (jobTitle) {
-        switch (jobTitle) {
-          case 'NOVICIATE':
-            return '见习'
-          case 'RANK_UNDECIDED':
-            return '未评'
-          case 'SECOND_GRADE':
-            return '中小学二级教师'
-          case 'FIRST_GRADE':
-            return '中小学一级教师'
-          case 'HIGHER_GRADE':
-            return '中小学高级教师'
-          default:
-            return '--'
-        }
-      },
       getAge (strBirthday) {
         if (!strBirthday) {
           return '--'
@@ -259,22 +206,7 @@
         }
         return returnAge // 返回周岁年龄
       },
-      getEntryType (entryType) {
-        switch (entryType) {
-          case 'PAPER':
-            return '论文'
-          case 'COMPETITION':
-            return '赛课及指导学生'
-          case 'TOPICS':
-            return '课题、课程'
-          case 'ACADEMIC':
-            return '经验交流及学术报告'
-          default:
-            return '--'
-        }
-      },
       handleInfoClick () {
-        console.log(1111)
         this.$router.push(`/teacher/info/edit/basic`)
       },
       handleChildrenClick () {

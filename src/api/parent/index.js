@@ -101,4 +101,10 @@ export default {
   async participationNotice (query) {
     return await Axios.post('/noticeParent/participationNotice.do', query)
   },
+
+  // 家长端 - 学生获奖信息详情查询
+  async getStudentPrize (query) {
+    return await Axios.post('/studentParent/getStudentPrize.do', query)
+  },
+
 }

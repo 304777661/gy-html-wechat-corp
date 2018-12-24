@@ -26,7 +26,6 @@
                   @cancel="onAddressCancel"
                   show-toolbar
                   value-key="label"
-                  :item-height="itemHeight"
                   ref="picker">
       </van-picker>
     </van-popup>

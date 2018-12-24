@@ -5,7 +5,7 @@
       <div class="member-selected-item" v-for="(item,index) in memberSelectedList" :key="index">
         <img class="member-selected-item__avatar" :src="item.avatar | defaultAvatar">
         <p class="member-selected-item__name">{{item.name}}</p>
-        <van-icon class="member-selected-item__delete" name="clear" size="30px" @click="handleDeleteClick(index)">
+        <van-icon class="member-selected-item__delete icon-size" name="clear" @click="handleDeleteClick(index)">
         </van-icon>
       </div>
       <div class="member-selected-line"></div>
@@ -161,6 +161,8 @@
 <style scoped lang="sass">
   .member
     position: relative
+    .icon-size
+      font-size: 15px
     &-item
       @include hor-start-center
       &-icon
