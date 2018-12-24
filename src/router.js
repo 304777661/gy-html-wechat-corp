@@ -192,6 +192,11 @@ const router = new Router({
       name: 'Performance',
       component: teacherView('performance/Index'),
       meta: {title: '绩效考核'}
+    }, {
+      path: 'job',
+      name: 'Job',
+      component: teacherView('job/Index'),
+      meta: {title: '招聘'}
     }]
   }, {
     path: '/parent',
