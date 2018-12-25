@@ -138,23 +138,19 @@
             color: #9B9B9B
         &-content
           margin-top: 10px
-          //color: #9B9B9B
-          //line-height: 21px
-          //font-size: 15px
-          img
+          /deep/ img
             width: 100%
             max-width: 100%
-          p
+          /deep/ p
             line-height: 24px
-          table
+          /deep/ table
             border: 1px solid #cccccc
             margin-right: 8px
-            tbody
-              tr
-                padding: 4px
-              td
-                min-width: 25%
-                border: 1px solid #cccccc
-                text-align: center
-                padding: 4px
+            tr
+              padding: 4px
+            td
+              min-width: 25%
+              border: 1px solid #cccccc
+              text-align: center
+              padding: 4px
 </style>

@@ -32,7 +32,13 @@ export default {
   },
   ymd (val) {
     if (!val) return '--'
-    return val.substring(10, 0).replace(/(\d{4})-(\d{2})-(\d{2})/g, '$1-$2-$3')
+    if (val instanceof Date) {
+      return val.Format('yyyy-MM-dd')
+    }
+    if (typeof(val) === 'string') {
+      return val.substring(10, 0).replace(/(\d{4})-(\d{2})-(\d{2})/g, '$1-$2-$3')
+    }
+    return val
   },
   yyyymmdd (val) {
     let param = 'yyyyMMdd'
@@ -40,7 +46,6 @@ export default {
       return val.Format(param) || '--'
     }
     return new Date(val).Format(param) || '--'
-    // return new Date().Format('yyyy-MM-dd')
   },
   md (val) {
     let param = 'MM-dd'

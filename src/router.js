@@ -106,7 +106,7 @@ const router = new Router({
       path: 'group/detail',
       name: 'TeamDetail',
       component: teacherView('group/Detail'),
-      meta: {title: '教研活动详情'}
+      meta: {title: '教研团队详情'}
     }, {
       path: 'research',
       name: 'ResearchList',

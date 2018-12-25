@@ -72,7 +72,7 @@
         return {
           keywords: null,
           orderDate: null,
-          selfOnly: isSelf ? 'NO' : 'YES',
+          selfOnly: isSelf ? 'YES' : 'NO',
           pageNo: isSelf ? this.allMeetingPageNo : this.selfMeetingPageNo,
           pageSize: config.pageSize
         }

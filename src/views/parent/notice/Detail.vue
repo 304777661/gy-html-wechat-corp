@@ -113,22 +113,21 @@
         font-size: 13px
         line-height: 18px
     &__content
-      img
+      /deep/ img
         width: 100%
         max-width: 100%
-      p
+      /deep/ p
         line-height: 24px
-      table
+      /deep/ table
         border: 1px solid #cccccc
         margin-right: 8px
-        tbody
-          tr
-            padding: 4px
-          td
-            min-width: 25%
-            border: 1px solid #cccccc
-            text-align: center
-            padding: 4px
+        tr
+          padding: 4px
+        td
+          min-width: 25%
+          border: 1px solid #cccccc
+          text-align: center
+          padding: 4px
     .picture-map
       margin-top: 10px
 

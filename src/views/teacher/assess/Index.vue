@@ -216,9 +216,10 @@
         this.showTermPicker = false
       },
 
-      handleTermPickerConfirmClick (item) {
+      async handleTermPickerConfirmClick (item) {
         this.curTerm = item
         this.showTermPicker = false
+        await this.loadData()
       },
       handleWeekClick () {
         this.showWeekPicker = true
@@ -227,9 +228,10 @@
         this.showWeekPicker = false
       },
 
-      handleWeekPickerConfirmClick (item) {
+      async handleWeekPickerConfirmClick (item) {
         this.curWeek = item
         this.showWeekPicker = false
+        await this.loadData()
       },
       async loadData () {
         this.loading = true

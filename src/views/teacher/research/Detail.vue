@@ -5,11 +5,10 @@
       <p class="research-detail__title">{{activity.title}}</p>
       <p class="research-detail__time">{{activity.createdTime | ymd}}</p>
       <hr>
-      <div class="research-detail__content">
-        {{activity.content}}
+      <div class="research-detail__content" v-html="activity.content">
       </div>
     </div>
-    <div class="research-detail__additional" v-if="activity && activity.attachmentList.length>0">
+    <div class="research-detail__additional" v-if="activity.attachmentList && activity.attachmentList.length>0">
       <p class="research-detail__additional__sticky van-hairline--bottom">附件</p>
       <div class="research-detail__additional__item van-hairline--bottom"
            v-for="(file,index) in activity.attachmentList" :key="index">
@@ -51,7 +50,8 @@
           this.showActionSheet = false
           return
         }
-        window.location.href = `${window.location.origin}${this.$config.apiPrefix}/oss/downloadFile.do?path=${this.curFile.fileUrl}`
+        // window.location.href = `${window.location.origin}${this.$config.apiPrefix}/oss/downloadFile.do?path=${this.curFile.fileUrl}`
+        window.location.href = this.curFile.fileUrl
         this.showActionSheet = false
       }
     },
@@ -82,7 +82,21 @@
       padding-bottom: 2px
     &__content
       margin-top: 10px
-      line-height: 1.5
+      /deep/ img
+        width: 100%
+        max-width: 100%
+      /deep/ p
+        line-height: 24px
+      /deep/ table
+        border: 1px solid #cccccc
+        margin-right: 8px
+        tr
+          padding: 4px
+        td
+          min-width: 25%
+          border: 1px solid #cccccc
+          text-align: center
+          padding: 4px
     &__additional
       margin-top: 10px
       background: $white

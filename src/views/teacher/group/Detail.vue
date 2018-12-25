@@ -5,9 +5,7 @@
       <p class="team-detail__title">{{activity.title}}</p>
       <p class="team-detail__time">{{activity.createdTime | ymd}}</p>
       <hr>
-      <div class="team-detail__content">
-        {{activity.content}}
-      </div>
+      <div class="team-detail__content" v-html="activity.content"></div>
     </div>
   </div>
 </template>
@@ -47,5 +45,19 @@
       padding-bottom: 2px
     &__content
       margin-top: 10px
-      line-height: 1.5
+      /deep/ img
+        width: 100%
+        max-width: 100%
+      /deep/ p
+        line-height: 24px
+      /deep/ table
+        border: 1px solid #cccccc
+        margin-right: 8px
+        tr
+          padding: 4px
+        td
+          min-width: 25%
+          border: 1px solid #cccccc
+          text-align: center
+          padding: 4px
 </style>

@@ -17,10 +17,10 @@
                :value="visit.visitContent"
                placeholder="">
     </van-field>
-    <div v-show="visit.attachmentList && visit.attachmentList.length >0">
+    <div v-show="imageList && imageList.length >0">
       <van-cell title="照片" class="visit-detail-title"></van-cell>
       <div class="visit-detail-picture">
-        <picture-map :pictures="visit.attachmentList" :upload="false"/>
+        <picture-map :pictures="imageList" :upload="false"/>
       </div>
     </div>
   </div>
@@ -38,12 +38,18 @@
           minHeight: 200
         },
         visit: {},
-        id: this.$route.query.id
+        id: this.$route.query.id,
+        imageList: []
       }
     },
     async created () {
       this.loading = true
       this.visit = await this.$api.teacher.getHomeVisitingWX({'id': this.id})
+      if (this.visit && this.visit.attachmentList && this.visit.attachmentList.length > 0) {
+        for (let i = 0; i < this.visit.attachmentList.length; i++) {
+          this.imageList.push(this.visit.attachmentList[i].fileUrl)
+        }
+      }
       this.loading = false
     },
   }

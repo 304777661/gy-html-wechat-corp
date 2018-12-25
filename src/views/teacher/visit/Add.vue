@@ -7,7 +7,7 @@
       <van-cell-group>
         <van-cell title="学生" is-link :value="visit.studentName ||'请选择'" @click="handleStudentsClick">
         </van-cell>
-        <van-cell title="家访时间" :value="visit.visitDate ? (visit.visitDate | ymd) : '请选择'"
+        <van-cell title="家访时间" :value="visit.visitDate | ymd"
                   is-link @click="handleSelectTimeClick"></van-cell>
         <van-field label="家访对象" v-model="visit.visitObject" input-align="right" placeholder="请输入"></van-field>
       </van-cell-group>
@@ -56,7 +56,7 @@
         itemHeight: 70,
         imageList: [],
         visit: {
-          visitDate: null,
+          visitDate: new Date(),
           visitObject: '',
           visitContent: '',
           attachments: [],
@@ -91,9 +91,8 @@
         }
         this.visit.visitDate = this.visitTime.Format('yyyy-MM-dd 00:00:00')
         if (this.imageList && this.imageList.length > 0) {
-          this.visit.attachmentList = []
           this.imageList.map(item => {
-            this.visit.attachmentList.push({
+            this.visit.attachments.push({
               fileName: item.substr(item.lastIndexOf('/') + 1).toLowerCase(),
               fileUrl: item
             })
@@ -107,7 +106,7 @@
         this.showDatePicker = true
       },
       handleDatePickerConfirm () {
-        this.visit.visitDate = this.visitTime.Format('yyyy-MM-dd 00:00:00')
+        this.visit.visitDate = this.visitTime
         this.showDatePicker = false
       },
       handleDatePickerCancel () {

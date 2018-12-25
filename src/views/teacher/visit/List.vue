@@ -6,7 +6,7 @@
       </div>
       <no-data v-show="!loading && !visitList.length"/>
       <my-loading v-model="loading"/>
-      <div ref="wrapper" class="visit-wrapper">
+      <div ref="wrapper" class="visit-wrapper" v-if="visitList && visitList.length>0">
         <van-list
           v-model="loading"
           :finished="finished"
@@ -65,7 +65,7 @@
         this.$router.push(`/teacher/visit/add`)
       }
     },
-    async created () {
+    async activated () {
       this.loadData()
     },
     mounted () {
