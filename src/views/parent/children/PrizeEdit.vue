@@ -28,7 +28,7 @@
       <van-datetime-picker
         v-model="prizeDate"
         type="date"
-        class="time-picker"
+        :max-date="maxDate"
         @cancel="handleTimeCancel"
         @confirm="handleTimeConfirm"
         :min-date="minDate">
@@ -43,11 +43,12 @@
     name: 'AddPrize',
     data () {
       return {
-        index: this.$route.params.index,
+        index: this.$route.query.index,
         imageList: [],
         pickerItemHeight: 70,
         prizeDate: new Date(),
         minDate: new Date(1970, 1, 1),
+        maxDate: new Date(),
         showPrizeLevel: false,
         showDatePicker: false,
         prizeLevel: {},
@@ -88,32 +89,33 @@
           this.$toast.fail('请输入奖项名称')
           return
         }
-        if (!this.prize.prizeLevel || this.prizeLevel.label === '请选择') {
-          this.$toast.fail('请选择奖项名称')
+        if (!this.prizeLevel) {
+          this.$toast.fail('请选择获奖级别')
           return
         }
-        if (!this.prize.sponsor || this.prizeLevel.sponsor.length === 0) {
+        if (!this.prize.sponsor || this.prize.sponsor.length === 0) {
           this.$toast.fail('请输入举办单位')
           return
         }
-        let attachments = []
+        let attachmentList = []
         if (this.imageList && this.imageList.length > 0) {
           this.imageList.map(item => {
-            this.attachmentList.push({
+            attachmentList.push({
               fileName: item.substr(item.lastIndexOf('/') + 1).toLowerCase(),
               fileUrl: item
             })
           })
         }
         this.prize.prizeLevel = this.prizeLevel.value
-        // await this.$api.parent.addStudentPrize(submit)
+        this.prize.attachmentList = attachmentList
+        await this.$api.parent.addStudentPrize(this.prize)
         this.$toast.success('提交成功')
-        // this.$router.back()
+        this.$router.back()
       }
     },
     async created () {
       if (this.index >= 0) {
-        // 编辑获奖
+        this.$route.meta.title = '编辑获奖情况'
         this.prizeList = await this.$api.parent.queryStudentPrizeList()
         if (this.prizeList && this.prizeList.length > 0) {
           this.prize = this.prizeList[this.index]
@@ -125,6 +127,8 @@
             }
           }
         }
+      } else {
+        this.$route.meta.title = '添加获奖情况'
       }
     }
   }
@@ -134,12 +138,6 @@
   .add-prize
     position: relative
     height: 100vh
-    .time-picker
-      position: absolute
-      bottom: 0
-      left: 0
-      z-index: 4
-      right: 0
     &-mask
       position: absolute
       left: 0

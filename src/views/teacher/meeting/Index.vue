@@ -66,7 +66,7 @@
         this.$router.push(`/teacher/meeting/book`)
       },
       goDetail (id) {
-        this.$router.push(`/teacher/meeting/detail/${id}`)
+        this.$router.push(`/teacher/meeting/detail?id=${id}`)
       },
       getQuery (isSelf) {
         return {

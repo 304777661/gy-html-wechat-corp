@@ -59,7 +59,7 @@
         this.loadData()
       },
       goToDetail (id) {
-        this.$router.push(`/teacher/visit/detail/${id}`)
+        this.$router.push(`/teacher/visit/detail?id=${id}`)
       },
       handleAddVisitClick () {
         this.$router.push(`/teacher/visit/add`)

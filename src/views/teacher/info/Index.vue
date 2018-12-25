@@ -213,7 +213,7 @@
         this.$router.push(`/teacher/info/edit/child`)
       },
       handleResumeClick (index) {
-        this.$router.push(`/teacher/info/resume/edit/${index}`)
+        this.$router.push(`/teacher/info/resume/edit?index=${index}`)
       },
       async loadData () {
         if (this.curTabIndex === 0) {

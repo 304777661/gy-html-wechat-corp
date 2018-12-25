@@ -33,7 +33,7 @@ const router = new Router({
       component: teacherView('notice/List'),
       meta: {title: '通知公告'}
     }, {
-      path: 'notice/detail/:id',
+      path: 'notice/detail',
       name: 'NoticeDetail',
       component: teacherView('notice/Detail'),
       meta: {title: '公告详情'}
@@ -53,7 +53,7 @@ const router = new Router({
       component: teacherView('info/ChildEdit'),
       meta: {title: '编辑家庭信息'}
     }, {
-      path: 'info/resume/edit/:index',
+      path: 'info/resume/edit',
       name: 'InfoResumeEdit',
       component: teacherView('info/ResumeEdit'),
       meta: {title: '编辑工作经历'}
@@ -61,14 +61,14 @@ const router = new Router({
       path: 'info/prize/add',
       name: 'InfoPrizeAdd',
       component: teacherView('info/PrizeAdd'),
-      meta: {title: '增加获奖经历'}
+      meta: {title: '增加获奖情况'}
     }, {
       path: 'students',
       name: 'Students',
       component: teacherView('student/List'),
       meta: {title: '学生信息'}
     }, {
-      path: 'student/detail/:id',
+      path: 'student/detail',
       name: 'StudentDetail',
       component: teacherView('student/Detail'),
       meta: {title: '学生详情'}
@@ -93,7 +93,7 @@ const router = new Router({
       component: teacherView('mailbox/List'),
       meta: {title: '家长意见'}
     }, {
-      path: 'mailbox/detail/:id',
+      path: 'mailbox/detail',
       name: 'MailBoxDetail',
       component: teacherView('mailbox/Detail'),
       meta: {title: '意见详情'}
@@ -103,7 +103,7 @@ const router = new Router({
       component: teacherView('group/Index'),
       meta: {title: '教研团队'}
     }, {
-      path: 'group/detail/:id',
+      path: 'group/detail',
       name: 'TeamDetail',
       component: teacherView('group/Detail'),
       meta: {title: '教研活动详情'}
@@ -113,7 +113,7 @@ const router = new Router({
       component: teacherView('research/List'),
       meta: {title: '科研奥赛'}
     }, {
-      path: 'research/detail/:id',
+      path: 'research/detail',
       name: 'ResearchDetail',
       component: teacherView('research/Detail'),
       meta: {title: '详情'}
@@ -123,17 +123,17 @@ const router = new Router({
       component: teacherView('activity/List'),
       meta: {title: '集体备课'}
     }, {
-      path: 'activity/detail/:id',
+      path: 'activity/detail',
       name: 'ActivityDetail',
       component: teacherView('activity/Detail'),
       meta: {title: '集体备课'}
     }, {
-      path: 'activity/add/:typeId',
+      path: 'activity/add',
       name: 'AddActivity',
       component: teacherView('activity/Add'),
       meta: {title: '添加活动'}
     }, {
-      path: 'activity/member/:orgId',
+      path: 'activity/member',
       name: 'ActivityMember',
       component: teacherView('activity/Member'),
       meta: {title: '选择参与人员'}
@@ -148,7 +148,7 @@ const router = new Router({
       component: teacherView('visit/Students'),
       meta: {title: '选择学生'}
     }, {
-      path: 'visit/detail/:id',
+      path: 'visit/detail',
       name: 'visitDetail',
       component: teacherView('visit/Detail'),
       meta: {title: '家访详情'}
@@ -163,7 +163,7 @@ const router = new Router({
       component: teacherView('meeting/Index'),
       meta: {title: '会议室预约'}
     }, {
-      path: 'meeting/detail/:id',
+      path: 'meeting/detail',
       name: 'MeetingDetail',
       component: teacherView('meeting/Detail'),
       meta: {title: '会议详情'}
@@ -209,7 +209,7 @@ const router = new Router({
       component: parentView('notice/Index'),
       meta: {title: '学校通知'}
     }, {
-      path: 'notice/detail/:id',
+      path: 'notice/detail',
       name: 'ParentNoticeDetail',
       component: parentView('notice/Detail'),
       meta: {title: '通知详情'}
@@ -227,7 +227,7 @@ const router = new Router({
       component: parentView('mailbox/Index'),
       meta: {title: '意见反馈'}
     }, {
-      path: 'mailbox/detail/:id',
+      path: 'mailbox/detail',
       component: parentView('mailbox/Detail'),
       meta: {title: '意见详情'}
     }, {
@@ -240,7 +240,7 @@ const router = new Router({
       component: parentView('survey/Index'),
       meta: {title: '问卷调查'}
     }, {
-      path: 'survey/detail/:id',
+      path: 'survey/detail',
       name: 'SurveyDetail',
       component: parentView('survey/Detail'),
       meta: {title: '问卷调查'}
@@ -253,17 +253,21 @@ const router = new Router({
       component: parentView('children/Setting'),
       meta: {title: '子女档案'}
     }, {
-      path: 'children/detail/:id',
+      path: 'children/info/edit',
+      component: parentView('children/InfoEdit'),
+      meta: {title: '编辑基本信息'}
+    }, {
+      path: 'children/detail',
       name: 'ChildrenDetail',
       component: parentView('children/Detail'),
       meta: {title: '子女详情'}
     }, {
-      path: 'children/prize/edit/:index',
+      path: 'children/prize/edit',
       name: 'ChildrenEditPrize',
       component: parentView('children/PrizeEdit'),
       meta: {title: '编辑获奖情况'}
     }, {
-      path: 'audit/detail/:id',
+      path: 'audit/detail',
       component: parentView('audit/Index'),
       meta: {title: '子女信息审核'}
     }]

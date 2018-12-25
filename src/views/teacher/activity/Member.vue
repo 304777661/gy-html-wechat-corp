@@ -51,7 +51,7 @@
     data () {
       return {
         loading: false,
-        orgId: this.$route.params.orgId,
+        orgId: this.$route.query.orgId,
         stepStack: [],
         organList: [],
         memberSelectedList: []

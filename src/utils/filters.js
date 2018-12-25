@@ -31,15 +31,8 @@ export default {
     return new Date(val).Format(param) || '--'
   },
   ymd (val) {
-    if (!val) {
-      return '--'
-    }
-    let param = 'yyyy-MM-dd'
-    if (val instanceof Date) {
-      return val.Format(param) || '--'
-    }
-    return new Date(val).Format(param) || '--'
-    // return new Date().Format('yyyy-MM-dd')
+    if (!val) return '--'
+    return val.substring(10, 0).replace(/(\d{4})-(\d{2})-(\d{2})/g, '$1-$2-$3')
   },
   yyyymmdd (val) {
     let param = 'yyyyMMdd'

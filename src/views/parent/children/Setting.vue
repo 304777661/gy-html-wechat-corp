@@ -41,7 +41,7 @@
     },
     methods: {
       handleChildrenClick (id) {
-        this.$router.push(`/parent/children/detail/${id}`)
+        this.$router.push(`/parent/children/detail?id=${id}`)
       }
     }
   }

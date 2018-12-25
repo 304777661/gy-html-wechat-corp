@@ -20,15 +20,17 @@
         </div>
       </div>
       <hr>
-      <div class="notice-detail__content">
-        {{article.content}}
-      </div>
+      <div class="notice-detail__content" v-html="article.content"></div>
     </div>
-    <hr>
+    <hr v-if="article.isAttachment === 'YES'">
     <picture-map v-if="article.isAttachment === 'YES'"
                  :upload="article.isParticipated === 'NO' && article.isFinish === 'NO'"
-                 :pictures="imageList"></picture-map>
-    <my-button v-if="article.isAttachment==='YES' && article.isParticipated === 'NO' && article.isFinish==='NO'"
+                 :pictures="imageList">
+    </picture-map>
+    <my-button v-if="article.noticeType === 'ACTVIITY' &&
+                     article.isAttachment==='YES' &&
+                     article.isParticipated === 'NO' &&
+                     article.isFinish==='NO'"
                :content="'我要报名'"
                @btnClick="handleApplyClick">
     </my-button>
@@ -70,11 +72,16 @@
     },
     async created () {
       this.loading = true
-      this.article = await this.$api.parent.getNotice({'id': this.$route.params.id})
+      this.article = await this.$api.parent.getNotice({'id': this.$route.query.id})
       if (this.article && this.article.attachmentList && this.article.attachmentList.length > 0) {
         for (let i = 0; i < this.article.attachmentList.length; i++) {
           this.imageList.push(this.article.attachmentList[i].fileUrl)
         }
+      }
+      if (this.article.noticeType === 'ACTIVITY') {
+        this.$route.meta.title = '活动详情'
+      } else {
+        this.$route.meta.title = '通知详情'
       }
       this.loading = false
     }
@@ -83,10 +90,9 @@
 
 <style lang="sass">
   .notice-detail
-    //padding: 20px
     background: $white
-    height: calc(100vh - #{$default-gap})
-    padding: 10px 14px 14px $default-gap
+    padding: 10px 14px $default-gap
+    overflow-x: scroll
     &-header
       &-title
         @include hor-between-center
@@ -107,7 +113,22 @@
         font-size: 13px
         line-height: 18px
     &__content
-      line-height: 1.5
+      img
+        width: 100%
+        max-width: 100%
+      p
+        line-height: 24px
+      table
+        border: 1px solid #cccccc
+        margin-right: 8px
+        tbody
+          tr
+            padding: 4px
+          td
+            min-width: 25%
+            border: 1px solid #cccccc
+            text-align: center
+            padding: 4px
     .picture-map
       margin-top: 10px
 

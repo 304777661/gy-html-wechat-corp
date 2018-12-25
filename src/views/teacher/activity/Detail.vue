@@ -31,7 +31,7 @@
     name: 'ActivityDetail',
     data () {
       return {
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         loading: false,
         imageList: [],
         activity: {}

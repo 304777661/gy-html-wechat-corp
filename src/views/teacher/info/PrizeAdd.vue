@@ -30,7 +30,6 @@
         v-show="showDatePicker"
         v-model="obtainTime"
         type="date"
-        class="time-picker"
         @cancel="handleTimeCancel"
         @confirm="handleTimeConfirm"
         :min-date="minDate">

@@ -28,7 +28,7 @@
     name: 'ResumeEdit',
     data () {
       return {
-        index: this.$route.params.index,
+        index: this.$route.query.index,
         resume: {
           startTermId: 0 /*开始学期Id*/,
           startTermName: '' /*开始学期时间*/,

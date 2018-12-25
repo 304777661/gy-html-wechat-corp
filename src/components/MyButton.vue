@@ -1,8 +1,10 @@
 <template>
   <div class="my-button">
-    <van-button class="btn"
-                @click="btnClick">{{content}}
-    </van-button>
+    <div class="my-button-wrapper">
+      <van-button class="btn"
+                  @click="btnClick">{{content}}
+      </van-button>
+    </div>
   </div>
 </template>
 
@@ -26,7 +28,14 @@
 <style scoped lang="sass">
   .my-button
     $btn-width: 90vw
-    $btn-height: 45px
+    $btn-height: 40px
+    position: fixed
+    background: #f5f5f5
+    width: 100vw
+    height: 60px
+    bottom: 0
+    left: 0
+    right: 0
     .btn
       position: fixed
       left: 50%
@@ -38,5 +47,5 @@
       margin-left: -$btn-width / 2
       border-radius: 4px
       background: $dark-blue
-      font-size: 17px
+      font-size: 16px
 </style>

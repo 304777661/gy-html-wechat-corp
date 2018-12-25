@@ -17,7 +17,7 @@
             </div>
 
             <div class="mailbox-item-body">
-              {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+              {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
             </div>
             <div class="van-hairline--bottom"></div>
             <div class="mailbox-item-footer">
@@ -74,7 +74,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`/teacher/mailbox/detail/${id}`)
+        this.$router.push(`/teacher/mailbox/detail?id=${id}`)
       },
     },
     async created () {

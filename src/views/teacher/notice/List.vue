@@ -18,7 +18,7 @@
             <p>{{item.title}}</p>
           </div>
           <div class="notice-list-item__content">
-            {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
           </div>
           <div class="notice-list-item__additional">
             <p>{{item.createdTime | ymd}}</p>
@@ -90,7 +90,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`/teacher/notice/detail/${id}`)
+        this.$router.push(`/teacher/notice/detail?id=${id}`)
       },
       handleTabChange (tabIndex) {
         if (this.curTabIndex === tabIndex) {

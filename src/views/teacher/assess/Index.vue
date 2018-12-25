@@ -167,7 +167,6 @@
     name: 'Index',
     data () {
       return {
-        id: this.$route.params.id,
         curTabIndex: 0,
         loading: false,
         showTermPicker: false,

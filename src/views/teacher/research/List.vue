@@ -16,7 +16,7 @@
             <p>{{item.title}}</p>
           </div>
           <div class="research-list-item__content">
-            {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
           </div>
           <div class="research-list-item__additional">
             <p>{{item.createdTime | ymd}}</p>
@@ -98,7 +98,7 @@
         this.loading = false
       },
       handleItemClick (id) {
-        this.$router.push(`/teacher/research/detail/${id}`)
+        this.$router.push(`/teacher/research/detail?id=${id}`)
       }
     },
     async created () {

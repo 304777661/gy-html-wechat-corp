@@ -19,7 +19,7 @@
             <p>{{item.title}}</p>
           </div>
           <div class="team-list-item__content">
-            {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
           </div>
           <div class="team-list-item__additional" v-show="item.bannerImage">
             <img :src="item.bannerImage">
@@ -81,7 +81,7 @@
         }
       },
       handleItemClick (id) {
-        this.$router.push(`/teacher/group/detail/${id}`)
+        this.$router.push(`/teacher/group/detail?id=${id}`)
       },
       async loadData (resetList = false) {
         this.loading = true

@@ -28,7 +28,7 @@
     name: 'ResearchDetail',
     data () {
       return {
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         actions: [{
           name: '下载到手机',
           className: 'icon icon-download',

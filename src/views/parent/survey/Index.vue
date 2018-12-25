@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="survey-item-body">
-          {{item.content.length > 60? item.content.substr(0,60)+'......' : item.content}}
+          {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
         </div>
         <div class="van-hairline--bottom"></div>
         <div class="survey-item-footer">
@@ -52,7 +52,7 @@
         this.loadData()
       },
       goDetail (id) {
-        this.$router.push(`/parent/survey/detail/${id}`)
+        this.$router.push(`/parent/survey/detail?id=${id}`)
       },
       getQuery () {
         return {
@@ -63,14 +63,14 @@
       async loadData (resetList = false) {
         this.loading = true
         if (resetList) {
-          this.articleList = []
+          this.surveyList = []
           this.pageNo = 1
         }
         let data = await this.$api.parent.querySurveyPage(this.getQuery())
         if (resetList) {
-          this.articleList = data.list
+          this.surveyList = data.list
         } else {
-          this.articleList = this.articleList.concat(data.list)
+          this.surveyList = this.surveyList.concat(data.list)
         }
         this.finished = !data.hasNextPage
         this.loading = false

@@ -73,7 +73,7 @@
     },
     methods: {
       goDetail (id) {
-        this.$router.push(`/teacher/student/detail/${id}`)
+        this.$router.push(`/teacher/student/detail?id=${id}`)
       },
       onLoad () {
         this.loadData()

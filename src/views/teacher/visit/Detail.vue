@@ -38,7 +38,7 @@
           minHeight: 200
         },
         visit: {},
-        id: this.$route.params.id
+        id: this.$route.query.id
       }
     },
     async created () {

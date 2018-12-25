@@ -12,8 +12,8 @@
       <van-cell title="身份证号" :value="student.idCard || '--'"></van-cell>
       <van-cell title="出生日期" :value="student.birthday | ymd"></van-cell>
       <van-cell title="民族" :value="student.nationName || '--'"></van-cell>
-      <van-cell title="户口性质" :value="getResidentType(student.residentType) || '--'"></van-cell>
-      <van-cell title="政治面貌" :value="getPoliticsStatus(student.politicsStatus) || '--'"></van-cell>
+      <van-cell title="户口性质" :value="$enums.ResidentType.getName(student.residentType) || '--'"></van-cell>
+      <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(student.politicsStatus) || '--'"></van-cell>
       <van-cell title="家庭住址" :value="student.currentAddress || '--'"></van-cell>
       <van-collapse v-model="show" v-show="fatherName || motherName || guardianName">
         <van-collapse-item title="家长信息" name="1">
@@ -36,7 +36,7 @@
 
   export default {
     data () {
-      const id = this.$route.params.id
+      const id = this.$route.query.id
       return {
         id,
         show: ['1'],
@@ -57,43 +57,20 @@
       }
       if (this.student.mother) {
         this.motherName = this.student.mother.name + '(母亲)'
-        this.motherPhone = this.student.father.phone
+        this.motherPhone = this.student.mother.phone
       }
       if (this.student.guardian) {
         this.guardianName = this.student.guardian.name + '(监护人)'
         this.guardianPhone = this.student.guardian.phone
       }
     },
-    methods: {
-      getResidentType (residentType) {
-        switch (residentType) {
-          case 'CITY':
-            return '城市'
-          case 'COUNTY':
-            return '县城'
-          case 'VILLAGE':
-            return '农村'
-        }
-      },
-
-      getPoliticsStatus (politicsStatus) {
-        switch (politicsStatus) {
-          case 'YOUNG_PIONEER':
-            return '少先队员'
-          case 'LEAGUE_MEMBER':
-            return '共青团员'
-          case 'COMMUNIST':
-            return '共产党员'
-          case 'MASSES':
-            return '群众'
-        }
-      }
-    }
+    methods: {}
   }
 </script>
 
 <style lang="sass">
   .student-detail
+    padding-bottom: 60px
     .van-collapse
       margin: 0 15px
       .van-cell

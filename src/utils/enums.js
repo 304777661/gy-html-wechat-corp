@@ -938,6 +938,34 @@ export default {
           return val
       }
     }
-  }
+  },
   // ---------------- JobStatus枚举  结束 -------------------
+
+  // ---------------- ResidentType枚举  开始 -------------------
+  ResidentType:{
+    // 枚举列表
+    list: [
+      {label: '城市', value: 'CITY'},
+      {label: '县城', value: 'COUNTY'},
+      {label: '农村', value: 'VILLAGE'}
+    ],
+    // 查询条件列表
+    allList:function(){
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName:function(val){
+      switch (val) {
+        case 'CITY':
+          return '城市'
+        case 'COUNTY':
+          return '县城'
+        case 'VILLAGE':
+          return '农村'
+        default:
+          return val
+      }
+    }
+  },
+  // ---------------- ResidentType枚举  结束 -------------------
 }

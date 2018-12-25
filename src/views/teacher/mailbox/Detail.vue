@@ -7,8 +7,7 @@
           <p class="mailbox-detail-wrapper__title">{{article.title || '未知'}}</p>
           <p class="mailbox-detail-wrapper__time">{{article.createdTime | ymd}}</p>
           <hr>
-          <div class="mailbox-detail-wrapper__content">
-            {{article.content}}
+          <div class="mailbox-detail-wrapper__content" v-html="article.content">
           </div>
         </div>
 
@@ -71,7 +70,7 @@
     },
     data () {
       return {
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         loading: false,
         pageNo: 1,
         replyContent: '',
@@ -130,6 +129,7 @@
 
   .mailbox-detail
     position: relative
+    overflow-x: scroll
     .wrapper
       height: calc(100vh - 70px)
     &-reply-additional
@@ -148,7 +148,22 @@
         padding-bottom: 2px
       &__content
         margin-top: 10px
-        line-height: 1.5
+        img
+          width: 100%
+          max-width: 100%
+        p
+          line-height: 24px
+        table
+          border: 1px solid #cccccc
+          margin-right: 8px
+          tbody
+            tr
+              padding: 4px
+            td
+              min-width: 25%
+              border: 1px solid #cccccc
+              text-align: center
+              padding: 4px
     &-reply
       margin-top: 10px
       background: $white

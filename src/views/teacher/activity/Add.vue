@@ -66,7 +66,7 @@
     name: 'AddActivity',
     data () {
       return {
-        typeId: this.$route.params.typeId,
+        typeId: this.$route.query.typeId,
         showPopup: false,
         showDatePicker: false,
         showTeachGroupPicker: false,
@@ -185,7 +185,7 @@
       },
       handleAddMemberClick () {
         sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
-        this.$router.push(`/teacher/activity/member/${this.orgId}`)
+        this.$router.push(`/teacher/activity/member?orgId=${this.orgId}`)
       },
       handleMemberSelectedEvent () {
         this.$eventBus.$on('memberSelectedEvent', (memberSelectedList) => {

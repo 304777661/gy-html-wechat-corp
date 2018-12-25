@@ -15,7 +15,7 @@
               <span class="activity-item-header__title">{{item.activityName}}</span>
             </div>
             <div class="activity-item-body">
-              {{item.activityContent.length > 60? item.activityContent.substr(0,60)+'......' : item.activityContent}}
+              {{item.activityContent.length > 42? item.activityContent.substr(0,42)+'......' : item.activityContent}}
             </div>
             <div class="van-hairline--bottom"></div>
             <div class="activity-item-footer">
@@ -105,10 +105,10 @@
         this.loadData(this.curTabIndex === 0)
       },
       goDetail (id) {
-        this.$router.push(`/teacher/activity/detail/${id}`)
+        this.$router.push(`/teacher/activity/detail?id=${id}`)
       },
       handleAddActivityClick () {
-        this.$router.push(`/teacher/activity/add/${this.curTabIndex}`)
+        this.$router.push(`/teacher/activity/add?typeId=${this.curTabIndex}`)
       },
       async loadData (isTeachGroup, resetList = false) {
         this.loading = true

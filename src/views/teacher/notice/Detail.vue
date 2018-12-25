@@ -1,17 +1,15 @@
 <template>
-  <div class="bulletin-detail">
+  <div class="notice-detail">
     <my-loading v-model="loading"/>
     <div v-show="!loading">
-      <p class="bulletin-detail__title">
+      <p class="notice-detail__title">
         {{article.title}}
       </p>
-      <p class="bulletin-detail__time">
+      <p class="notice-detail__time">
         {{article.createdTime | ymd}}
       </p>
       <hr>
-      <div class="bulletin-detail__content">
-        {{article.content}}
-      </div>
+      <div class="notice-detail__content" v-html="article.content"></div>
     </div>
   </div>
 </template>
@@ -21,7 +19,7 @@
     data () {
       return {
         loading: false,
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         article: {}
       }
     },
@@ -34,10 +32,10 @@
 </script>
 
 <style lang="sass" scoped>
-  .bulletin-detail
+  .notice-detail
     padding: 14px
     background: $white
-    height: 100vh
+    overflow-x: scroll
     &__title
       font-size: $font-large
       line-height: 24px
@@ -49,5 +47,20 @@
       padding-bottom: 2px
     &__content
       margin-top: 10px
-      line-height: 1.5
+      img
+        width: 100%
+        max-width: 100%
+      p
+        line-height: 24px
+      table
+        border: 1px solid #cccccc
+        margin-right: 8px
+        tbody
+          tr
+            padding: 4px
+          td
+            min-width: 25%
+            border: 1px solid #cccccc
+            text-align: center
+            padding: 4px
 </style>

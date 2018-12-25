@@ -32,7 +32,7 @@
     name: 'Index',
     data () {
       return {
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         audit: {}
       }
     },

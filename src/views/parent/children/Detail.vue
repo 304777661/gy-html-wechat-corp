@@ -13,29 +13,32 @@
     </div>
     <my-tabs :tabs="tabs" @tabChanged="handleTabChange"></my-tabs>
     <div v-show="curTabIndex === 0" class="child-detail-tab">
-      <van-cell-group :border="false">
-        <van-cell title="班级学号" :value="student.classStudentNo || '--'"></van-cell>
-        <van-cell title="全国学籍号" :value="student.nationStudentNo || '--'"></van-cell>
-        <van-cell title="身份证号" :value="student.idCard || '--'"></van-cell>
-        <van-cell title="出生日期" :value="student.birthday | ymd"></van-cell>
-        <van-cell title="民族" :value="student.nationName || '--'"></van-cell>
-        <van-cell title="户口性质" :value="getResidentType(student.residentType) || '--'"></van-cell>
-        <van-cell title="政治面貌" :value="getPoliticsStatus(student.politicsStatus) || '--'"></van-cell>
-        <van-cell title="家庭住址" :value="student.currentAddress || '--'"></van-cell>
-        <van-collapse v-model="show" v-show="fatherName || motherName || guardianName">
-          <van-collapse-item title="家长信息" name="1">
-            <van-cell v-show="fatherName" :title="fatherName" :value="fatherPhone || '--'">
-              <a :href="'tel:'+fatherPhone">{{fatherPhone || '--'}}</a>
-            </van-cell>
-            <van-cell v-show="motherName" :title="motherName" :value="motherPhone || '--'">
-              <a :href="'tel:'+motherPhone">{{motherPhone || '--'}}</a>
-            </van-cell>
-            <van-cell v-show="guardianName" :title="guardianName" :value="guardianPhone || '--'">
-              <a :href="'tel:'+guardianPhone">{{guardianPhone || '--'}}</a>
-            </van-cell>
-          </van-collapse-item>
-        </van-collapse>
-      </van-cell-group>
+      <div class="child-detail-tab-wrapper">
+        <van-cell-group>
+          <van-cell title="班级学号" :value="student.classStudentNo || '--'"></van-cell>
+          <van-cell title="全国学籍号" :value="student.nationStudentNo || '--'"></van-cell>
+          <van-cell title="身份证号" :value="student.idCard || '--'"></van-cell>
+          <van-cell title="出生日期" :value="student.birthday | ymd"></van-cell>
+          <van-cell title="民族" :value="student.nationName || '--'"></van-cell>
+          <van-cell title="户口性质" :value="getResidentType(student.residentType) || '--'"></van-cell>
+          <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(student.politicsStatus) || '--'"></van-cell>
+          <van-cell title="家庭住址" :value="student.currentAddress || '--'"></van-cell>
+          <van-collapse v-model="show" v-show="fatherName || motherName || guardianName">
+            <van-collapse-item title="家长信息" name="1">
+              <van-cell v-show="fatherName" :title="fatherName" :value="fatherPhone || '--'">
+                <a :href="'tel:'+fatherPhone">{{fatherPhone || '--'}}</a>
+              </van-cell>
+              <van-cell v-show="motherName" :title="motherName" :value="motherPhone || '--'">
+                <a :href="'tel:'+motherPhone">{{motherPhone || '--'}}</a>
+              </van-cell>
+              <van-cell v-show="guardianName" :title="guardianName" :value="guardianPhone || '--'">
+                <a :href="'tel:'+guardianPhone">{{guardianPhone || '--'}}</a>
+              </van-cell>
+            </van-collapse-item>
+          </van-collapse>
+        </van-cell-group>
+      </div>
+      <my-button :content="'编辑档案信息'" @btnClick="handleEditInfoClick"></my-button>
     </div>
 
     <div v-show="curTabIndex === 1" class="child-detail-tab prize">
@@ -63,9 +66,8 @@
   export default {
     name: 'ChildrenDetail',
     data () {
-      const id = this.$route.params.id
       return {
-        id,
+        id: this.$route.query.id,
         curTabIndex: 0,
         loading: false,
         showSetPrimary: true,
@@ -84,7 +86,7 @@
         guardianName: null,
         guardianPhone: null,
         student: {},
-        prizeList: []
+        prizeList: [],
       }
     },
     async created () {
@@ -102,7 +104,7 @@
           }
           if (this.student.mother) {
             this.motherName = this.student.mother.name + '(母亲)'
-            this.motherPhone = this.student.father.phone
+            this.motherPhone = this.student.mother.phone
           }
           if (this.student.guardian) {
             this.guardianName = this.student.guardian.name + '(监护人)'
@@ -122,19 +124,6 @@
             return '农村'
         }
       },
-
-      getPoliticsStatus (politicsStatus) {
-        switch (politicsStatus) {
-          case 'YOUNG_PIONEER':
-            return '少先队员'
-          case 'LEAGUE_MEMBER':
-            return '共青团员'
-          case 'COMMUNIST':
-            return '共产党员'
-          case 'MASSES':
-            return '群众'
-        }
-      },
       async handleTabChange (curTabIndex) {
         if (this.curTabIndex === curTabIndex) {
           return
@@ -142,11 +131,14 @@
         this.curTabIndex = curTabIndex
         await this.loadData()
       },
+      handleEditInfoClick () {
+        this.$router.push(`/parent/children/info/edit`)
+      },
       handlePrizeEdit (index) {
-        this.$router.push(`/parent/children/prize/edit/${index}`)
+        this.$router.push(`/parent/children/prize/edit?index=${index}`)
       },
       handleAddPrizeClick () {
-        this.$router.push(`/parent/children/prize/edit/-1`)
+        this.$router.push(`/parent/children/prize/edit?index=-1`)
       },
       async handleSetPrimaryClick () {
         this.loading = true
@@ -203,6 +195,8 @@
         padding: 6px 25px
     &-tab
       margin-top: 10px
+      &-wrapper
+        padding-bottom: 70px
       &-prize
         position: relative
         &-title

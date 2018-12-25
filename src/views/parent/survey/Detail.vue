@@ -19,8 +19,7 @@
       </div>
     </div>
     <hr>
-    <div class="survey-detail-content">
-      {{article.content}}
+    <div class="survey-detail-content" v-html="article.content">
     </div>
     <div class="van-hairline--bottom"></div>
 
@@ -62,7 +61,7 @@
     name: 'SurveyDetail',
     data () {
       return {
-        id: this.$route.params.id,
+        id: this.$route.query.id,
         isFinish: true,
         editable: false,
         loading: true,
@@ -164,9 +163,14 @@
         line-height: 18px
     &-content
       padding: 0 14px
-      margin: 10px 0
-      line-height: 21px
-      font-size: 15px
+      margin-top: 10px
+      //line-height: 21px
+      //font-size: 15px
+      img
+        width: 100%
+        max-width: 100%
+      p
+        line-height: 24px
     &-question
       padding: 10px 14px 0
       background: $white
