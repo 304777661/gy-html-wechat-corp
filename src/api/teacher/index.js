@@ -247,4 +247,9 @@ export default {
     return await Axios.post('/teacher/updateTeacherResume.do', query)
   },
 
+  // 查询授课班级和担任班主任或班助的班级列表
+  async queryTeacherClassList (query) {
+    return await Axios.post('/teacher/queryTeacherClassList.do', query)
+  },
+
 }

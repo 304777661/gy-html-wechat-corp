@@ -13,7 +13,7 @@
       <van-cell title="出生日期" :value="student.birthday | ymd"></van-cell>
       <van-cell title="民族" :value="student.nationName || '--'"></van-cell>
       <van-cell title="户口性质" :value="$enums.ResidentType.getName(student.residentType) || '--'"></van-cell>
-      <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(student.politicsStatus) || '--'"></van-cell>
+      <van-cell title="政治面貌" :value="$enums.StudentPoliticsStatus.getName(student.politicsStatus) || '--'"></van-cell>
       <van-cell title="家庭住址" :value="student.currentAddress || '--'"></van-cell>
       <van-collapse v-model="show" v-show="fatherName || motherName || guardianName">
         <van-collapse-item title="家长信息" name="1">

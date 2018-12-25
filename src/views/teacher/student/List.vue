@@ -2,7 +2,7 @@
   <div class="student">
 
     <div class="student-header">
-      <span class="student-header-class-name">{{curClass.label || '--'}}</span>
+      <span class="student-header-class-name">{{curClass.className || '--'}}</span>
       <span class="student-header-class-picker" @click="handleSwitchClassClick">选择班级</span>
     </div>
     <div class="student-search">
@@ -23,12 +23,11 @@
     </div>
     <van-popup v-model="showPopup" position="bottom" lazy-render>
       <van-picker :columns="columns"
-                  @change="onPickerChange"
                   show-toolbar
                   @cancel="onPickerCancel"
                   @confirm="onPickerConfirm"
                   value-key="label"
-                  :loading="gradeLoading"
+                  :loading="classLoading"
                   ref="picker">
       </van-picker>
     </van-popup>
@@ -46,22 +45,14 @@
         loading: false,
         finished: false,
         keywords: null,
-        gradeList: [],
-        curGrade: {},
+        classList: [],
         curClass: {},
         pageNo: 1,
-        popupItemHeight: 60,
         showPopup: false,
         selectGradeId: null,
         selectClassId: null,
-        columns: [{
-          values: [],
-          className: 'student-popup-item'
-        }, {
-          values: [],
-          className: 'student-popup-item'
-        }],
-        gradeLoading: true
+        columns: [],
+        classLoading: true
       }
     },
     watch: {
@@ -82,39 +73,14 @@
         this.loadData(true)
       },
       handleSwitchClassClick () {
-        if (this.columns && this.columns.length > 0) {
-          this.showPopup = true
-        } else {
-          this.$toast.fail('数据初始化失败')
-        }
-      },
-      onPickerChange (picker, values) {
-        let curGrade = this.gradeList.find(item => item.value === values[0].value)
-        if (curGrade.children) {
-          this.columns[1].values = curGrade.children.map(item => {
-            return {
-              label: item.label,
-              value: item.value,
-            }
-          })
-          picker && picker.setColumnValues(1, this.columns[1].values)
-        }
+        this.showPopup = true
       },
       onPickerCancel () {
         this.showPopup = false
       },
-      onPickerConfirm (value, index) {
+      onPickerConfirm (item) {
         this.showPopup = false
-        if (!this.gradeList[index[0]]) {
-          this.$toast.fail('年级数据错误')
-          return
-        }
-        if (!this.curGrade.children || !this.curGrade.children[index[1]]) {
-          this.$toast.fail('班级数据错误')
-          return
-        }
-        this.curGrade = this.gradeList[index[0]]
-        this.curClass = this.curGrade.children[index[1]]
+        this.curClass = this.classList[this.classList.findIndex(clazz => clazz.id === item.value)]
         this.loadData(true)
       },
       async loadData (resetList = false) {
@@ -135,7 +101,7 @@
       },
       getQuery () {
         return {
-          classId: this.curClass.value,
+          classId: this.curClass.id,
           keywords: this.keywords,
           pageNo: this.pageNo,
           pageSize: config.pageSize
@@ -143,27 +109,18 @@
       }
     },
     async created () {
-      this.gradeLoading = true
-      this.gradeList = await this.$api.teacher.queryClassCascadeList({})
-      if (this.gradeList && this.gradeList.length > 0) {
-        this.curGrade = this.gradeList[0]
-        this.columns[0].values = this.gradeList.map(item => {
+      this.classLoading = true
+      this.classList = await this.$api.teacher.queryTeacherClassList({})
+      if (this.classList && this.classList.length > 0) {
+        this.curClass = this.classList[0]
+        this.columns = this.classList.map(item => {
           return {
-            label: item.label,
-            value: item.value,
+            label: item.className,
+            value: item.id,
           }
         })
-        if (this.curGrade && this.curGrade.children && this.curGrade.children.length > 0) {
-          this.curClass = this.curGrade.children[0]
-          this.columns[1].values = this.curGrade.children.map(item => {
-            return {
-              label: item.label,
-              value: item.value,
-            }
-          })
-        }
       }
-      this.gradeLoading = false
+      this.classLoading = false
       // 查询学生列表
       this.loadData(true)
     },
@@ -180,9 +137,6 @@
       display: flex
       flex-direction: row
       justify-content: space-between
-    &-popup-item
-      line-height: 60px
-      height: 60px
     &-header
       background: $dark-blue
       height: 60px

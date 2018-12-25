@@ -668,6 +668,38 @@ export default {
   },
   // ---------------- 政治面貌类型  结束 -------------------
 
+  // ---------------- StudentPoliticsStatus枚举  开始 -------------------
+  StudentPoliticsStatus:{
+    // 枚举列表
+    list: [
+      {label: '少先队员', value: 'YOUNG_PIONEER'},
+      {label: '共青团员', value: 'LEAGUE_MEMBER'},
+      {label: '共产党员', value: 'COMMUNIST'},
+      {label: '群众', value: 'MASSES'}
+    ],
+    // 查询条件列表
+    allList:function(){
+      return [{label: '全部', value: null}].concat(this.list)
+    },
+    // 根据枚举值获取名称
+    getName:function(val){
+      switch (val) {
+        case 'YOUNG_PIONEER':
+          return '少先队员'
+        case 'LEAGUE_MEMBER':
+          return '共青团员'
+        case 'COMMUNIST':
+          return '共产党员'
+        case 'MASSES':
+          return '群众'
+        default:
+          return val
+      }
+    }
+  },
+  // ---------------- StudentPoliticsStatus枚举  结束 -------------------
+
+
   // ---------------- 职称类型  开始 -------------------
   TeacherTitleType: {
     // 枚举列表
