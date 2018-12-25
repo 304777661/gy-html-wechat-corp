@@ -1,27 +1,7 @@
 <template>
   <div class="survey-detail" :class="editable ? '' : 'survey-detail-full'">
     <my-loading v-model="loading"/>
-    <div class="survey-detail-header">
-      <div class="survey-detail-header-title">
-        <p class="survey-detail-header-title__name">{{article.title}}</p>
-        <div class="survey-detail-header-title__tag">
-          <van-tag v-if="article.isParticipated === 'YES'" color="#24A197">已参与
-          </van-tag>
-          <van-tag v-else-if="article.isFinish === 'YES'" color="#9B9B9B" plain>已结束
-          </van-tag>
-          <van-tag v-else color="#24A197" plain>进行中
-          </van-tag>
-        </div>
-      </div>
-      <div class="survey-detail-header__additional">
-        <span>{{article.participatedNum}}人已参与</span>
-        <span>结束时间：{{article.endTime | ymdhm}}</span>
-      </div>
-    </div>
-    <hr>
-    <div class="survey-detail-content" v-html="article.content">
-    </div>
-    <div class="van-hairline--bottom"></div>
+    <notice-detail :article="article" :endTime="article.endTime"></notice-detail>
 
     <div class="survey-detail-question" v-for="(item,index) in article.questionList" :key="item.id">
       <!--单选/多选-->
@@ -45,7 +25,7 @@
         <p class="survey-detail-question-title">{{index + 1}}、{{item.title}}</p>
         <van-field v-model="item.answer"
                    type="textarea"
-                   :border="false"
+                   :border="true"
                    :autosize="textAreaAutoSize"
                    :readonly="!editable"
                    placeholder="请输入">
@@ -136,41 +116,8 @@
 <style lang="sass" scoped>
 
   .survey-detail
-    $mb: 70px
-    background: white
-    height: calc(100vh - #{$mb})
-    &-full
-      height: 100vh
-    &-header
-      padding: 14px 14px 0
-      &-title
-        @include hor-between-center
-        &__name
-          flex: 1
-          @include text-overflow
-          color: $black
-          font-size: 17px
-          line-height: 24px
-          font-weight: bold
-        &__tag
-          .van-tag
-          padding: 3px 0
-      &__additional
-        margin-top: 8px
-        @include hor-between-center
-        color: #cccccc
-        font-size: 13px
-        line-height: 18px
-    &-content
-      padding: 0 14px
-      margin-top: 10px
-      //line-height: 21px
-      //font-size: 15px
-      img
-        width: 100%
-        max-width: 100%
-      p
-        line-height: 24px
+    background: $white
+    padding-bottom: 100px
     &-question
       padding: 10px 14px 0
       background: $white

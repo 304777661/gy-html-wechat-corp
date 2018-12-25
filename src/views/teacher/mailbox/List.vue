@@ -17,7 +17,7 @@
             </div>
 
             <div class="mailbox-item-body">
-              {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
+              {{item.content | summary(42)}}
             </div>
             <div class="van-hairline--bottom"></div>
             <div class="mailbox-item-footer">

@@ -1,11 +1,17 @@
 <template>
   <div class="search">
-    <input type="search" class="search__input"
-           :placeholder="placeholder"
-           :value="value"
-           @input="onInput"
-           @keydown.enter="search">
-    <van-icon name="search" class="search__icon" />
+    <!--使用form解决iOS键盘不显示搜索问题-->
+    <form action="javascript:return true;">
+      <!--使用type=search弹出带搜索按钮的键盘-->
+      <input type="search" class="search__input"
+             :placeholder="placeholder"
+             :value="value"
+             ref="searchInput"
+             @input="onInput"
+             @keyup.13=show()
+             @keydown.enter="search">
+      <van-icon name="search" class="search__icon"></van-icon>
+    </form>
   </div>
 </template>
 
@@ -33,6 +39,9 @@
       search () {
         event.preventDefault()
         this.$emit('search')
+      },
+      show () {
+        this.$refs.searchInput.blur()
       }
     }
   }
@@ -41,6 +50,9 @@
 <style lang="sass">
   .search
     position: relative
+    padding: $default-gap
+    background: $white
+    margin-bottom: 10px
     &__input
       width: 100%
       height: $search-input-height
@@ -50,7 +62,7 @@
       border-radius: 2px
     &__icon
       position: absolute
-      left: 10px
+      left: 22px
       top: 50%
       transform: translateY(-50%)
       color: $black

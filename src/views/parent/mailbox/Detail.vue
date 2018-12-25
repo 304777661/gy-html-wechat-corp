@@ -1,19 +1,7 @@
 <template>
   <div class="mailbox-detail">
     <my-loading v-model="loading"/>
-    <div class="mailbox-detail-wrapper">
-      <div v-show="!loading">
-        <p class="mailbox-detail-wrapper-header">
-          <span class="mailbox-detail-wrapper-header__title">{{article.title || '未知'}}</span>
-          <van-tag class="mailbox-detail-wrapper-header__tag" color="#24A197"
-                   v-show="article.isAnonymous === 'YES'">匿名
-          </van-tag>
-        </p>
-        <p class="mailbox-detail-wrapper__time">{{article.createdTime | ymd}}</p>
-        <hr>
-        <div class="mailbox-detail-wrapper__content" v-html="article.content"></div>
-      </div>
-    </div>
+    <notice-detail :article="article" :isAnonymous="article.isAnonymous === 'YES'"></notice-detail>
     <div class="mailbox-detail-reply" v-if="replyList && replyList.length>0">
       <p class="mailbox-detail-reply-count van-hairline--bottom">{{replyList ? replyList.length : '0'}}条回复</p>
 
@@ -96,26 +84,6 @@
 <style scoped lang="sass">
 
   .mailbox-detail
-    position: relative
-    overflow-x: scroll
-    &-wrapper
-      background: $white
-      padding: 14px
-      &-header
-        @include hor-start-center
-        &__title
-          font-size: $font-large
-          line-height: 24px
-          flex: 1
-      &__time
-        font-size: 13px
-        line-height: 18px
-        color: #ccc
-        margin-top: 8px
-        padding-bottom: 2px
-      &__content
-        margin-top: 10px
-        line-height: 1.5
     &-reply
       margin-top: 10px
       background: $white
@@ -138,19 +106,5 @@
             color: #9B9B9B
         &-content
           margin-top: 10px
-          /deep/ img
-            width: 100%
-            max-width: 100%
-          /deep/ p
-            line-height: 24px
-          /deep/ table
-            border: 1px solid #cccccc
-            margin-right: 8px
-            tr
-              padding: 4px
-            td
-              min-width: 25%
-              border: 1px solid #cccccc
-              text-align: center
-              padding: 4px
+          line-height: 1.2
 </style>

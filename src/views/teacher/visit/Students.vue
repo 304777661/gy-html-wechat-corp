@@ -1,9 +1,7 @@
 <!--选择访问学生-->
 <template>
   <div class="select-student">
-    <div class="select-student-search">
-      <search v-model="keywords" @search="onSearch"></search>
-    </div>
+    <search v-model="keywords" @search="onSearch"></search>
     <no-data v-show="!loading && !studentList.length"/>
     <!--<div v-if="studentList && studentList.length>0">-->
     <div ref="wrapper" class="select-student-wrapper">
@@ -97,10 +95,6 @@
   .select-student
     .icon-size
       font-size: 20px
-    &-search
-      padding: $default-gap
-      margin-bottom: 10px
-      background: $white
     &-wrapper
       height: calc(100vh - 70px)
       &-item

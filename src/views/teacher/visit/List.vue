@@ -1,9 +1,7 @@
 <template>
   <div class="visit">
     <div class="wrapper">
-      <div class="visit-search">
-        <search v-model="studentName" @search="onSearch"></search>
-      </div>
+      <search v-model="studentName" @search="onSearch"></search>
       <no-data v-show="!loading && !visitList.length"/>
       <my-loading v-model="loading"/>
       <div ref="wrapper" class="visit-wrapper" v-if="visitList && visitList.length>0">
@@ -82,10 +80,6 @@
     /deep/ .van-hairline--bottom
       &:after
         left: 12px
-    &-search
-      padding: $default-gap
-      background: $white
-      margin-bottom: 10px
     &-btn
       position: absolute
       left: 50%

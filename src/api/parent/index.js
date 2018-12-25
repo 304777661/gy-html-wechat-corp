@@ -107,4 +107,9 @@ export default {
     return await Axios.post('/studentParent/getStudentPrize.do', query)
   },
 
+  // 家长端 - 学生信息变更新增
+  async addStudentChange (query) {
+    return await Axios.post('/studentParent/addStudentChange.do', query)
+  },
+
 }

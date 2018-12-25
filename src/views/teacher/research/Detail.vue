@@ -1,24 +1,7 @@
 <template>
   <div class="research-detail">
     <my-loading v-model="loading"/>
-    <div class="wrapper">
-      <p class="research-detail__title">{{activity.title}}</p>
-      <p class="research-detail__time">{{activity.createdTime | ymd}}</p>
-      <hr>
-      <div class="research-detail__content" v-html="activity.content">
-      </div>
-    </div>
-    <div class="research-detail__additional" v-if="activity.attachmentList && activity.attachmentList.length>0">
-      <p class="research-detail__additional__sticky van-hairline--bottom">附件</p>
-      <div class="research-detail__additional__item van-hairline--bottom"
-           v-for="(file,index) in activity.attachmentList" :key="index">
-        <img class="research-detail__additional__item__icon" :src="file.fileUrl | fileIcon"/>
-        <span class="research-detail__additional__item__name">{{file.fileName}}</span>
-        <div class="research-detail__additional__item__func" @click="handleDownloadClick(file)">下载</div>
-      </div>
-    </div>
-
-    <van-actionsheet v-model="showActionSheet" :actions="actions"></van-actionsheet>
+    <notice-detail :article="article"></notice-detail>
   </div>
 </template>
 
@@ -36,7 +19,7 @@
         loading: false,
         showActionSheet: false,
         curFile: null,
-        activity: {}
+        article: {}
       }
     },
     methods: {
@@ -57,7 +40,7 @@
     },
     async created () {
       this.loading = true
-      this.activity = await this.$api.teacher.getNotice({'id': this.id})
+      this.article = await this.$api.teacher.getNotice({'id': this.id})
       this.loading = false
     }
   }

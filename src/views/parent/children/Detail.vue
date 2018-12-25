@@ -4,12 +4,21 @@
       <p class="child-detail-header__name">{{student.name}}</p>
       <div class="child-detail-header-wrapper">
         <img class="child-detail-header-wrapper__avatar" :src="student.avatar | defaultAvatar">
-        <div class="child-detail-header-wrapper__tag" v-show="!showSetPrimary">
+        <div class="child-detail-header-wrapper__input">
+          <input type="file"
+                 id="file-input"
+                 accept="image/*"
+                 hidden
+                 @change="inputChanged">
+          <label for="file-input"> </label>
+        </div>
+        <div class="child-detail-header-wrapper__tag" v-show="student.isCurrent === 'YES'">
           <img src="../../../assets/images/main-children.png"/>
           <span>主</span>
         </div>
       </div>
-      <div class="child-detail-header__setting" @click="handleSetPrimaryClick" v-show="showSetPrimary">设置主查询</div>
+      <div class="child-detail-header__setting" @click="handleSetPrimaryClick" v-if="student.isCurrent === 'NO'">设置主查询
+      </div>
     </div>
     <my-tabs :tabs="tabs" @tabChanged="handleTabChange"></my-tabs>
     <div v-show="curTabIndex === 0" class="child-detail-tab">
@@ -20,8 +29,9 @@
           <van-cell title="身份证号" :value="student.idCard || '--'"></van-cell>
           <van-cell title="出生日期" :value="student.birthday | ymd"></van-cell>
           <van-cell title="民族" :value="student.nationName || '--'"></van-cell>
-          <van-cell title="户口性质" :value="getResidentType(student.residentType) || '--'"></van-cell>
-          <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(student.politicsStatus) || '--'"></van-cell>
+          <van-cell title="户口性质" :value="$enums.ResidentType.getName(student.residentType) || '--'"></van-cell>
+          <van-cell title="政治面貌"
+                    :value="$enums.StudentPoliticsStatus.getName(student.politicsStatus) || '--'"></van-cell>
           <van-cell title="家庭住址" :value="student.currentAddress || '--'"></van-cell>
           <van-collapse v-model="show" v-show="fatherName || motherName || guardianName">
             <van-collapse-item title="家长信息" name="1">
@@ -38,10 +48,11 @@
           </van-collapse>
         </van-cell-group>
       </div>
-      <my-button :content="'编辑档案信息'" @btnClick="handleEditInfoClick"></my-button>
+      <my-button :content="'编辑基本信息'" @btnClick="handleEditInfoClick"></my-button>
     </div>
 
     <div v-show="curTabIndex === 1" class="child-detail-tab prize">
+      <no-data v-show="!loading && !prizeList.length"/>
       <div class="child-detail-tab-prize" v-for="(prize,index) in prizeList" :key="prize.id">
         <div class="child-detail-tab-prize-title van-hairline--bottom">
           <span>获奖情况{{index+1}}</span>
@@ -70,7 +81,6 @@
         id: this.$route.query.id,
         curTabIndex: 0,
         loading: false,
-        showSetPrimary: true,
         tabs: [{
           id: 0,
           label: '基本信息'
@@ -87,6 +97,7 @@
         guardianPhone: null,
         student: {},
         prizeList: [],
+
       }
     },
     async created () {
@@ -114,16 +125,6 @@
           this.prizeList = await this.$api.parent.queryStudentPrizeList({})
         }
       },
-      getResidentType (residentType) {
-        switch (residentType) {
-          case 'CITY':
-            return '城市'
-          case 'COUNTY':
-            return '县城'
-          case 'VILLAGE':
-            return '农村'
-        }
-      },
       async handleTabChange (curTabIndex) {
         if (this.curTabIndex === curTabIndex) {
           return
@@ -132,7 +133,7 @@
         await this.loadData()
       },
       handleEditInfoClick () {
-        this.$router.push(`/parent/children/info/edit`)
+        this.$router.push(`/parent/children/info/edit?id=${this.id}`)
       },
       handlePrizeEdit (index) {
         this.$router.push(`/parent/children/prize/edit?index=${index}`)
@@ -145,7 +146,30 @@
         await this.$api.parent.setCurrentChild({'studentId': this.id})
         this.loading = false
         this.$toast.success('设置成功')
-        this.showSetPrimary = false
+        this.student.isCurrent = 'YES'
+      },
+      async inputChanged (e) {
+        if (e.target.files.length === 0) return
+        let toast = this.$toast.loading({
+          duration: 0,
+          forbidClick: true,
+          message: '文件上传中...'
+        })
+        let files = e.target.files
+        // 所有的图片一起异步上传, 使用j变量来控制上传进度
+        for (let i = 0; i < files.length; i++) {
+          let formData = new FormData()
+          const file = files[i]
+          formData.append('file', file)
+          this.$api.teacher.upload(formData).then(imgUrl => {
+            // 使pictures这个数组里面的图片能保持上传的位置
+            this.student.avatar = imgUrl
+            toast.clear()
+            // 防止选择同一图片后, change事件不触发
+            document.getElementById('file-input').value = null
+            this.$toast.success('文件上传成功')
+          })
+        }
       }
     }
   }
@@ -156,7 +180,6 @@
     .prize
       padding-bottom: 70px
     &-header
-      height: 210px
       background: $dark-blue
       @include ver-center-center
       &__name
@@ -164,10 +187,23 @@
         font-size: 18px
         line-height: 25px
         text-align: center
+        margin-top: 10px
       &-wrapper
         position: relative
+        margin-bottom: 14px
+        &__input
+          position: absolute
+          top: 40px
+          left: 0
+          width: 70px
+          height: 70px
+          label
+            width: 100%
+            height: 100%
+            padding: 29px 36px
+            background: transparent
         &__avatar
-          margin-top: 20px
+          margin-top: 14px
           @include circle(74px)
           border: 1px solid #FAFBFD
         &__tag
@@ -187,12 +223,12 @@
             color: $white
       &__setting
         color: $white
-        margin-top: 20px
-        font-size: 15px
+        margin-bottom: 10px
+        font-size: 14px
         line-height: 21px
         background: #FFC500
         border-radius: 8px
-        padding: 6px 25px
+        padding: 4px 20px
     &-tab
       margin-top: 10px
       &-wrapper

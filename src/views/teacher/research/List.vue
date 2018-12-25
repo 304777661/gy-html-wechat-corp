@@ -16,7 +16,7 @@
             <p>{{item.title}}</p>
           </div>
           <div class="research-list-item__content">
-            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
+            {{item.content | summary(42)}}
           </div>
           <div class="research-list-item__additional">
             <p>{{item.createdTime | ymd}}</p>
@@ -113,10 +113,6 @@
 
   .research
     padding-bottom: $default-gap
-    &-search
-      padding: $default-gap
-      background: $white
-      margin-bottom: 10px
     &-list
       &-item
         padding: 14px

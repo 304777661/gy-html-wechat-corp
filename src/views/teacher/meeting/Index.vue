@@ -24,7 +24,7 @@
         </van-list>
       </div>
     </div>
-    <my-button :content="'预定会议室'" @btnClick="handleBookMeeting"></my-button>
+    <my-button :content="'预定会议室'" @btnClick="handleBookMeeting" v-if="showBookBtn"></my-button>
   </div>
 </template>
 
@@ -35,6 +35,7 @@
     name: 'Meeting',
     data () {
       return {
+        showBookBtn: false,
         meetingList: [],
         keywords: null,
         allMeetingPageNo: 1,
@@ -95,6 +96,15 @@
       }
     },
     async activated () {
+      let myself = await this.$api.teacher.getSessionUserDetail({})
+      if (myself.isTeachGroupLeader === 'YES' ||
+        myself.isPrepareLeader === 'YES' ||
+        myself.isSchoolLeader === 'YES' ||
+        myself.isMiddleLeader === 'YES') {
+        this.showBookBtn = true
+      } else {
+        this.showBookBtn = false
+      }
       await this.loadData(true)
     }
   }
@@ -102,8 +112,7 @@
 
 <style scoped lang="sass">
   .meeting
-    .wrapper
-      height: calc(100vh - 70px)
+    padding-bottom: 70px
     &-item
       background: $white
       padding: 10px 14px

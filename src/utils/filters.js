@@ -17,11 +17,13 @@ export default {
     return enums.LeavePeriod.getName(val)
   },
   ymdhm (val) {
-    let param = 'yyyy-MM-dd hh:mm'
+    if (!val) return ''
     if (val instanceof Date) {
-      return val.Format(param) || '--'
+      return val.Format('yyyy-MM-dd hh:mm')
     }
-    return new Date(val).Format(param) || '--'
+    if (typeof(val) === 'string' && val.length > 16) {
+      return val.substring(16, 0)
+    }
   },
   hm (val) {
     let param = 'hh:mm'
@@ -31,7 +33,7 @@ export default {
     return new Date(val).Format(param) || '--'
   },
   ymd (val) {
-    if (!val) return '--'
+    if (!val) return ''
     if (val instanceof Date) {
       return val.Format('yyyy-MM-dd')
     }
@@ -191,7 +193,6 @@ export default {
     if (val === 'Male') {return '男'}
     return ''
   },
-
   rmb (val) {
     if (!val) {
       return '0.00元'
@@ -212,5 +213,12 @@ export default {
     }
 
     return (((sign) ? '' : '-') + val + '.' + cents + '元')
+  },
+  summary (val, length) {
+    // 超过length长度的val，进行截断
+    if (!val) {
+      return ''
+    }
+    return val.length > length ? val.substr(0, length) + '......' : val
   }
 }

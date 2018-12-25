@@ -342,7 +342,7 @@
     async created () {
       this.loading = true
       this.teacher = await this.$api.teacher.getTeacherDetail({})
-      this.loading = true
+      this.loading = false
     }
   }
 </script>

@@ -116,7 +116,7 @@
     async created () {
       if (this.index >= 0) {
         this.$route.meta.title = '编辑获奖情况'
-        this.prizeList = await this.$api.parent.queryStudentPrizeList()
+        this.prizeList = await this.$api.parent.queryStudentPrizeList({})
         if (this.prizeList && this.prizeList.length > 0) {
           this.prize = this.prizeList[this.index]
           for (let i = 0; i < this.$enums.PrizeLevel.list.length; i++) {

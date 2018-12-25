@@ -1,28 +1,25 @@
 <template>
-  <div class="team">
-    <div class="team-search">
-      <search v-model="keywords" @search="onSearch"></search>
-    </div>
+  <div class="group">
+    <search v-model="keywords" @search="onSearch"></search>
     <my-tabs :tabs="tabs" @tabChanged="handleTabChange" :swipeable="true" v-if="tabs && tabs.length>0"/>
     <no-data v-show="!loading && !articleList.length"/>
     <my-loading v-model="loading"/>
-    <div class="team-list" v-if="articleList.length">
+    <div v-if="articleList && articleList.length>0">
       <van-list
         v-model="loading"
         :finished="finished"
         @load="onLoad">
-        <div class="team-list-item van-hairline--bottom"
+        <div class="group-item van-hairline--bottom"
              v-for="(item,index) in articleList"
              :key="index"
              @click="handleItemClick(item.id)">
-          <div class="team-list-item__header">
-            <p>{{item.title}}</p>
+          <div class="group-item-thumbnail">
+            <img v-if="item.bannerImage" :src="item.bannerImage">
+            <img v-else src="../../../assets/images/group_thumb.png">
           </div>
-          <div class="team-list-item__content">
-            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
-          </div>
-          <div class="team-list-item__additional" v-show="item.bannerImage">
-            <img :src="item.bannerImage">
+          <div class="group-item-content">
+            <p class="group-item-content__title">{{item.title}}</p>
+            <p class="group-item-content__summary">{{item.content | summary(32)}}</p>
           </div>
         </div>
       </van-list>
@@ -119,29 +116,32 @@
 </script>
 
 <style scoped lang="sass">
-
-  .team
+  .group
     padding-bottom: $default-gap
-    &-search
-      padding: $default-gap
+    &-item
+      padding: 10px 14px
       background: $white
-      margin-bottom: 10px
-    &-list
-      &-item
-        padding: 14px
-        background: $white
-        &__header
+      @include hor-start-center
+      $imgWidth: 70px
+      &-thumbnail
+        border: .5px solid $gray-light
+        width: $imgWidth
+        height: $imgWidth
+        margin-right: 8px
+        @include hor-center-center
+        border-radius: 4px
+      &-content
+        flex: 1
+        min-width: 0
+        &__title
           font-weight: bold
-          font-size: 18px
+          font-size: 16px
           color: $black
-          line-height: 25px
-          p
-            @include text-overflow
-        &__content
+          line-height: 22px
+          @include text-overflow
+        &__summary
           font-size: 15px
+          line-height: 1.3
           margin-top: 6px
           color: #9B9B9B
-        &__additional
-          margin-top: 8px
-          width: 100%
 </style>

@@ -1,38 +1,23 @@
 <template>
   <div class="mailbox-detail">
-    <!--<my-loading v-model="loading"/>-->
-    <div class="wrapper">
-      <div class="mailbox-detail-wrapper">
-        <div v-show="!loading">
-          <p class="mailbox-detail-wrapper__title">{{article.title || '未知'}}</p>
-          <p class="mailbox-detail-wrapper__time">{{article.createdTime | ymd}}</p>
-          <hr>
-          <div class="mailbox-detail-wrapper__content" v-html="article.content">
-          </div>
-        </div>
-
-      </div>
-      <div class="mailbox-detail-reply" v-if="replyList && replyList.length>0">
-        <p class="mailbox-detail-reply-count van-hairline--bottom">{{replyList ? replyList.length : '0'}}条回复</p>
-
-        <van-list
-          v-model="replyLoading"
-          :finished="finished"
-          @load="onLoad">
-          <div class="mailbox-detail-reply-item van-hairline--bottom"
-               v-for="item in replyList"
-               :key="item.id">
-            <div class="mailbox-detail-reply-item-header">
+    <notice-detail :article="article"></notice-detail>
+    <div class="mailbox-detail-reply" v-if="replyList && replyList.length>0">
+      <p class="mailbox-detail-reply-count van-hairline--bottom">{{replyList ? replyList.length : '0'}}条回复</p>
+      <van-list
+        v-model="replyLoading"
+        :finished="finished"
+        @load="onLoad">
+        <div class="mailbox-detail-reply-item van-hairline--bottom"
+             v-for="item in replyList"
+             :key="item.id">
+          <div class="mailbox-detail-reply-item-header">
               <span
                 class="mailbox-detail-reply-item-header-name">{{article.isAnonymous === 'YES' ? '学校' : '班主任'}}</span>
-              <span class="mailbox-detail-reply-item-header-time">{{item.createdTime | ymd}}</span>
-            </div>
-            <p class="mailbox-detail-reply-item-content">
-              {{item.content}}
-            </p>
+            <span class="mailbox-detail-reply-item-header-time">{{item.createdTime | ymd}}</span>
           </div>
-        </van-list>
-      </div>
+          <p class="mailbox-detail-reply-item-content">{{item.content}}</p>
+        </div>
+      </van-list>
     </div>
     <my-button :content="'回复'" @btnClick="handelReplyClick"></my-button>
 
@@ -129,46 +114,13 @@
 
   .mailbox-detail
     position: relative
-    overflow-x: scroll
-    .wrapper
-      height: calc(100vh - 70px)
-    &-reply-additional
-      margin-bottom: 10px
-    &-wrapper
-      background: $white
-      padding: 14px
-      &__title
-        font-size: $font-large
-        line-height: 24px
-      &__time
-        font-size: 13px
-        line-height: 18px
-        color: #ccc
-        margin-top: 8px
-        padding-bottom: 2px
-      &__content
-        margin-top: 10px
-        /deep/ img
-          width: 100%
-          max-width: 100%
-        /deep/ p
-          line-height: 24px
-        /deep/ table
-          border: 1px solid #cccccc
-          margin-right: 8px
-          tr
-            padding: 4px
-          td
-            min-width: 25%
-            border: 1px solid #cccccc
-            text-align: center
-            padding: 4px
+    padding-bottom: 70px
     &-reply
       margin-top: 10px
       background: $white
       &-count
         padding-left: 14px
-        font-size: 14px
+        font-size: 13px
         line-height: 30px
         color: #24A197
       &-item
@@ -188,5 +140,4 @@
           color: #9B9B9B
           line-height: 21px
           font-size: 15px
-  // @include text-overflow-line(3)
 </style>

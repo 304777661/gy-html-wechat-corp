@@ -1,14 +1,11 @@
 <template>
   <div class="student">
-
+    <no-data v-show="!loading && !studentList.length"/>
     <div class="student-header">
       <span class="student-header-class-name">{{curClass.className || '--'}}</span>
       <span class="student-header-class-picker" @click="handleSwitchClassClick">选择班级</span>
     </div>
-    <div class="student-search">
-      <search v-model="keywords" @search="onSearch"></search>
-    </div>
-    <no-data v-show="!loading && !studentList.length"/>
+    <search v-model="keywords" @search="onSearch"></search>
     <div v-if="studentList.length">
       <van-list v-model="loading"
                 :finished="finished"
@@ -156,10 +153,6 @@
         font-size: 12px
         line-height: 17px
         color: #86B6F1
-    &-search
-      padding: 9px $default-gap
-      background: $white
-      margin-bottom: 10px
     &-item
       height: 70px
       background: $white

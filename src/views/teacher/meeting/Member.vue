@@ -181,6 +181,8 @@
       height: 60px
       padding-top: 5px
       margin-bottom: 10px
+      &::-webkit-scrollbar
+        display: none
       &-item
         width: 60px
         height: 50px

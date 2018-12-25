@@ -1,8 +1,6 @@
 <template>
   <div class="notice">
-    <div class="notice-search">
-      <search v-model="keywords" @search="onSearch"></search>
-    </div>
+    <search v-model="keywords" @search="onSearch"></search>
     <my-tabs :tabs="tabs" @tabChanged="handleTabChange"></my-tabs>
     <no-data v-show="!loading && !articleList.length"/>
     <div class="notice-list" v-if="articleList.length">
@@ -18,7 +16,7 @@
             <p>{{item.title}}</p>
           </div>
           <div class="notice-list-item__content">
-            {{item.content.length > 42? item.content.substr(0,42)+'......' : item.content}}
+            {{item.content | summary(42)}}
           </div>
           <div class="notice-list-item__additional">
             <p>{{item.createdTime | ymd}}</p>
@@ -115,10 +113,6 @@
 
   .notice
     padding-bottom: $default-gap
-    &-search
-      padding: $default-gap
-      background: $white
-      margin-bottom: 10px
     &-list
       &-item
         padding: 14px

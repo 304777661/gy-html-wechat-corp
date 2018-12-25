@@ -33,7 +33,7 @@
     font-size: 13px
     color: $gray
     .icon-size
-      font-size: 15px
+      font-size: 10px
     &__text
       margin-left: 5px
 </style>

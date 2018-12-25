@@ -15,7 +15,7 @@
               <span class="activity-item-header__title">{{item.activityName}}</span>
             </div>
             <div class="activity-item-body">
-              {{item.activityContent.length > 42? item.activityContent.substr(0,42)+'......' : item.activityContent}}
+              {{item.activityContent | summary(42)}}
             </div>
             <div class="van-hairline--bottom"></div>
             <div class="activity-item-footer">
