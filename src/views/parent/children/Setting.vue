@@ -1,16 +1,16 @@
 <template>
   <div class="children">
     <div class="children-list">
-      <div class="children-list-item" v-for="children in childrenList" :key="children.studentId">
+      <div class="children-list-item" v-for="child in childrenList" :key="child.id">
         <!--<div :class="['children-body',{'selected':selectedIdx === children.studentId }]"-->
-        <div class="children-list-item-person" @click="handleChildrenClick(children.id)">
-          <img class="children-list-item-person-avatar" :src="children.avatar | defaultAvatar"/>
-          <div class="children-list-item-person-tag" v-show="selectedIdx === children.id">
+        <div class="children-list-item-person" @click="handleChildrenClick(child.id)">
+          <img class="children-list-item-person-avatar" :src="child.avatar | defaultAvatar"/>
+          <div class="children-list-item-person-tag" v-show="child.isCurrent === 'YES'">
             <img src="../../../assets/images/main-children.png"/>
             <span>主</span>
           </div>
-          <p>{{children.name}}</p>
-          <p>{{children.className}}</p>
+          <p>{{child.name}}</p>
+          <p>{{child.className}}</p>
         </div>
       </div>
     </div>
@@ -23,27 +23,17 @@
   export default {
     data () {
       return {
-        selectedIdx: null,
         childrenList: []
-      }
-    },
-    async created () {
-      this.childrenList = await this.$api.parent.queryStudentList({})
-      if (this.childrenList && this.childrenList.length === 1) {
-        this.handleChildrenClick(this.childrenList[0])
-      }
-
-      for (let child of this.childrenList) {
-        if (child.isPrimary) {
-          this.selectedIdx = child.id
-        }
       }
     },
     methods: {
       handleChildrenClick (id) {
         this.$router.push(`/parent/children/detail?id=${id}`)
       }
-    }
+    },
+    async created () {
+      this.childrenList = await this.$api.parent.queryStudentList({})
+    },
   }
 </script>
 

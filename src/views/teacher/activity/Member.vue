@@ -49,6 +49,7 @@
   export default {
     name: 'Member',
     data () {
+      console.log(this.$route.query.orgId)
       return {
         loading: false,
         orgId: this.$route.query.orgId,

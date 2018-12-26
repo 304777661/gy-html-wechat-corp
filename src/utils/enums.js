@@ -669,7 +669,7 @@ export default {
   // ---------------- 政治面貌类型  结束 -------------------
 
   // ---------------- StudentPoliticsStatus枚举  开始 -------------------
-  StudentPoliticsStatus:{
+  StudentPoliticsStatus: {
     // 枚举列表
     list: [
       {label: '少先队员', value: 'YOUNG_PIONEER'},
@@ -678,11 +678,11 @@ export default {
       {label: '群众', value: 'MASSES'}
     ],
     // 查询条件列表
-    allList:function(){
+    allList: function () {
       return [{label: '全部', value: null}].concat(this.list)
     },
     // 根据枚举值获取名称
-    getName:function(val){
+    getName: function (val) {
       switch (val) {
         case 'YOUNG_PIONEER':
           return '少先队员'
@@ -698,7 +698,6 @@ export default {
     }
   },
   // ---------------- StudentPoliticsStatus枚举  结束 -------------------
-
 
   // ---------------- 职称类型  开始 -------------------
   TeacherTitleType: {
@@ -836,7 +835,7 @@ export default {
   },
   // ---------------- 审核状态  结束 -------------------
 
-  // ---------------- 变更类型  开始 -------------------
+  // ---------------- ChangeType枚举  开始 -------------------
   ChangeType: {
     // 枚举列表
     list: [
@@ -848,7 +847,7 @@ export default {
       {label: '家庭住址', value: 'ADDRESS'},
       {label: '父亲', value: 'FATHER'},
       {label: '母亲', value: 'MOTHER'},
-      {label: '监护人', value: 'GUARDIAN'},
+      {label: '监护人', value: 'GUARDIAN'}
     ],
     // 查询条件列表
     allList: function () {
@@ -867,6 +866,8 @@ export default {
           return '户口性质'
         case 'POLITICS':
           return '政治面貌'
+        case 'ADDRESS':
+          return '家庭住址'
         case 'FATHER':
           return '父亲'
         case 'MOTHER':
@@ -876,9 +877,9 @@ export default {
         default:
           return val
       }
-    },
+    }
   },
-  // ---------------- 变更类型  结束 -------------------
+  // ---------------- ChangeType枚举  结束 -------------------
 
   // ---------------- 变更类型  开始 -------------------
   AssessLevel: {
@@ -974,7 +975,7 @@ export default {
   // ---------------- JobStatus枚举  结束 -------------------
 
   // ---------------- ResidentType枚举  开始 -------------------
-  ResidentType:{
+  ResidentType: {
     // 枚举列表
     list: [
       {label: '城市', value: 'CITY'},
@@ -982,11 +983,11 @@ export default {
       {label: '农村', value: 'VILLAGE'}
     ],
     // 查询条件列表
-    allList:function(){
+    allList: function () {
       return [{label: '全部', value: null}].concat(this.list)
     },
     // 根据枚举值获取名称
-    getName:function(val){
+    getName: function (val) {
       switch (val) {
         case 'CITY':
           return '城市'

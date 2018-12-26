@@ -4,8 +4,7 @@
       <van-cell-group>
         <van-field label="活动名称" placeholder="请输入" v-model="activity.activityName" input-align="right"></van-field>
         <van-cell title="活动时间" :value="activity.activityDate | ymd" is-link @click="handleTimePicker"></van-cell>
-        <van-cell title="教研组" :value="curTeachGroup.label || '请选择'" is-link @click="handleTeachGroupPicker"
-                  v-if="!isTeachGroup()"></van-cell>
+        <van-cell title="教研组" :value="curTeachGroup.label || '请选择'" is-link @click="handleTeachGroupPicker"></van-cell>
         <van-cell title="年级" :value="curGrade.label || '请选择'" is-link @click="handleGradePicker"
                   v-if="!isTeachGroup()"></van-cell>
         <van-field label="活动地点" placeholder="请输入" v-model="activity.activityLocation" input-align="right"></van-field>
@@ -47,7 +46,7 @@
       </van-picker>
     </van-popup>
 
-    <van-popup v-model="showPopup" position="bottom">
+    <van-popup v-model="showTeachGroupPicker" position="bottom">
       <van-picker :columns="teacherGroupColumns"
                   show-toolbar
                   @cancel="handleTeacherGroupCancel"
@@ -99,6 +98,7 @@
         this.showTeachGroupPicker = false
       },
       handleTeacherGroupConfirm (item) {
+        console.log(item.tag)
         this.orgId = item.tag
         let index = this.teachGroupList.findIndex(teachGroupItem => teachGroupItem.value === item.value)
         this.curTeachGroup = this.teachGroupList[index]

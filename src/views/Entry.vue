@@ -73,7 +73,7 @@
           'link': 'parent/survey'
         }, {
           'name': '家-审核',
-          'link': 'parent/audit/detail?id=1'
+          'link': 'parent/audit/detail?id=3'
         }, {
           'name': '家-招聘',
           'link': 'teacher/job'

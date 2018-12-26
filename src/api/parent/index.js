@@ -112,4 +112,9 @@ export default {
     return await Axios.post('/studentParent/addStudentChange.do', query)
   },
 
+  // 家长端 - 更新头像
+  async updateChildWithAvatar (query) {
+    return await Axios.post('/studentParent/updateChildWithAvatar.do', query)
+  },
+
 }

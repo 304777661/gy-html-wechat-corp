@@ -156,13 +156,15 @@
           message: '文件上传中...'
         })
         let files = e.target.files
-        // 所有的图片一起异步上传, 使用j变量来控制上传进度
         for (let i = 0; i < files.length; i++) {
           let formData = new FormData()
           const file = files[i]
           formData.append('file', file)
-          this.$api.teacher.upload(formData).then(imgUrl => {
-            // 使pictures这个数组里面的图片能保持上传的位置
+          this.$api.teacher.upload(formData).then(async (imgUrl) => {
+            await this.$api.parent.updateChildWithAvatar({
+              studentId: this.student.id,
+              avatar: imgUrl
+            })
             this.student.avatar = imgUrl
             toast.clear()
             // 防止选择同一图片后, change事件不触发

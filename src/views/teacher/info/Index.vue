@@ -121,6 +121,7 @@
     data () {
       return {
         curTabIndex: 0,
+        loading: false,
         tabs: [{
           id: 0,
           label: '基本情况',

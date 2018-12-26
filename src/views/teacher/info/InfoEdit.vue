@@ -35,104 +35,53 @@
         <van-cell title="工龄" :value="teacher.workYears ? (teacher.workYears +'年') : '--'"></van-cell>
         <van-cell title="来校时间" :value="teacher.joinSchoolTime | ymd"></van-cell>
         <van-cell title="原工作单位" :value="teacher.lastWorkUnit || '--'"></van-cell>
-        <van-cell title="职称1" :value="$enums.TeacherTitleType.getName(teacherTitle1)" is-link
-                  @click="handleTeacherTitle1Click"></van-cell>
-        <van-cell title="评定时间1" :value="teacherAcquireTime1 | ymd" is-link @click="handleTitleAcquire1Click"></van-cell>
-        <van-cell title="职称2" :value="$enums.TeacherTitleType.getName(teacherTitle2)" is-link
-                  @click="handleTeacherTitle2Click"></van-cell>
-        <van-cell title="评定时间2" :value="teacherAcquireTime2 | ymd" is-link @click="handleTitleAcquire2Click"></van-cell>
+      </van-cell-group>
+
+      <van-cell-group>
+        <van-cell title="职称信息" class="info-edit-sticky">
+          <van-icon class="info-edit-sticky__add icon-size" name="add" color="#24A197" @click="handleAddClick()">
+          </van-icon>
+        </van-cell>
+
+        <div class="info-edit-item"
+             v-for="(teacherTitle,index) in teacher.teacherTitleList"
+             :key="'teacherTitle'+index">
+          <van-cell :title="'职称'+(index+1)" class="child-edit-item-title">
+            <van-icon class="info-edit-item__del icon-size" name="delete" color="#ccc"
+                      @click="handleDeleteClick(index)">
+            </van-icon>
+          </van-cell>
+          <van-cell title="职称" :value="$enums.TeacherTitleType.getName(teacherTitle.title)" is-link
+                    @click="handleTeacherTitleClick(index)">
+          </van-cell>
+          <van-cell title="评定时间" :value="teacherTitle.acquireTime | ymd" is-link
+                    @click="handleTitleAcquireClick(index)">
+          </van-cell>
+        </div>
       </van-cell-group>
     </div>
-    <my-button :content="submitBtnTitle" @btnClick="handleSubmitClick"></my-button>
+    <my-button :content="'提交'" @btnClick="handleSubmitClick"></my-button>
 
-    <van-popup v-model="showSexPicker"
-               position="bottom"
-               :lazy-render="false">
+    <van-popup v-model="showPicker" position="bottom">
       <van-picker show-toolbar
-                  :columns="sexColumns"
+                  :columns="columns"
                   value-key="label"
-                  @cancel="handleSexCancelClick"
-                  @confirm="handleSexConfirmClick"></van-picker>
+                  @cancel="handlePickerCancelClick"
+                  @confirm="handlePickerConfirmClick">
+      </van-picker>
     </van-popup>
 
-    <van-popup v-model="showPoliticsPicker"
-               position="bottom"
-               :lazy-render="false">
-      <van-picker show-toolbar
-                  :columns="politicsColumns"
-                  value-key="label"
-                  @cancel="handlePoliticsCancelClick"
-                  @confirm="handlePoliticsConfirmClick"></van-picker>
-    </van-popup>
-
-    <van-popup v-model="showHighEducationPicker"
-               position="bottom"
-               :lazy-render="false">
-      <van-picker show-toolbar
-                  :columns="highEducationColumns"
-                  value-key="label"
-                  @cancel="handleHighEducationCancelClick"
-                  @confirm="handleHighEducationConfirmClick"></van-picker>
-    </van-popup>
-
-    <van-popup v-model="showTeacherTitle1"
-               position="bottom"
-               :lazy-render="false">
-      <van-picker show-toolbar
-                  :columns="title1Columns"
-                  value-key="label"
-                  @cancel="handleTeacherTitle1CancelClick"
-                  @confirm="handleTeacherTitle1ConfirmClick"></van-picker>
-    </van-popup>
-
-    <van-popup v-model="showTeacherTitle2"
-               position="bottom"
-               :lazy-render="false">
-      <van-picker show-toolbar
-                  :columns="title2Columns"
-                  value-key="label"
-                  @cancel="handleTeacherTitle2CancelClick"
-                  @confirm="handleTeacherTitle2ConfirmClick"></van-picker>
-    </van-popup>
-
-    <van-popup v-model="showJoinPartyPicker"
-               position="bottom"
-               :lazy-render="false">
+    <van-popup v-model="showDatePicker" position="bottom" :lazy-render="false">
       <van-datetime-picker
-        v-show="showJoinPartyPicker"
-        v-model="joinPartyTime"
+        v-model="dateTime"
         type="date"
-        @cancel="handleJoinPartyTimeCancel"
-        @confirm="handleJoinPartyTimeConfirm"
+        @cancel="handleDatePickerCancel"
+        @confirm="handleDatePickerConfirm"
+        :max-date="maxDate"
         :min-date="minDate">
       </van-datetime-picker>
     </van-popup>
 
-    <van-popup v-model="showTitleAcquire1"
-               position="bottom"
-               :lazy-render="false">
-      <van-datetime-picker
-        v-show="showTitleAcquire1"
-        v-model="teacherAcquireDate1"
-        type="date"
-        @cancel="handleTitleAcquire1Cancel"
-        @confirm="handleTitleAcquire1Confirm"
-        :min-date="minDate">
-      </van-datetime-picker>
-    </van-popup>
-
-    <van-popup v-model="showTitleAcquire2"
-               position="bottom"
-               :lazy-render="false">
-      <van-datetime-picker
-        v-show="showTitleAcquire2"
-        v-model="teacherAcquireDate2"
-        type="date"
-        @cancel="handleTitleAcquire2Cancel"
-        @confirm="handleTitleAcquire2Confirm"
-        :min-date="minDate">
-      </van-datetime-picker>
-    </van-popup>
   </div>
 </template>
 
@@ -141,34 +90,120 @@
     name: 'EditInfo',
     data () {
       return {
-        itemHeight: 60,
-        pickerItemHeight: 70,
-        joinPartyTime: new Date(),
-        teacherAcquireTime1: new Date(),
-        teacherAcquireDate1: new Date(),
-        teacherAcquireTime2: new Date(),
-        teacherAcquireDate2: new Date(),
         sexColumns: this.$enums.Sex.list,
         politicsColumns: this.$enums.PoliticsType.list,
-        title1Columns: this.$enums.TeacherTitleType.list,
-        title2Columns: this.$enums.TeacherTitleType.list,
+        titleColumns: this.$enums.TeacherTitleType.list,
         highEducationColumns: this.$enums.HighestEducation.list,
-        showSexPicker: false,
-        showPoliticsPicker: false,
-        showJoinPartyPicker: false,
-        showHighEducationPicker: false,
-        showTitleAcquire1: false,
-        showTitleAcquire2: false,
-        showTeacherTitle1: false,
-        showTeacherTitle2: false,
-        submitBtnTitle: '提交',
+        columns: [],
+        teacherAcquireTime1: null,
+        teacherAcquireTime2: null,
+        teacherAcquireDate1: new Date(),
+        teacherAcquireDate2: new Date(),
+        showPicker: false,
+        showDatePicker: false,
         teacherTitle1: null,
         teacherTitle2: null,
-        minDate: new Date(),
-        teacher: {}
+        minDate: new Date(1970, 1, 1),
+        maxDate: new Date(),
+        pickType: '',
+        dateTime: null,
+        teacher: {},
+        titleIndex: -1,
+        titleAcquireIndex: -1
       }
     },
     methods: {
+      handleSexClick () {
+        this.pickType = 'SEX'
+        this.columns = this.sexColumns
+        this.showPicker = true
+      },
+      handlePoliticsClick () {
+        this.pickType = 'POLITICS'
+        this.columns = this.politicsColumns
+        this.showPicker = true
+      },
+      handleHighEducationClick () {
+        this.pickType = 'HIGH_EDUCATION'
+        this.columns = this.highEducationColumns
+        this.showPicker = true
+      },
+      handlePickerCancelClick () {
+        this.pickType = ''
+        this.columns = []
+        this.showPicker = false
+      },
+      handleJoinPartyTime () {
+        this.pickType = 'JOIN_PARTY_DATE'
+        this.dateTime = this.teacher.joinPartyTime ? new Date(this.teacher.joinPartyTime) : new Date()
+        this.showDatePicker = true
+      },
+      handleTeacherTitleClick (index) {
+        this.titleIndex = index
+        this.pickType = 'TITLE' + index
+        this.columns = this.titleColumns
+        this.showPicker = true
+      },
+      handleTitleAcquireClick (index) {
+        this.titleAcquireIndex = index
+        this.pickType = 'TITLE_ACQUIRE_DATE' + index
+        this.dateTime = this.teacher.teacherTitleList[index].acquireTime ? new Date(this.teacher.teacherTitleList[index].acquireTime) : new Date()
+        this.showDatePicker = true
+      },
+      handleDatePickerCancel () {
+        this.pickType = ''
+        this.dateTime = null
+        this.showDatePicker = false
+      },
+      handleDatePickerConfirm () {
+        this.showDatePicker = false
+        switch (this.pickType) {
+          case 'JOIN_PARTY_DATE':
+            this.teacher.joinPartyTime = this.dateTime
+            break
+          case 'TITLE_ACQUIRE_DATE' + this.titleAcquireIndex:
+            this.teacher.teacherTitleList[this.titleAcquireIndex].acquireTime = this.dateTime
+            break
+        }
+        this.dateTime = null
+      },
+      handlePickerConfirmClick (item) {
+        this.showPicker = false
+        switch (this.pickType) {
+          case 'SEX':
+            this.teacher.sex = item.value
+            break
+          case 'POLITICS':
+            this.teacher.politicsStatus = item.value
+            break
+          case 'TITLE' + this.titleIndex:
+            this.teacher.teacherTitleList[this.titleIndex].title = item.value
+            this.titleIndex = -1
+            break
+          case 'HIGH_EDUCATION':
+            this.teacher.highestEducation = item.value
+            break
+        }
+        this.columns = []
+      },
+      handleAddClick () {
+        if (!this.teacher.teacherTitleList) {
+          this.teacher.teacherTitleList = []
+        }
+        this.teacher.teacherTitleList.push({
+          title: '',
+          acquireTime: null
+        })
+      },
+      handleDeleteClick (index) {
+        this.$dialog.confirm({
+          title: `是否删除该职称信息？`
+        }).then(() => {
+          this.teacher.teacherTitleList.splice(index, 1)
+        }, () => {
+          console.log('用户取消')
+        })
+      },
       getAge (strBirthday) {
         if (!strBirthday) {
           return '--'
@@ -217,87 +252,6 @@
         }
         return returnAge // 返回周岁年龄
       },
-      handleSexClick () {
-        this.showSexPicker = true
-      },
-      handleSexCancelClick () {
-        this.showSexPicker = false
-      },
-      handleSexConfirmClick (item) {
-        this.teacher.sex = item.value
-        this.showSexPicker = false
-      },
-      handlePoliticsClick () {
-        this.showPoliticsPicker = true
-      },
-      handlePoliticsCancelClick () {
-        this.showPoliticsPicker = false
-      },
-      handlePoliticsConfirmClick (item) {
-        this.teacher.politicsStatus = item.value
-        this.showPoliticsPicker = false
-      },
-      handleJoinPartyTime () {
-        this.joinPartyTime = this.teacher.joinPartyTime
-        this.showJoinPartyPicker = true
-      },
-      handleJoinPartyTimeCancel () {
-        this.showJoinPartyPicker = false
-      },
-      handleJoinPartyTimeConfirm () {
-        this.teacher.joinPartyTime = this.joinPartyTime.Format('yyyy-MM-dd 00:00:00')
-        this.showJoinPartyPicker = false
-      },
-      handleTeacherTitle1Click () {
-        this.showTeacherTitle1 = true
-      },
-      handleTeacherTitle1CancelClick () {
-        this.showTeacherTitle1 = false
-      },
-      handleTeacherTitle1ConfirmClick (item) {
-        this.teacherTitle1 = item.value
-        this.showTeacherTitle1 = false
-      },
-      handleTeacherTitle2Click () {
-        this.showTeacherTitle2 = true
-      },
-      handleTeacherTitle2CancelClick () {
-        this.showTeacherTitle2 = false
-      },
-      handleTeacherTitle2ConfirmClick (item) {
-        this.teacherTitle2 = item.value
-        this.showTeacherTitle2 = false
-      },
-      handleTitleAcquire1Click () {
-        this.showTitleAcquire1 = true
-      },
-      handleTitleAcquire1Cancel () {
-        this.showTitleAcquire1 = false
-      },
-      handleTitleAcquire1Confirm () {
-        this.teacherAcquireTime1 = this.teacherAcquireDate1
-        this.showTitleAcquire1 = false
-      },
-      handleTitleAcquire2Click () {
-        this.showTitleAcquire2 = true
-      },
-      handleTitleAcquire2Cancel () {
-        this.showTitleAcquire2 = false
-      },
-      handleTitleAcquire2Confirm () {
-        this.teacherAcquireTime2 = this.teacherAcquireDate2
-        this.showTitleAcquire2 = false
-      },
-      handleHighEducationClick () {
-        this.showHighEducationPicker = true
-      },
-      handleHighEducationCancelClick () {
-        this.showHighEducationPicker = false
-      },
-      handleHighEducationConfirmClick (item) {
-        this.teacher.highestEducation = item.value
-        this.showHighEducationPicker = false
-      },
       async handleSubmitClick () {
         if (!this.teacher.name || this.teacher.name.length === 0) {
           this.$toast.fail('请输入姓名')
@@ -307,33 +261,14 @@
           this.$toast.fail('请输入身份证号')
           return
         }
+        // if (this.idCardUtil.checkIdCard(this.teacher.idCard.length)) {
+        //   this.$toast.fail('身份证号不正确')
+        //   return
+        // }
         if (!this.teacher.phone || this.teacher.phone.length === 0) {
           this.$toast.fail('请输入联系电话')
           return
         }
-        // 拼接数据
-        this.teacher.teacherTitleList = []
-        if (this.teacherTitle1 && this.teacherTitle1.length > 0) {
-          if (!this.teacherAcquireTime1) {
-            this.$toast.fail('请选择职称1的评定时间')
-          } else {
-            this.teacher.teacherTitleList.push({
-              title: this.teacherTitle1,
-              acquireTime: this.teacherAcquireTime1.Format('yyyy-MM-dd 00:00:00')
-            })
-          }
-        }
-        if (this.teacherTitle2 && this.teacherTitle2.length > 0) {
-          if (!this.teacherAcquireTime2) {
-            this.$toast.fail('请选择职称2的评定时间')
-          } else {
-            this.teacher.teacherTitleList.push({
-              title: this.teacherTitle2,
-              acquireTime: this.teacherAcquireTime2.Format('yyyy-MM-dd 00:00:00')
-            })
-          }
-        }
-        // this.teacher.firstEducation = 'REGULAR_COLLEGE'
         await this.$api.teacher.updateTeacher(this.teacher)
         this.$toast.success('提交成功')
         this.$router.back()
@@ -342,6 +277,15 @@
     async created () {
       this.loading = true
       this.teacher = await this.$api.teacher.getTeacherDetail({})
+      if (this.teacher && this.teacher.teacherTitleList) {
+        if (this.teacher.teacherTitleList.length >= 1) {
+          this.teacherTitle1 = this.teacher.teacherTitleList[0].title
+          this.teacherAcquireTime1 = new Date(this.teacher.teacherTitleList[0].acquireTime)
+        } else if (this.teacher.teacherTitleList.length >= 2) {
+          this.teacherTitle2 = this.teacher.teacherTitleList[1].title
+          this.teacherAcquireTime2 = new Date(this.teacher.teacherTitleList[1].acquireTime)
+        }
+      }
       this.loading = false
     }
   }
@@ -350,6 +294,18 @@
 <style scoped lang="sass">
   .info-edit
     padding-bottom: $default-gap
-    .wrapper
-      height: calc(100vh - 80px)
+    margin-bottom: 70px
+    .icon-size
+      font-size: 18px
+    &-item
+      margin-top: 10px
+      &__del
+        top: 4px
+        right: 2px
+    &-sticky
+      margin-top: 10px
+      color: #24A197
+      &__add
+        top: 4px
+
 </style>

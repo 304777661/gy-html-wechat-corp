@@ -128,13 +128,13 @@
         /deep/ p
           line-height: 24px
         /deep/ table
-          border: 1px solid #cccccc
+          border: 1.2px solid #cccccc
           margin: 6px 0
           /deep/ tr
             padding: 8px
           /deep/ td
             min-width: 30vw
-            border: .5px solid #ccc
+            border: 1.2px solid #ccc
             text-align: center
             vertical-align: center
             padding: 8px
