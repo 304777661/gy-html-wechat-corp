@@ -1,42 +1,53 @@
-<!--会议室预约-选择人员-->
 <template>
   <div class="member">
-    <div class="member-selected">
-      <div class="member-selected-item" v-for="(item,index) in memberSelectedList" :key="index">
-        <img class="member-selected-item__avatar" :src="item.avatar | defaultAvatar">
-        <p class="member-selected-item__name">{{item.name}}</p>
-        <van-icon class="member-selected-item__delete icon-size" name="clear" @click="handleDeleteClick(index)">
-        </van-icon>
+    <div class="wrapper">
+      <div class="member-selected">
+        <div class="member-selected-item" v-for="(item,index) in memberSelectedList" :key="index">
+          <img class="member-selected-item__avatar" :src="item.avatar | defaultAvatar">
+          <p class="member-selected-item__name">{{item.name}}</p>
+          <van-icon class="member-selected-item__delete icon-size" name="clear" @click="handleDeleteClick(index)">
+          </van-icon>
+        </div>
+        <div class="member-selected-line"></div>
+        <p class="member-selected-empty" v-show="!memberSelectedList || memberSelectedList.length===0">选择的人员将显示在这里</p>
       </div>
-      <div class="member-selected-line"></div>
-      <p class="member-selected-empty" v-show="!memberSelectedList || memberSelectedList.length===0">选择的人员将显示在这里</p>
-    </div>
 
-    <van-cell-group>
-      <van-cell class="member-item"
-                v-for="(item,index) in organList" :key="index"
-                :is-link="item.addressBookType === 'ORG'"
-                @click="handleItemClick(item,index)">
+      <van-cell @click="handleBackClick">
         <template slot="title">
-          <img v-if="item.addressBookType === 'BACK'"
-               class="member-item-icon"
-               src="../../../assets/images/back.png"/>
-          <img v-else-if="item.addressBookType === 'ORG'"
-               class="member-item-icon"
-               src="../../../assets/images/dept.png"/>
-          <img v-else class="member-item-icon"
-               :src="item.avatar | defaultAvatar"/>
-          <span class="member-item-title">{{item.name}}</span>
+          <img class="member-item-icon" src="../../../assets/images/back.png"/>
+          <span class="member-item-title">返回上一级</span>
         </template>
-        <van-icon class="member-item-radio"
-                  v-if="item.addressBookType === 'USER'"
-                  :name="item.isSelected ? 'checked' : 'check'"
-                  :color="item.isSelected ? '#108EE9' : '#CFCFCF'">
-        </van-icon>
       </van-cell>
-    </van-cell-group>
+      <van-cell icon="check" @click="handleAllCheckClick" title="全选" color="#ccc">
 
-    <my-loading v-model="loading"></my-loading>
+      </van-cell>
+
+      <van-cell-group>
+        <van-cell class="member-item"
+                  v-for="(item,index) in organList" :key="index"
+                  :is-link="item.addressBookType === 'ORG'"
+                  @click="handleItemClick(item,index)">
+          <template slot="title">
+            <img v-if="item.addressBookType === 'BACK'"
+                 class="member-item-icon"
+                 src="../../../assets/images/back.png"/>
+            <img v-else-if="item.addressBookType === 'ORG'"
+                 class="member-item-icon"
+                 src="../../../assets/images/dept.png"/>
+            <img v-else class="member-item-icon"
+                 :src="item.avatar | defaultAvatar"/>
+            <span class="member-item-title">{{item.name}}</span>
+          </template>
+          <van-icon class="member-item-radio"
+                    v-if="item.addressBookType === 'USER'"
+                    :name="item.isSelected ? 'checked' : 'check'"
+                    :color="item.isSelected ? '#108EE9' : '#CFCFCF'">
+          </van-icon>
+        </van-cell>
+      </van-cell-group>
+
+      <my-loading v-model="loading"></my-loading>
+    </div>
     <div class="member-additional">
       <span class="member-additional-count"> 已选择：{{memberSelectedList.length}}人</span>
       <div class="member-additional-btn" @click="handleOkClick">
@@ -107,10 +118,9 @@
           title: `是否删除${this.memberSelectedList[index].name}？`
         }).then(() => {
           let deletedItem = this.memberSelectedList.splice(index, 1)
-          console.log(deletedItem)
           for (let i = 0; i < this.organList.length; i++) {
             let item = this.organList[i]
-            if (this.isUser(item) && item.id === deletedItem.id) {
+            if (this.isUser(item) && item.id === deletedItem[0].id) {
               item.isSelected = false
               this.$set(this.organList, i, item)
               break
@@ -144,6 +154,12 @@
         }
         this.organList = data
         this.loading = false
+      },
+      handleBackClick () {
+        // todo
+      },
+      handleAllCheckClick () {
+        // todo
       }
     },
     async created () {
@@ -161,6 +177,8 @@
 <style scoped lang="sass">
   .member
     position: relative
+    .wrapper
+      margin-bottom: 80px
     .icon-size
       font-size: 15px
     &-item
@@ -168,7 +186,7 @@
       &-icon
         width: 16px
         height: 16px
-        margin-right: 4px
+        margin-right: 2px
       &-title
         line-height: 24px
         &-radio

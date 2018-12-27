@@ -15,7 +15,7 @@
         </span>
       </div>
     </div>
-
+    <my-loading v-model="loading"/>
     <no-data v-show="!loading && !salary"></no-data>
     <div v-if="salary !== null">
       <van-cell title="基本工资" :value="salary.salaryBase | rmb"></van-cell>
@@ -32,7 +32,8 @@
         <van-cell :title="item.salaryTemplateName" :value="item.salaryValue | rmb"></van-cell>
       </div>
       <div class="van-hairline--bottom"></div>
-      <!--<van-cell title="实发数" value="0.00元" class="salary-final"/>-->
+      <van-cell title="应发数" :value="salary.salaryShould | rmb" class="salary-should"></van-cell>
+      <van-cell title="实发数" :value="salary.salaryReality | rmb" class="salary-reality"></van-cell>
     </div>
   </div>
 </template>
@@ -76,7 +77,7 @@
       }
     },
     async created () {
-      this.loadData()
+      await this.loadData()
     }
   }
 </script>
@@ -104,7 +105,9 @@
         &:last-child
           border-bottom-left-radius: 4px
           border-bottom-right-radius: 4px
-    &-final
+    &-should
+      margin-top: 10px
+    &-reality
       color: #24A197
     &-header
       height: 100px

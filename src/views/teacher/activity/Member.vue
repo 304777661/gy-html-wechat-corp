@@ -68,7 +68,7 @@
               this.memberSelectedList.push(item)
             }
           } else {
-            if (hasIndex > 0) {
+            if (hasIndex >= 0) {
               this.memberSelectedList.splice(hasIndex, 1)
             }
           }
@@ -99,7 +99,6 @@
           return
         }
         this.$eventBus.$emit('memberSelectedEvent', this.memberSelectedList)
-        console.log(this.memberSelectedList)
         this.$router.back()
       },
       handleDeleteClick (index) {
@@ -108,8 +107,7 @@
         }).then(() => {
           let deletedItem = this.memberSelectedList.splice(index, 1)
           for (let i = 0; i < this.organList.length; i++) {
-            let item = this.organList[i]
-            if (this.isUser(item) && item.id === deletedItem.id) {
+            if (this.isUser(item) && item.id === deletedItem[0].id) {
               item.isSelected = false
               this.$set(this.organList, i, item)
               break

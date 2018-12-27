@@ -9,13 +9,7 @@
         <span>{{meeting.memberCount}}人</span>
       </van-cell>
     </van-cell-group>
-    <div class="meeting-detail-member van-hairline--top">
-      <div class="meeting-detail-member-person" v-for="(member,index) in meeting.memberList" :key="index">
-        <img :src="member.avatar | defaultAvatar">
-        <p>{{member.name}}</p>
-      </div>
-    </div>
-
+    <select-member :canAdd="false" :canDelete="false" :memberList="meeting.memberList"></select-member>
   </div>
 </template>
 

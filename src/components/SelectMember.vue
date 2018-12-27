@@ -9,7 +9,7 @@
     </div>
     <div class="select-member-item">
       <van-icon v-if="canAdd" name="add-o" class="icon-size-add" color="#ccc" @click="handleAddClick"></van-icon>
-      <p></p>
+      <p>&nbsp;&nbsp;</p>
     </div>
   </div>
 </template>
@@ -65,6 +65,9 @@
     &-item
       padding: 2px 10px 2px 8px
       position: relative
+      width: 70px
+      @include ver-center-center
+      min-width: 0
       img
         @include circle(40px)
       p

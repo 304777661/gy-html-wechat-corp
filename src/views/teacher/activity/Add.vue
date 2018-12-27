@@ -69,8 +69,6 @@
         showPopup: false,
         showDatePicker: false,
         showTeachGroupPicker: false,
-        popupItemHeight: 60,
-        itemHeight: 70,
         textAreaSize: {
           minHeight: 200
         },
@@ -98,11 +96,10 @@
         this.showTeachGroupPicker = false
       },
       handleTeacherGroupConfirm (item) {
-        console.log(item.tag)
         this.orgId = item.tag
         let index = this.teachGroupList.findIndex(teachGroupItem => teachGroupItem.value === item.value)
         this.curTeachGroup = this.teachGroupList[index]
-        this.columns = this.teachGroupList[index].map(item => {
+        this.columns = this.teachGroupList[index].children.map(item => {
           return {
             label: item.label,
             value: item.value,
@@ -149,6 +146,8 @@
         this.memberList.map(item => {
           this.activity.teacherList.push(item.id)
         })
+        // 组织机构Id
+        this.activity.teachGroupId = this.orgId
         // 附件
         if (this.imageList && this.imageList.length > 0) {
           this.activity.attachmentList = []
@@ -164,8 +163,8 @@
         this.$router.back()
       },
       handleGradeConfirm (item) {
-        this.showPopup = false
         this.curGrade = item
+        this.showPopup = false
       },
       handleGradeCancel () {
         this.showPopup = false
@@ -184,6 +183,10 @@
         this.showDatePicker = false
       },
       handleAddMemberClick () {
+        if (!this.orgId) {
+          this.$toast.fail('请选择教研组')
+          return
+        }
         sessionStorage.setItem('MEETING_MEMBER', JSON.stringify(this.memberList))
         this.$router.push(`/teacher/activity/member?orgId=${this.orgId}`)
       },
@@ -194,15 +197,19 @@
       },
       isTeachGroup () {
         return this.typeId === 0 || this.typeId === '0'
+      },
+      getActivityType () {
+        return this.isTeachGroup() ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS'
       }
     },
     async created () {
-      this.activity.activityType = this.isTeachGroup() ? 'ACTIVITY_TEACH_GROUP' : 'ACTIVITY_PREPARE_LESSONS'
+      this.activity.activityType = this.getActivityType()
       this.activity.activityDate = this.selectDate.Format('yyyy-MM-dd 00:00:00')
-      this.teachGroupList = this.$api.teacher.queryTeachGroupListWithUser({})
+      this.teachGroupList = await this.$api.teacher.queryTeachGroupListWithUser({'activityType': this.getActivityType()})
 
       if (this.teachGroupList && this.teachGroupList.length > 0) {
         this.curTeachGroup = this.teachGroupList[0]
+        this.orgId = this.teachGroupList[0].tag
         this.teacherGroupColumns = this.teachGroupList.map(item => {
           return {
             label: item.label,

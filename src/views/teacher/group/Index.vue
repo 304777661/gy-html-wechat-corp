@@ -127,6 +127,7 @@
         border: .5px solid $gray-light
         width: $imgWidth
         height: $imgWidth
+        overflow: hidden
         margin-right: 8px
         @include hor-center-center
         border-radius: 4px

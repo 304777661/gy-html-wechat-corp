@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/corp-api': {
-        target: 'https://gy-dev.yun-chang.cn/',
+        target: 'https://gy-test.yun-chang.cn/',
         changeOrigin: true,
         pathRewrite: {
           '^corp-api': 'corp-api'

@@ -262,8 +262,8 @@
         }
       },
       onChange (picker, values) {
-        let curGrade = this.gradeList.find(item => item.gradeId === values[0].value)
-        if (curGrade && curGrade.children && curGrade.children.length > 0) {
+        let curGrade = this.gradeList.find(item => item.value === values[0].value)
+        if (curGrade && curGrade.children) {
           this.columns[1].values = curGrade.children.map(item => {
             return {
               label: item.label,
@@ -278,11 +278,11 @@
       },
       async onConfirm (value, index) {
         this.showPopup = false
-        if (!this.gradeList[index[0]]) {
+        if (!value[0]) {
           this.$toast.fail('年级数据错误')
           return
         }
-        if (!this.curGrade.children || !this.curGrade.children[index[1]]) {
+        if (!value[1]) {
           this.$toast.fail('班级数据错误')
           return
         }
