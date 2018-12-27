@@ -143,7 +143,7 @@
         if (this.isStaff()) {
           this.sectionContent = this.curDate.Format('yyyy年MM月')
         } else {
-          this.sectionContent = this.curTerm.name
+          this.sectionContent = this.curTerm.termName
         }
       },
       async handlePreviousClick () {
@@ -152,7 +152,7 @@
           this.updateSectionContent()
         } else {
           // 上个学期
-          const index = this.termList.findIndex(term => term.id === this.curTerm.id)
+          const index = this.termList.findIndex(term => term.schoolTermId === this.curTerm.schoolTermId)
           const preIndex = index - 1
           if (preIndex < 0) {
             this.$toast.fail('没有更多数据')
@@ -174,7 +174,7 @@
           this.updateSectionContent()
         } else {
           // 下个学期
-          const index = this.termList.findIndex(term => term.id === this.curTerm.id)
+          const index = this.termList.findIndex(term => term.schoolTermId === this.curTerm.schoolTermId)
           const nextIndex = index + 1
           if (nextIndex >= this.termList.length) {
             this.$toast.fail('没有更多数据')
@@ -191,9 +191,9 @@
       async loadData () {
         this.loading = true
         if (this.curTabIndex === 0) {
-          this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.id})
+          this.teacherPerformance = await this.$api.teacher.getAssessTeacherPerformance({'termId': this.curTerm.schoolTermId})
         } else if (this.curTabIndex === 1) {
-          this.teacherAssess = await this.$api.teacher.getAssessTeacher({'termId': this.curTerm.id})
+          this.teacherAssess = await this.$api.teacher.getAssessTeacher({'termId': this.curTerm.schoolTermId})
         } else if (this.curTabIndex === 2) {
           this.staffPerformance = await this.$api.teacher.queryAssessStaff({'month': this.curDate.Format('yyyy-MM-dd 00:00:00')})
         }
@@ -204,8 +204,13 @@
       this.loading = true
       this.termList = await this.$api.teacher.querySchoolTermList({})
       if (this.termList && this.termList.length > 0) {
-        this.curTerm = this.termList[0]
-        this.sectionContent = this.curTerm.name
+        let index = this.termList.findIndex(item => item.isDefault === 'YES')
+        if (index < 0) {
+          this.curTerm = this.termList[this.termList.length - 1]
+        } else {
+          this.curTerm = this.termList[index]
+        }
+        this.sectionContent = this.curTerm.termName
       }
       await this.loadData()
       this.loading = false

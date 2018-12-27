@@ -147,8 +147,8 @@
       if (this.termList && this.termList.length > 0) {
         this.termColumns = this.termList.map(item => {
           return {
-            label: item.name,
-            value: item.id,
+            label: item.termName,
+            value: item.schoolTermId,
           }
         })
       }

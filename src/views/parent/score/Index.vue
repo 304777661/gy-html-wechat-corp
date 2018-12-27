@@ -97,14 +97,22 @@
       // 查询学期列表
       this.termList = await this.$api.teacher.querySchoolTermList({})
       if (this.termList && this.termList.length > 0) {
-        this.curTerm = {
-          id: this.termList[0].id,
-          name: this.termList[0].name
+        let index = this.termList.findIndex(item => item.isDefault === 'YES')
+        if (index < 0) {
+          this.curTerm = {
+            id: this.termList[this.termList.length - 1].schoolTermId,
+            name: this.termList[this.termList.length - 1].termName
+          }
+        } else {
+          this.curTerm = {
+            id: this.termList[index].schoolTermId,
+            name: this.termList[index].termName
+          }
         }
         this.termColumns = this.termList.map(item => {
           return {
-            label: item.name,
-            value: item.id,
+            label: item.termName,
+            value: item.schoolTermId,
           }
         })
       }
@@ -175,6 +183,7 @@
         color: $white
         flex: 1
         @include hor-center-center
+        text-align: center
         span
           &:first-child
             margin-right: 6px

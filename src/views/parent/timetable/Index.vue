@@ -1,6 +1,6 @@
 <template>
   <div class="timetable">
-    <section-picker :content="curTerm.name" @previousClick="handlePreviousClick()"
+    <section-picker :content="curTerm.termName" @previousClick="handlePreviousClick()"
                     @nextClick="handleNextClick()"></section-picker>
 
     <no-data v-show="!loading && !courseList.length"/>
@@ -65,9 +65,15 @@
       this.loading = true
       // 查学期
       this.termList = await this.$api.teacher.querySchoolTermList({})
-      if (this.termList) {
-        this.curTermIndex = this.termList.length - 1
-        this.curTerm = this.termList[this.curTermIndex]
+      if (this.termList && this.termList.length > 0) {
+        let index = this.termList.findIndex(item => item.isDefault === 'YES')
+        if (index < 0) {
+          this.curTermIndex = this.termList.length - 1
+          this.curTerm = this.termList[this.curTermIndex]
+        } else {
+          this.curTermIndex = index
+          this.curTerm = this.termList[index]
+        }
         await this.loadData()
       }
       this.loading = false
@@ -154,7 +160,7 @@
           this.$toast.fail('学期数据错误')
           return
         }
-        this.sectionList = await this.$api.parent.parentTimetable({'termId': this.curTerm.id})
+        this.sectionList = await this.$api.parent.parentTimetable({'termId': this.curTerm.schoolTermId})
         // 处理课程
         this.courseList = new Array(this.sections.length) //9节课
         for (let i = 0; i < this.courseList.length; i++) {

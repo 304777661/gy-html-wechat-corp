@@ -249,16 +249,22 @@
       // 学期
       this.termList = await this.$api.teacher.querySchoolTermList({})
       if (this.termList && this.termList.length > 0) {
-        this.curTerm.label = this.termList[0].name
-        this.curTerm.value = this.termList[0].id
+        let index = this.termList.findIndex(item => item.isDefault === 'YES')
+        if (index < 0) {
+          this.curTerm.label = this.termList[this.termList.length - 1].termName
+          this.curTerm.value = this.termList[this.termList.length - 1].schoolTermId
+        } else {
+          this.curTerm.label = this.termList[index].termName
+          this.curTerm.value = this.termList[index].schoolTermId
+        }
         this.termColumns = this.termList.map(item => {
           return {
-            label: item.name,
-            value: item.id
+            label: item.termName,
+            value: item.schoolTermId
           }
         })
         // 周次
-        this.weekList = await this.$api.teacher.querySchoolTermWeekList({'id': this.curTerm.id})
+        this.weekList = await this.$api.teacher.querySchoolTermWeekList({'id': this.curTerm.value})
         if (this.weekList && this.weekList.length > 0) {
           this.curWeek.label = this.weekList[0].weekDesc
           this.curWeek.value = this.weekList[0].id
@@ -295,6 +301,7 @@
       @include hor-center-center
       &__item
         color: $white
+        text-align: center
         flex: 1
         @include hor-center-center
         span

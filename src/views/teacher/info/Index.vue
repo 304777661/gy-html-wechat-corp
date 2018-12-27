@@ -147,7 +147,7 @@
       },
       handleAddClick () {
         if (this.curTabIndex === 1) {
-          this.$router.push(`/teacher/info/resume/edit/-1`)
+          this.$router.push(`/teacher/info/resume/edit?index=-1`)
         } else if (this.curTabIndex === 2) {
           this.$router.push(`/teacher/info/prize/add`)
         }
