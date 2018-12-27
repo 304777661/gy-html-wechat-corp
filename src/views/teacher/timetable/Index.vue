@@ -73,27 +73,17 @@
         this.curTerm = this.termList[this.curTermIndex]
         await this.loadData()
       }
-      // 处理课程
-      this.courseList = new Array(this.sections.length) //9节课
-      for (let i = 0; i < this.courseList.length; i++) {
-        this.courseList[i] = new Array(this.weekList.length)
-        for (let j = 0; j < this.courseList[i].length; j++) {
-          this.courseList[i][j] = {}
-        }
-      }
 
-      for (let i = 0; i < this.sectionList.length; i++) {
-        const course = this.sectionList[i]
-        let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
-        let weekIndex = this.weekList.indexOf(course.dayOfWeek)
-        if (sectionIndex > -1 && weekIndex > -1) {
-          this.courseList[sectionIndex][weekIndex] = course
-        }
-      }
       this.loading = false
     },
     methods: {
       generateColorAndBgColor (timetable) {
+        if (!timetable || timetable.length <= 0) {
+          return {
+            color: '#F8FAFC',
+            backgroundColor: '#F8FAFC'
+          }
+        }
         switch (timetable) {
           case '语文':
             return {
@@ -127,14 +117,10 @@
               backgroundColor: '#efe0c6'
             }
           case '化学':
+          case '物理':
             return {
               color: '#2ab0c4',
               backgroundColor: '#b7ebfe'
-            }
-          case '物理':
-            return {
-              color: '#',
-              backgroundColor: '#'
             }
           case '音乐':
             return {
@@ -142,34 +128,30 @@
               backgroundColor: '#bdf0b6'
             }
           case '体育':
+          default:
             return {
               color: '#718180',
               backgroundColor: '#d0dbe0'
             }
-          default:
-            return {
-              color: '#F8FAFC',
-              backgroundColor: '#F8FAFC'
-            }
         }
       },
-      handlePreviousClick () {
+      async handlePreviousClick () {
         if (this.curTermIndex - 1 < 0) {
           this.$toast.fail('已无其他学期')
           return
         }
         this.curTermIndex--
         this.curTerm = this.termList[this.curTermIndex]
-        this.loadData()
+        await this.loadData()
       },
-      handleNextClick () {
+      async handleNextClick () {
         if (this.curTermIndex + 1 >= this.termList.length) {
           this.$toast.fail('已是最新的学期')
           return
         }
         this.curTermIndex++
         this.curTerm = this.termList[this.curTermIndex]
-        this.loadData()
+        await this.loadData()
       },
       goAll () {
         this.$router.push(`/teacher/timetable/class`)
@@ -180,6 +162,24 @@
           return
         }
         this.sectionList = await this.$api.teacher.queryTeacherTimetableList({'termId': this.curTerm.id})
+        // 处理课程
+        this.courseList = new Array(this.sections.length) //9节课
+        for (let i = 0; i < this.courseList.length; i++) {
+          this.courseList[i] = new Array(this.weekList.length)
+          for (let j = 0; j < this.courseList[i].length; j++) {
+            this.courseList[i][j] = {}
+          }
+        }
+
+        for (let i = 0; i < this.sectionList.length; i++) {
+          const course = this.sectionList[i]
+          let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
+          let weekIndex = this.weekList.indexOf(course.dayOfWeek)
+          if (sectionIndex > -1 && weekIndex > -1) {
+            this.courseList[sectionIndex][weekIndex] = course
+          }
+        }
+        console.log(this.courseList)
       },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0

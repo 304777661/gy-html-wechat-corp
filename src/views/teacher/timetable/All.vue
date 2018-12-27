@@ -137,27 +137,16 @@
         this.curTerm = this.termList[this.curTermIndex]
         await this.loadData()
       }
-
-      this.courseList = new Array(this.sections.length)
-      for (let i = 0; i < this.courseList.length; i++) {
-        this.courseList[i] = new Array(this.weekList.length)
-        for (let j = 0; j < this.courseList[i].length; j++) {
-          this.courseList[i][j] = {}
-        }
-      }
-
-      for (let i = 0; i < this.sectionList.length; i++) {
-        const course = this.sectionList[i]
-        let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
-        let weekIndex = this.weekList.indexOf(course.dayOfWeek)
-        if (sectionIndex > -1 && weekIndex > -1) {
-          this.courseList[sectionIndex][weekIndex] = course
-        }
-      }
       this.loading = false
     },
     methods: {
       generateColorAndBgColor (classTable) {
+        if (!classTable || classTable.length <= 0) {
+          return {
+            color: '#F8FAFC',
+            backgroundColor: '#F8FAFC'
+          }
+        }
         switch (classTable) {
           case '语文':
             return {
@@ -206,14 +195,10 @@
               backgroundColor: '#bdf0b6'
             }
           case '体育':
+          default:
             return {
               color: '#718180',
               backgroundColor: '#d0dbe0'
-            }
-          default:
-            return {
-              color: '#F8FAFC',
-              backgroundColor: '#F8FAFC'
             }
         }
       },
@@ -224,7 +209,7 @@
         }
         this.curTermIndex--
         this.curTerm = this.termList[this.curTermIndex]
-        this.loadData()
+        await this.loadData()
       },
       async handleNextClick () {
         if (this.curTermIndex + 1 >= this.termList.length) {
@@ -233,7 +218,7 @@
         }
         this.curTermIndex++
         this.curTerm = this.termList[this.curTermIndex]
-        this.loadData()
+        await this.loadData()
       },
       goTeacherTimeTable () {
         this.$router.push(`/teacher/timetable`)
@@ -252,6 +237,22 @@
           classId: this.curClass.value
         }
         this.sectionList = await this.$api.teacher.queryClassTimetable(query)
+        this.courseList = new Array(this.sections.length)
+        for (let i = 0; i < this.courseList.length; i++) {
+          this.courseList[i] = new Array(this.weekList.length)
+          for (let j = 0; j < this.courseList[i].length; j++) {
+            this.courseList[i][j] = {}
+          }
+        }
+
+        for (let i = 0; i < this.sectionList.length; i++) {
+          const course = this.sectionList[i]
+          let sectionIndex = this.sections.indexOf(course.sectionName.substr(1, 1))
+          let weekIndex = this.weekList.indexOf(course.dayOfWeek)
+          if (sectionIndex > -1 && weekIndex > -1) {
+            this.courseList[sectionIndex][weekIndex] = course
+          }
+        }
       },
       showEvenCourse (course) {
         return course && course.courseIdEven > 0
@@ -288,7 +289,7 @@
         }
         this.curGrade = this.gradeList[index[0]]
         this.curClass = this.curGrade.children[index[1]]
-        this.loadData()
+        await this.loadData()
       },
     }
   }

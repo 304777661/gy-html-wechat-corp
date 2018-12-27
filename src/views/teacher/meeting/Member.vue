@@ -11,16 +11,20 @@
         <div class="member-selected-line"></div>
         <p class="member-selected-empty" v-show="!memberSelectedList || memberSelectedList.length===0">选择的人员将显示在这里</p>
       </div>
-
-      <van-cell @click="handleBackClick">
-        <template slot="title">
-          <img class="member-item-icon" src="../../../assets/images/back.png"/>
-          <span class="member-item-title">返回上一级</span>
-        </template>
-      </van-cell>
-      <van-cell icon="check" @click="handleAllCheckClick" title="全选" color="#ccc">
-
-      </van-cell>
+      <van-cell-group>
+        <van-cell :icon="checkIcon" class="all-check"
+                  :class="checkIcon === 'checked' ? 'all-check-active':'all-check-inactive'"
+                  @click="handleAllCheckClick" title="全选" color="#ccc">
+        </van-cell>
+      </van-cell-group>
+      <van-cell-group>
+        <van-cell @click="handleBackClick" v-if="stepStack.length > 0">
+          <template slot="title">
+            <img class="member-item-icon" src="../../../assets/images/back.png"/>
+            <span class="member-item-title">返回上一级</span>
+          </template>
+        </van-cell>
+      </van-cell-group>
 
       <van-cell-group>
         <van-cell class="member-item"
@@ -66,7 +70,8 @@
         orgId: 0,
         stepStack: [],
         organList: [],
-        memberSelectedList: []
+        memberSelectedList: [],
+        checkIcon: 'check'
       }
     },
     methods: {
@@ -76,23 +81,47 @@
           let hasIndex = this.memberSelectedList.findIndex(member => member.id === item.id)
           if (item.isSelected) {
             if (hasIndex < 0) {
+              // 已选择列表里面没有此人
               this.memberSelectedList.push(item)
             }
           } else {
-            if (hasIndex > 0) {
+            if (hasIndex >= 0) {
               this.memberSelectedList.splice(hasIndex, 1)
             }
           }
           this.$set(this.organList, index, item)
+          this.judgeAllCheck()
         } else {
           if (this.isOrgan(item)) {
             this.stepStack.push(this.orgId)
           }
-          if (this.isBack(item)) {
-            this.stepStack.splice(this.stepStack.length - 1, 1)
-          }
           this.orgId = item.id
           await this.loadData()
+          this.judgeAllCheck()
+        }
+      },
+      judgeAllCheck () {
+        // 更新全选状态
+        let hasUser = false
+        let hasUnChecked = false
+        for (let i = 0; i < this.organList.length; i++) {
+          let item = this.organList[i]
+          if (this.isUser(item)) {
+            hasUser = true
+            if (!item.isSelected) {
+              hasUnChecked = true
+              break
+            }
+          }
+        }
+        if (!hasUser) {
+          this.checkIcon = 'check'
+        } else {
+          if (!hasUnChecked) {
+            this.checkIcon = 'checked'
+          } else {
+            this.checkIcon = 'check'
+          }
         }
       },
       isOrgan (item) {
@@ -101,31 +130,28 @@
       isUser (item) {
         return item && item.addressBookType === 'USER'
       },
-      isBack (item) {
-        return item && item.addressBookType === 'BACK'
-      },
       handleOkClick () {
         if (this.memberSelectedList.length === 0) {
           this.$toast.fail('至少选择一人')
           return
         }
         this.$eventBus.$emit('memberSelectedEvent', this.memberSelectedList)
-        console.log(this.memberSelectedList)
         this.$router.back()
       },
       handleDeleteClick (index) {
         this.$dialog.confirm({
           title: `是否删除${this.memberSelectedList[index].name}？`
         }).then(() => {
-          let deletedItem = this.memberSelectedList.splice(index, 1)
+          let deletedItems = this.memberSelectedList.splice(index, 1)
           for (let i = 0; i < this.organList.length; i++) {
             let item = this.organList[i]
-            if (this.isUser(item) && item.id === deletedItem[0].id) {
+            if (this.isUser(item) && item.id === deletedItems[0].id) {
               item.isSelected = false
               this.$set(this.organList, i, item)
               break
             }
           }
+          this.judgeAllCheck()
         }, () => {
           console.log('用户取消')
         })
@@ -133,14 +159,6 @@
       async loadData () {
         this.loading = true
         let data = await this.$api.teacher.queryAddressBookItemListByOrgId({'orgId': this.orgId})
-        if (this.stepStack.length > 0) {
-          data.splice(0, 0, {
-            addressBookType: 'BACK',
-            avatar: null,
-            id: this.stepStack[this.stepStack.length - 1],
-            name: '返回上一级'
-          })
-        }
         // 和当前选中的人员比较，是否选中
         for (let i = 0; i < data.length; i++) {
           if (this.isUser(data[i])) {
@@ -155,11 +173,50 @@
         this.organList = data
         this.loading = false
       },
-      handleBackClick () {
-        // todo
+      // 返回上一级
+      async handleBackClick () {
+        this.orgId = this.stepStack[this.stepStack.length - 1]
+        await this.loadData()
+        this.stepStack.splice(this.stepStack.length - 1, 1)
+        this.judgeAllCheck()
       },
+      // 全选
       handleAllCheckClick () {
-        // todo
+        // 判断是否有可以全选的用户
+        let hasUser = false
+        for (let i = 0; i < this.organList.length; i++) {
+          if (this.isUser(this.organList[i])) {
+            hasUser = true
+            break
+          }
+        }
+        if (!hasUser) {
+          this.$toast.fail('当前部门没有可选择的人')
+          return
+        }
+        if (this.checkIcon === 'check') {
+          this.checkIcon = 'checked'
+          this.organList.map(item => {
+            if (this.isUser(item)) {
+              item.isSelected = true
+              let hasSelectedIndex = this.memberSelectedList.findIndex(member => member.id === item.id)
+              if (hasSelectedIndex < 0) {
+                this.memberSelectedList.push(item)
+              }
+            }
+          })
+        } else {
+          this.checkIcon = 'check'
+          this.organList.map(item => {
+            if (this.isUser(item)) {
+              item.isSelected = false
+              let hasSelectedIndex = this.memberSelectedList.findIndex(member => member.id === item.id)
+              if (hasSelectedIndex >= 0) {
+                this.memberSelectedList.splice(hasSelectedIndex, 1)
+              }
+            }
+          })
+        }
       }
     },
     async created () {
@@ -170,6 +227,7 @@
         })
       }
       await this.loadData()
+      this.judgeAllCheck()
     }
   }
 </script>
@@ -177,6 +235,15 @@
 <style scoped lang="sass">
   .member
     position: relative
+    .all-check
+      /deep/ .van-cell__left-icon
+        margin-right: 8px
+      &-active
+        /deep/ .van-cell__left-icon
+          color: $dark-blue
+      &-inactive
+        /deep/ .van-cell__left-icon
+          color: #cccccc
     .wrapper
       margin-bottom: 80px
     .icon-size
@@ -186,7 +253,7 @@
       &-icon
         width: 16px
         height: 16px
-        margin-right: 2px
+        margin-right: 4px
       &-title
         line-height: 24px
         &-radio
@@ -198,6 +265,7 @@
       overflow-scrolling: touch
       height: 60px
       padding-top: 5px
+      padding-left: 4px
       margin-bottom: 10px
       &::-webkit-scrollbar
         display: none
@@ -240,6 +308,7 @@
       right: 0
       bottom: 0
       height: $additional-height
+      display: flex
       @include hor-start-center
       &-count
         flex: 1
