@@ -147,7 +147,7 @@
           this.activity.teacherList.push(item.id)
         })
         // 组织机构Id
-        this.activity.teachGroupId = this.orgId
+        this.activity.teachGroupId = this.curTeachGroup.value
         // 附件
         if (this.imageList && this.imageList.length > 0) {
           this.activity.attachmentList = []

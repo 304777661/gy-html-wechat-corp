@@ -92,8 +92,27 @@
     }
   }
 </script>
-
-<style scoped lang="sass">
+<style lang="sass">
+  .detail-main-content
+    padding: 10px 14px
+    img
+      width: 100%
+      max-width: 100%
+      margin: 4px 0
+    p
+      line-height: 24px
+    table
+      border: 1px solid #cccccc
+      margin: 6px 0
+      tr
+        padding: 8px
+      td
+        min-width: 30vw
+        border: 1px solid #cccccc
+        text-align: center
+        padding: 8px
+</style>
+<style lang="sass" scoped>
   .detail
     margin-bottom: $default-gap
     overflow-x: scroll
@@ -119,25 +138,6 @@
         line-height: 18px
         color: #ccc
         @include hor-between-center
-      &-content
-        padding: 10px 14px
-        /deep/ img
-          width: 100%
-          max-width: 100%
-          margin: 4px 0
-        /deep/ p
-          line-height: 24px
-        /deep/ table
-          border: 1px solid #cccccc
-          margin: 6px 0
-          /deep/ tr
-            padding: 8px
-          /deep/ td
-            min-width: 30vw
-            border: 1px solid #cccccc
-            text-align: center
-            vertical-align: center
-            padding: 8px
     &-attachment
       &-divider
         height: 10px
