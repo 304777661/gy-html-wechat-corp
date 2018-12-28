@@ -99,6 +99,7 @@ Vue.prototype.$eventBus = new Vue()
 Vue.prototype.$toast = Toast
 Vue.prototype.$enums = enums
 Vue.prototype.$config = config
+Vue.prototype.$idCardUtil = idCardUtil
 Vue.prototype.$api = {
   teacher: teacherApi,
   parent: parentApi

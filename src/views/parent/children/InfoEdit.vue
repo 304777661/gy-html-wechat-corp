@@ -106,7 +106,7 @@
           this.$toast.fail('请输入身份证号')
           return
         }
-        // if (this.idCardUtil.checkIdCard(this.child.idCard.length)) {
+        // if (!this.$idCardUtil.checkIdCard(this.child.idCard)) {
         //   this.$toast.fail('身份证号不正确')
         //   return
         // }

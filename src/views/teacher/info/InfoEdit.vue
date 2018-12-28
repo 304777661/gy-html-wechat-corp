@@ -261,7 +261,7 @@
           this.$toast.fail('请输入身份证号')
           return
         }
-        // if (this.idCardUtil.checkIdCard(this.teacher.idCard.length)) {
+        // if (!this.$idCardUtil.checkIdCard(this.teacher.idCard)) {
         //   this.$toast.fail('身份证号不正确')
         //   return
         // }
