@@ -172,7 +172,7 @@
       }
       this.pickerLoading = false
       // 判断是编辑还是新增
-      if (this.index && this.index > 0) {
+      if (this.index && this.index >= 0) {
         let resumeList = await this.$api.teacher.queryTeacherResumeList({})
         if (resumeList && resumeList.length > 0) {
           this.resume = resumeList[this.index]

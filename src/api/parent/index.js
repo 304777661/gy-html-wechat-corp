@@ -117,5 +117,13 @@ export default {
     return await Axios.post('/studentParent/updateChildWithAvatar.do', query)
   },
 
-  //
+  // 查询当前用户当前子女的所有学期
+  async querySchoolTermListWithCurrentChild (query) {
+    return await Axios.post('/schoolTerm/querySchoolTermListWithCurrentChild.do', query)
+  },
+
+  // 考试批次列表查询 - 根据学期与当前子女
+  async queryExamBatchListWithChild (query) {
+    return await Axios.post('/examBatch/queryExamBatchListWithChild.do', query)
+  },
 }

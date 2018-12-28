@@ -64,7 +64,7 @@
     async created () {
       this.loading = true
       // 查学期
-      this.termList = await this.$api.teacher.querySchoolTermList({})
+      this.termList = await this.$api.parent.querySchoolTermListWithCurrentChild({})
       if (this.termList && this.termList.length > 0) {
         let index = this.termList.findIndex(item => item.isDefault === 'YES')
         if (index < 0) {

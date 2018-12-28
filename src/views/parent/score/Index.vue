@@ -94,7 +94,7 @@
     async created () {
       this.loading = true
       // 查询学期列表
-      this.termList = await this.$api.teacher.querySchoolTermList({})
+      this.termList = await this.$api.parent.querySchoolTermListWithCurrentChild({})
       if (this.termList && this.termList.length > 0) {
         let index = this.termList.findIndex(item => item.isDefault === 'YES')
         if (index < 0) {
@@ -117,7 +117,7 @@
       }
 
       // 查询考试批次列表
-      this.examBatchList = await this.$api.teacher.queryExamBatchList({})
+      this.examBatchList = await this.$api.parent.queryExamBatchListWithChild({'termId': this.curTerm.id})
       if (this.examBatchList && this.examBatchList.length > 0) {
         this.curExamBatch = {
           id: this.examBatchList[0].id,

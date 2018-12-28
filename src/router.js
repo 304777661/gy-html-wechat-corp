@@ -196,7 +196,7 @@ const router = new Router({
       path: 'job',
       name: 'Job',
       component: teacherView('job/Index'),
-      meta: {title: '招聘'}
+      meta: {title: '湖南广益实验中学'}
     }]
   }, {
     path: '/parent',

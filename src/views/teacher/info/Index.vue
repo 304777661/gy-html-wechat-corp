@@ -81,7 +81,7 @@
             编辑
           </span>
             </van-cell>
-            <van-cell title="开始时间" :value="resume.startTernName || '--'"></van-cell>
+            <van-cell title="开始时间" :value="resume.startTermName || '--'"></van-cell>
             <van-cell title="结束时间" :value="resume.endTermName || '--'"></van-cell>
             <van-cell title="教授科目" :value="resume.courseName || '--'"></van-cell>
             <van-cell title="年级" :value="resume.gradeName || '--'"></van-cell>
@@ -101,7 +101,7 @@
             <van-cell title="类型" :value="$enums.ProjectType.getName(research.entryType) || '--'"></van-cell>
             <van-cell title="颁奖单位" :value="research.awardUnit || '--'"></van-cell>
             <van-cell title="获奖等级或获得的成绩" :value="research.achievement || '--'"></van-cell>
-            <van-cell title="获奖时间" :value="research.obtainTime || ymd"></van-cell>
+            <van-cell title="获奖时间" :value="research.obtainTime | ymd"></van-cell>
             <van-cell title="证明材料"
                       :value="(research.attachments && research.attachments.length>0)? '已上传':'未上传'">
             </van-cell>
@@ -226,7 +226,7 @@
         }
       }
     },
-    async created () {
+    async activated () {
       await this.loadData()
     }
   }
@@ -236,6 +236,12 @@
 
   .info
     padding-bottom: $default-gap
+    &-work
+      /deep/ .van-cell-group
+        background: transparent
+    &-awards
+      /deep/ .van-cell-group
+        background: transparent
     &-basic
       padding-bottom: 10px
       &-children

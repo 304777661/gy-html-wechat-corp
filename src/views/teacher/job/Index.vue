@@ -73,7 +73,7 @@
 <style scoped lang="sass">
   .job
     position: relative
-    background-image: url(../../../assets/images/job_bg.png)
+    background-image: url('~IMAGE/job_bg.png')
     height: 100vh
     .van-popup
       border-radius: 4px
