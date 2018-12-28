@@ -252,4 +252,9 @@ export default {
     return await Axios.post('/teacher/queryTeacherClassList.do', query)
   },
 
+  // 增加教师获奖情况
+  async addTeachingResearch (query) {
+    return await Axios.post('/teacher/addTeachingResearch.do', query)
+  },
+
 }

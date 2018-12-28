@@ -100,6 +100,10 @@
           this.$toast.fail('获奖等级或获得的成绩')
           return
         }
+        if (!this.imageList || this.imageList.length <= 0) {
+          this.$toast.fail('请上传证明材料')
+          return
+        }
         if (this.imageList && this.imageList.length > 0) {
           this.prize.attachmentList = []
           this.imageList.map(item => {
@@ -109,7 +113,8 @@
             })
           })
         }
-        await this.$api.parent.addStudentPrize(this.prize)
+        this.prize.obtainTime = this.prize.obtainTime.Format('yyyy-MM-dd 00:00:00')
+        await this.$api.teacher.addTeachingResearch(this.prize)
         this.$toast.success('获奖信息已提交，请等待审核')
         this.$router.back()
       },

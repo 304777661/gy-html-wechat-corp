@@ -81,7 +81,6 @@
         defaultTermTitle: '学期',
         defaultExamTitle: '考试批次',
         curTerm: {},
-        itemHeight: 70,
         termColumns: [],
         examColumns: [],
         curExamBatch: {},

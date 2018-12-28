@@ -117,4 +117,5 @@ export default {
     return await Axios.post('/studentParent/updateChildWithAvatar.do', query)
   },
 
+  //
 }
