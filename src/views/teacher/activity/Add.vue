@@ -99,6 +99,7 @@
         this.orgId = item.tag
         let index = this.teachGroupList.findIndex(teachGroupItem => teachGroupItem.value === item.value)
         this.curTeachGroup = this.teachGroupList[index]
+        console.log(this.curTeachGroup)
         this.columns = this.teachGroupList[index].children.map(item => {
           return {
             label: item.label,
@@ -215,6 +216,12 @@
             label: item.label,
             value: item.value,
             tag: item.tag
+          }
+        })
+        this.columns = this.curTeachGroup.children.map(item => {
+          return {
+            label: item.label,
+            value: item.value,
           }
         })
       }

@@ -145,14 +145,29 @@
         this.$router.back()
         return
       }
+      if (this.isTeachGroupLeader && this.isPrepareLeader) {
+        if (this.curTabIndex === 0) {
+          await this.loadData(true, true)
+        } else {
+          await this.loadData(false, true)
+        }
+        this.loading = false
+        return
+      }
+
       if (this.isTeachGroupLeader) {
         this.curTabIndex = 0
         await this.loadData(true, true)
-      } else {
+        this.loading = false
+        return
+      }
+
+      if (this.isPrepareLeader) {
         this.curTabIndex = 1
         await this.loadData(false, true)
+        this.loading = false
+        return
       }
-      this.loading = false
     },
   }
 </script>
