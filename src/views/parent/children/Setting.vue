@@ -41,7 +41,6 @@
   .children
     &-list
       display: flex
-      flex-flow: row
       align-items: center
       flex-wrap: wrap
       border-bottom: 1px solid #eee
