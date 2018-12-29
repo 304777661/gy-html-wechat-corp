@@ -108,7 +108,11 @@
         }
         this.prize.prizeLevel = this.prizeLevel.value
         this.prize.attachmentList = attachmentList
-        await this.$api.parent.addStudentPrize(this.prize)
+        if (this.index >= 0) {
+          await this.$api.parent.updateStudentPrize(this.prize)
+        } else {
+          await this.$api.parent.addStudentPrize(this.prize)
+        }
         this.$toast.success('提交成功')
         this.$router.back()
       }
@@ -124,6 +128,11 @@
             if (item.value === this.prize.prizeLevel) {
               this.prizeLevel = item
               break
+            }
+          }
+          if (this.prize.attachmentList && this.prize.attachmentList.length > 0) {
+            for (let i = 0; i < this.prize.attachmentList.length; i++) {
+              this.imageList.push(this.prize.attachmentList[i].fileUrl)
             }
           }
         }

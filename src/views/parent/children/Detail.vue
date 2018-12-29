@@ -100,7 +100,7 @@
 
       }
     },
-    async created () {
+    async activated () {
       this.loading = true
       await this.loadData()
       this.loading = false

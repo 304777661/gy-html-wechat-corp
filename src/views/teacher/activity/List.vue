@@ -141,6 +141,7 @@
         this.isPrepareLeader = true
       }
       if (!this.isTeachGroupLeader && !this.isPrepareLeader) {
+        this.loading = false
         this.$toast.fail('您没有访问权限')
         this.$router.back()
         return
