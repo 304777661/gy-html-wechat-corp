@@ -23,6 +23,11 @@ const router = new Router({
     component: view('Entry'),
     meta: {title: '首页'}
   }, {
+    path: '/error',
+    name: 'Error',
+    component: view('Error'),
+    meta: {title: '错误'}
+  }, {
     path: '/teacher',
     name: 'Teacher',
     component: view('Home'),
@@ -276,7 +281,12 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   setWechatTitle(to.meta.title || '')
-  next()
+  if (navigator.userAgent.indexOf('wxwork') < 0 && (to.name !== 'Error')) {
+    // next('/error')
+    next()
+  } else {
+    next()
+  }
 })
 
 export default router

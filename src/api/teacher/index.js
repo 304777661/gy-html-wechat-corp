@@ -257,4 +257,24 @@ export default {
     return await Axios.post('/teacher/addTeachingResearch.do', query)
   },
 
+  // 获取面试信息
+  async getTeacherApplyInterview (query) {
+    return await Axios.post('/teacherApply/getTeacherApplyInterview.do', query)
+  },
+
+  // 发送验证码
+  async sendVerifyCode (query) {
+    return await Axios.post('/teacherApply/sendVerifyCode.do', query)
+  },
+
+  // 获取面试信息
+  async getTeacherApplyInterview (query) {
+    return await Axios.post('/teacherApply/getTeacherApplyInterview.do', query)
+  },
+
+  // 教师应聘短信确认
+  async teacherApplyConfirm (query) {
+    return await Axios.post('/teacherApply/teacherApplyConfirm.do', query)
+  }
+
 }
