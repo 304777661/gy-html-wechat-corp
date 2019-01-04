@@ -29,7 +29,7 @@
     data () {
       return {
         showConfirm: false,
-        phone: '15874150335',
+        phone: '',
         verifyCode: '',
         serverVerifyCode: '',
         interviewTime: null,
