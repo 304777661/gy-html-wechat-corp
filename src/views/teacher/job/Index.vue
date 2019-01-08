@@ -2,7 +2,7 @@
   <div class="job">
     <div class="job-container">
       <p class="job-container-prompt">湖南广益实验中学邀请您填写手机号</p>
-      <p class="job-container-prompt">确认参加</p>
+      <p class="job-container-prompt">确认参加招聘考试和面试</p>
       <div v-if="interviewTime">
         <p class="job-container-prompt">面试时间：{{interviewTime | ymdhm}}</p>
         <p class="job-container-prompt">面试地点：{{interviewVenue}}</p>

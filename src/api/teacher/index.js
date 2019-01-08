@@ -2,7 +2,11 @@ import Axios from 'axios'
 
 export default {
 
-  // 查询学期列表
+  /**
+   * 查询学期列表
+   * @param query 对象
+   * @returns {Promise<any>}
+   */
   async querySchoolTermList (query) {
     return await Axios.post('/schoolTerm/querySchoolTermList.do', query)
   },

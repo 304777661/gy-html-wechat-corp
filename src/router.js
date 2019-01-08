@@ -281,9 +281,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   setWechatTitle(to.meta.title || '')
-  if (navigator.userAgent.indexOf('wxwork') < 0 && (to.name !== 'Error')) {
-    // next('/error')
-    next()
+  if (process.env.NODE_ENV !== 'development' && navigator.userAgent.indexOf('wxwork') < 0
+    && (to.name !== 'Error') && (to.name !== 'Job')) {
+    next('/error')
   } else {
     next()
   }
