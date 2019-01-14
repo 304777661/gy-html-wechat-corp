@@ -261,10 +261,10 @@
           this.$toast.fail('请输入身份证号')
           return
         }
-        if (!this.$idCardUtil.checkIdCard(this.teacher.idCard)) {
-          this.$toast.fail('身份证号不正确')
-          return
-        }
+        // if (!this.$idCardUtil.checkIdCard(this.teacher.idCard)) {
+        //   this.$toast.fail('身份证号不正确')
+        //   return
+        // }
         if (!this.teacher.phone || this.teacher.phone.length === 0) {
           this.$toast.fail('请输入联系电话')
           return

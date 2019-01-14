@@ -19,23 +19,23 @@
                    input-align="right"></van-field>
         <van-collapse v-model="show">
           <van-collapse-item title="家长信息" name="1">
-            <van-field label="父亲姓名" v-model="child.fatherName" placeholder="请输入" clearable
+            <van-field label="父亲姓名" v-model="child.father.name" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="父亲工作单位" v-model="child.fatherCompany" placeholder="请输入" clearable
+            <van-field label="父亲工作单位" v-model="child.father.company" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="父亲电话" v-model="child.fatherPhone" placeholder="请输入" clearable
+            <van-field label="父亲电话" v-model="child.father.phone" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="母亲姓名" v-model="child.motherName" placeholder="请输入" clearable
+            <van-field label="母亲姓名" v-model="child.mother.name" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="母亲工作单位" v-model="child.motherCompany" placeholder="请输入" clearable
+            <van-field label="母亲工作单位" v-model="child.mother.company" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="母亲电话" v-model="child.motherPhone" placeholder="请输入" clearable
+            <van-field label="母亲电话" v-model="child.mother.phone" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="监护人姓名" v-model="child.guardianName" placeholder="请输入" clearable
+            <van-field label="监护人姓名" v-model="child.guardian.name" placeholder="请输入" clearable
                        input-align="right"></van-field>
-            <van-field label="监护人工作单位" v-model="child.guardianCompany" placeholder="请输入" clearable
+            <van-field label="监护人工作单位" v-model="child.guardian.company" placeholder="请输入" clearable
                        input-align="right" class="over-size"></van-field>
-            <van-field label="监护人电话" v-model="child.guardianPhone" placeholder="请输入" clearable
+            <van-field label="监护人电话" v-model="child.guardian.phone" placeholder="请输入" clearable
                        input-align="right"></van-field>
           </van-collapse-item>
         </van-collapse>
@@ -58,6 +58,11 @@
   export default {
     name: 'EditInfo',
     data () {
+      let item = {
+        name: null,
+        phone: null,
+        company: null
+      }
       return {
         id: this.$route.query.id,
         studentPoliticsColumns: this.$enums.StudentPoliticsStatus.list,
@@ -65,7 +70,11 @@
         columns: [],
         showPicker: false,
         minDate: new Date(),
-        child: {},
+        child: {
+          father: this.$utils.clone(item),
+          mother: this.$utils.clone(item),
+          guardian: this.$utils.clone(item)
+        },
         pickerType: '',
         show: ['1'],
       }
@@ -106,20 +115,16 @@
           this.$toast.fail('请输入身份证号')
           return
         }
-        if (!this.$idCardUtil.checkIdCard(this.child.idCard)) {
-          this.$toast.fail('身份证号不正确')
-          return
-        }
+        // if (!this.$idCardUtil.checkIdCard(this.child.idCard)) {
+        //   this.$toast.fail('身份证号不正确')
+        //   return
+        // }
         if (!this.child.residentType || this.child.residentType.length === 0) {
           this.$toast.fail('请选择户口性质')
           return
         }
         if (!this.child.politicsStatus || this.child.politicsStatus.length === 0) {
           this.$toast.fail('请选择政治面貌')
-          return
-        }
-        if (!this.child.currentAddress || this.child.currentAddress.length === 0) {
-          this.$toast.fail('请输入现居住地')
           return
         }
         await this.$api.parent.addStudentChange(this.child)
@@ -129,7 +134,17 @@
     },
     async created () {
       this.loading = true
-      this.child = await this.$api.parent.getStudent({'id': this.id})
+      let child = await this.$api.parent.getStudent({'id': this.id})
+      if (!child.father) {
+        child.father = this.child.father
+      }
+      if (!child.mother) {
+        child.mother = this.child.mother
+      }
+      if (!child.guardian) {
+        child.guardian = this.child.guardian
+      }
+      this.child = child
       this.loading = false
     }
   }

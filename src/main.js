@@ -27,6 +27,7 @@ import MyTabs from './components/MyTabs'
 import NoticeDetail from './components/NoticeDetail'
 import MyButton from './components/MyButton'
 import SelectMember from './components/SelectMember'
+import Utils from './utils'
 // import Radio from './components/Radio'
 import {
   Icon,
@@ -100,6 +101,7 @@ Vue.prototype.$toast = Toast
 Vue.prototype.$enums = enums
 Vue.prototype.$config = config
 Vue.prototype.$idCardUtil = idCardUtil
+Vue.prototype.$utils = Utils
 Vue.prototype.$api = {
   teacher: teacherApi,
   parent: parentApi
