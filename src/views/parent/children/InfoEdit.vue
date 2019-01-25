@@ -115,10 +115,10 @@
           this.$toast.fail('请输入身份证号')
           return
         }
-        // if (!this.$idCardUtil.checkIdCard(this.child.idCard)) {
-        //   this.$toast.fail('身份证号不正确')
-        //   return
-        // }
+        if (!this.$idCardUtil.checkIdCard(this.child.idCard)) {
+          this.$toast.fail('身份证号不正确')
+          return
+        }
         if (!this.child.residentType || this.child.residentType.length === 0) {
           this.$toast.fail('请选择户口性质')
           return

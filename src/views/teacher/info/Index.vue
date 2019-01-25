@@ -29,7 +29,7 @@
           <van-cell title="联系电话" :value="teacher.phone || '--'"></van-cell>
           <van-cell title="出生年月" :value="teacher.birthday | ymd"></van-cell>
           <van-cell title="年龄" :value="(getAge(teacher.birthday) || '--')+'岁'"></van-cell>
-          <van-cell title="民族" :value="teacher.folk || '--'"></van-cell>
+          <van-cell title="民族" :value="teacher.folkName || '--'"></van-cell>
           <van-cell title="籍贯" :value="teacher.residence || '--'"></van-cell>
           <van-cell title="政治面貌" :value="$enums.PoliticsType.getName(teacher.politicsStatus) || '--'"></van-cell>
           <van-cell title="加入时间" :value="teacher.joinPartyTime | ymd"></van-cell>

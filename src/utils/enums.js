@@ -638,13 +638,23 @@ export default {
   // ---------------- 教研活动类型  结束 -------------------
 
   // ---------------- 政治面貌类型  开始 -------------------
+  // ---------------- PoliticsStatus枚举  开始 -------------------
   PoliticsType: {
     // 枚举列表
     list: [
+      {label: '中共党员', value: 'COMMUNIST'},
+      {label: '中共预备党员', value: 'COMMUNIST_PREPARE'},
       {label: '共青团员', value: 'LEAGUE'},
-      {label: '共产党员', value: 'COMMUNIST'},
-      {label: '民主党派', value: 'DEMOCRATIC'},
-      {label: '群众', value: 'MASSES'},
+      {label: '民革党员', value: 'MINGGE'},
+      {label: '民盟盟员', value: 'LEAGUE_MEMBERS'},
+      {label: '民建会员', value: 'CIVIL_SERVICE_MEMBERS'},
+      {label: '民进会员', value: 'DPP_MEMBER'},
+      {label: '农工党党员', value: 'RURAL_LABOR_PARTY'},
+      {label: '致公党党员', value: 'PUBLIC_INTEREST_PARTY'},
+      {label: '九三学社社员', value: 'MEMBER_OF_JIUSAN_SOCIETY'},
+      {label: '台盟盟员', value: 'TAIWAN_ALLIANCE_MEMBERS'},
+      {label: '无党派人士', value: 'NON_PARTISANS'},
+      {label: '群众', value: 'MASSES'}
     ],
     // 查询条件列表
     allList: function () {
@@ -653,12 +663,30 @@ export default {
     // 根据枚举值获取名称
     getName: function (val) {
       switch (val) {
+        case 'COMMUNIST':
+          return '中共党员'
+        case 'COMMUNIST_PREPARE':
+          return '中共预备党员'
         case 'LEAGUE':
           return '共青团员'
-        case 'COMMUNIST':
-          return '共产党员'
-        case 'DEMOCRATIC':
-          return '民主党派'
+        case 'MINGGE':
+          return '民革党员'
+        case 'LEAGUE_MEMBERS':
+          return '民盟盟员'
+        case 'CIVIL_SERVICE_MEMBERS':
+          return '民建会员'
+        case 'DPP_MEMBER':
+          return '民进会员'
+        case 'RURAL_LABOR_PARTY':
+          return '农工党党员'
+        case 'PUBLIC_INTEREST_PARTY':
+          return '致公党党员'
+        case 'MEMBER_OF_JIUSAN_SOCIETY':
+          return '九三学社社员'
+        case 'TAIWAN_ALLIANCE_MEMBERS':
+          return '台盟盟员'
+        case 'NON_PARTISANS':
+          return '无党派人士'
         case 'MASSES':
           return '群众'
         default:
@@ -666,7 +694,7 @@ export default {
       }
     }
   },
-  // ---------------- 政治面貌类型  结束 -------------------
+  // ---------------- PoliticsStatus枚举  结束 -------------------
 
   // ---------------- StudentPoliticsStatus枚举  开始 -------------------
   StudentPoliticsStatus: {
@@ -703,11 +731,25 @@ export default {
   TeacherTitleType: {
     // 枚举列表
     list: [
-      {label: '未评', value: 'RANK_UNDECIDED'},
-      {label: '见习', value: 'NOVICIATE'},
-      {label: '中小学二级教师', value: 'SECOND_GRADE'},
-      {label: '中小学一级教师', value: 'FIRST_GRADE'},
-      {label: '中小学高级教师', value: 'HIGHER_GRADE'},
+      {label: '无', value: 'NOTHING'},
+      {label: '助理经济师', value: 'ASSISTANT_ECONOMIST'},
+      {label: '初级经济师', value: 'JUNIOR_ECONOMIST'},
+      {label: '初级医师', value: 'JUNIOR_PHYSICIAN'},
+      {label: '执照医师', value: 'LICENSED_DOCTOR'},
+      {label: '护士', value: 'NURSE'},
+      {label: '助理会计师', value: 'ASSISTANT_ACCOUNTANT'},
+      {label: '会计师', value: 'ACCOUNTANT'},
+      {label: '中级会计师', value: 'INTERMEDIATE_ACCOUNTANT'},
+      {label: '中级人力资源师', value: 'INTERMEDIATE_RESOURCES'},
+      {label: '见习', value: 'PROBATION'},
+      {label: '未评', value: 'NO_COMMENT'},
+      {label: '未定职称', value: 'RANK_UNDECIDED'},
+      {label: '中学一级教师', value: 'MIDDLE_FIRST_GRADE'},
+      {label: '中学二级教师', value: 'MIDDLE_SECOND_GRADE'},
+      {label: '中学高级教师', value: 'MIDDLE_SENIOR_GRADE'},
+      {label: '小学一级教师', value: 'FIRST_GRADE'},
+      {label: '小学二级教师', value: 'SECOND_GRADE'},
+      {label: '小学高级教师', value: 'HIGHER_GRADE'}
     ],
     // 查询条件列表
     allList: function () {
@@ -716,20 +758,48 @@ export default {
     // 根据枚举值获取名称
     getName: function (val) {
       switch (val) {
-        case 'RANK_UNDECIDED':
-          return '未评'
-        case 'NOVICIATE':
+        case 'NOTHING':
+          return '无'
+        case 'ASSISTANT_ECONOMIST':
+          return '助理经济师'
+        case 'JUNIOR_ECONOMIST':
+          return '初级经济师'
+        case 'JUNIOR_PHYSICIAN':
+          return '初级医师'
+        case 'LICENSED_DOCTOR':
+          return '执照医师'
+        case 'NURSE':
+          return '护士'
+        case 'ASSISTANT_ACCOUNTANT':
+          return '助理会计师'
+        case 'ACCOUNTANT':
+          return '会计师'
+        case 'INTERMEDIATE_ACCOUNTANT':
+          return '中级会计师'
+        case 'INTERMEDIATE_RESOURCES':
+          return '中级人力资源师'
+        case 'PROBATION':
           return '见习'
-        case 'SECOND_GRADE':
-          return '中小学二级教师'
+        case 'NO_COMMENT':
+          return '未评'
+        case 'RANK_UNDECIDED':
+          return '未定职称'
+        case 'MIDDLE_FIRST_GRADE':
+          return '中学一级教师'
+        case 'MIDDLE_SECOND_GRADE':
+          return '中学二级教师'
+        case 'MIDDLE_SENIOR_GRADE':
+          return '中学高级教师'
         case 'FIRST_GRADE':
-          return '中小学一级教师'
+          return '小学一级教师'
+        case 'SECOND_GRADE':
+          return '小学二级教师'
         case 'HIGHER_GRADE':
-          return '中小学高级教师'
+          return '小学高级教师'
         default:
           return val
       }
-    },
+    }
   },
   // ---------------- 职称类型  结束 -------------------
 
@@ -737,10 +807,13 @@ export default {
   EducationType: {
     // 枚举列表
     list: [
-      {label: '全日制本科', value: 'FULL_COLLEGE'},
-      {label: '函授本科', value: 'CORRESPONDENCE_COLLEGE'},
-      {label: '自考本科', value: 'SELF_COLLEGE'},
-      {label: '专科', value: 'JUNIOR_COLLEGE'},
+      {label: '硕士研究生', value: 'POSTGRADUATE'},
+      {label: '大学本科', value: 'FULL_COLLEGE'},
+      {label: '大学专科', value: 'JUNIOR_COLLEGE'},
+      {label: '大学专科（自考）', value: 'SELF_JUNIOR'},
+      {label: '职高', value: 'VOCATIONAL_HIGH'},
+      {label: '中技', value: 'INTERMEDIATE_TECHNOLOGY'},
+      {label: '中专', value: 'SECONDARY_SPECIALIZED'},
       {label: '高中', value: 'HIGH_SCHOOL'},
       {label: '初中', value: 'JUNIOR_SCHOOL'},
       {label: '小学', value: 'PRIMARY_SCHOOL'}
@@ -752,14 +825,20 @@ export default {
     // 根据枚举值获取名称
     getName: function (val) {
       switch (val) {
+        case 'POSTGRADUATE':
+          return '硕士研究生'
         case 'FULL_COLLEGE':
-          return '全日制本科'
-        case 'CORRESPONDENCE_COLLEGE':
-          return '函授本科'
-        case 'SELF_COLLEGE':
-          return '自考本科'
+          return '大学本科'
         case 'JUNIOR_COLLEGE':
-          return '专科'
+          return '大学专科'
+        case 'SELF_JUNIOR':
+          return '大学专科（自考）'
+        case 'VOCATIONAL_HIGH':
+          return '职高'
+        case 'INTERMEDIATE_TECHNOLOGY':
+          return '中技'
+        case 'SECONDARY_SPECIALIZED':
+          return '中专'
         case 'HIGH_SCHOOL':
           return '高中'
         case 'JUNIOR_SCHOOL':
@@ -913,13 +992,25 @@ export default {
   HighestEducation: {
     // 枚举列表
     list: [
-      {label: '博士', value: 'DOCTORAL_CANDIDATE'},
-      {label: '在职硕士', value: 'JOB_POSTGRADUATE'},
-      {label: '全日制硕士', value: 'FULL_POSTGRADUATE'},
-      {label: '全日制本科', value: 'FULL_COLLEGE'},
-      {label: '函授本科', value: 'CORRESPONDENCE_COLLEGE'},
-      {label: '自考本科', value: 'SELF_COLLEGE'},
-      {label: '专科', value: 'JUNIOR_COLLEGE'}
+      {label: '博士研究生', value: 'DOCTORAL_CANDIDATE'},
+      {label: '硕士研究生', value: 'POSTGRADUATE'},
+      {label: '硕士研究生（函授）', value: 'CORRESPONDENCE_POSTGRADUATE'},
+      {label: '硕士研究生（在职）', value: 'JOB_POSTGRADUATE'},
+      {label: '硕士研究生（脱产）', value: 'OUT_PRODUCTION_POSTGRADUATE'},
+      {label: '大学本科', value: 'FULL_COLLEGE'},
+      {label: '大学本科（自考）', value: 'SELF_COLLEGE'},
+      {label: '大学本科（函授）', value: 'CORRESPONDENCE_COLLEGE'},
+      {label: '大学本科（成教）', value: 'ADULT_COLLEGE'},
+      {label: '大学本科（脱产）', value: 'OUT_PRODUCTION_COLLEGE'},
+      {label: '大学专科', value: 'SPECIALTY'},
+      {label: '大学专科（自考）', value: 'SELF_SPECIALTY'},
+      {label: '大学专科（函授）', value: 'CORRESPONDENCE_SPECIALTY'},
+      {label: '大学专科（在职）', value: 'JOB_SPECIALTY'},
+      {label: '职高', value: 'VOCATIONAL_HIGH'},
+      {label: '中专', value: 'SECONDARY_SPECIALIZED'},
+      {label: '高中', value: 'HIGH_SCHOOL'},
+      {label: '初中', value: 'JUNIOR_SCHOOL'},
+      {label: '小学', value: 'PRIMARY_SCHOOL'}
     ],
     // 查询条件列表
     allList: function () {
@@ -929,19 +1020,43 @@ export default {
     getName: function (val) {
       switch (val) {
         case 'DOCTORAL_CANDIDATE':
-          return '博士'
+          return '博士研究生'
+        case 'POSTGRADUATE':
+          return '硕士研究生'
+        case 'CORRESPONDENCE_POSTGRADUATE':
+          return '硕士研究生（函授）'
         case 'JOB_POSTGRADUATE':
-          return '在职硕士'
-        case 'FULL_POSTGRADUATE':
-          return '全日制硕士'
+          return '硕士研究生（在职）'
+        case 'OUT_PRODUCTION_POSTGRADUATE':
+          return '硕士研究生（脱产）'
         case 'FULL_COLLEGE':
-          return '全日制本科'
-        case 'CORRESPONDENCE_COLLEGE':
-          return '函授本科'
+          return '大学本科'
         case 'SELF_COLLEGE':
-          return '自考本科'
-        case 'JUNIOR_COLLEGE':
-          return '专科'
+          return '大学本科（自考）'
+        case 'CORRESPONDENCE_COLLEGE':
+          return '大学本科（函授）'
+        case 'ADULT_COLLEGE':
+          return '大学本科（成教）'
+        case 'OUT_PRODUCTION_COLLEGE':
+          return '大学本科（脱产）'
+        case 'SPECIALTY':
+          return '大学专科'
+        case 'SELF_SPECIALTY':
+          return '大学专科（自考）'
+        case 'CORRESPONDENCE_SPECIALTY':
+          return '大学专科（函授）'
+        case 'JOB_SPECIALTY':
+          return '大学专科（在职）'
+        case 'VOCATIONAL_HIGH':
+          return '职高'
+        case 'SECONDARY_SPECIALIZED':
+          return '中专'
+        case 'HIGH_SCHOOL':
+          return '高中'
+        case 'JUNIOR_SCHOOL':
+          return '初中'
+        case 'PRIMARY_SCHOOL':
+          return '小学'
         default:
           return val
       }
